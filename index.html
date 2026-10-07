@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ClientPortal — uma experiência premium para gerenciar clientes, projetos, arquivos, mensagens e pagamentos.">
+  <title>ClientPortal — Seu cliente, em um só lugar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <header class="navbar" id="navbar">
+    <a href="#inicio" class="brand">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>CLIENT<span>PORTAL</span></span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navegação principal">
+      <a href="#produto">Produto</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-ghost" id="loginBtn">Entrar</button>
+      <a class="btn btn-primary" href="#cta">Começar grátis <span>→</span></a>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#produto">Produto</a>
+    <a href="#recursos">Recursos</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#faq">FAQ</a>
+    <a href="#cta" class="btn btn-primary">Começar grátis →</a>
+  </div>
+
+  <main id="inicio">
+    <section class="hero section">
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="pulse"></span> A nova experiência do cliente</div>
+        <h1>Seu cliente.<br><em>Em um só lugar.</em></h1>
+        <p class="hero-text">
+          Projetos, arquivos, mensagens e pagamentos organizados
+          em uma experiência simples, elegante e profissional.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#produto" class="btn btn-primary btn-large">Explorar portal <span>→</span></a>
+          <button class="btn btn-outline btn-large" id="demoBtn"><span class="play">▶</span> Ver demonstração</button>
+        </div>
+
+        <div class="trust-row">
+          <span>✓ Atualizações em tempo real</span>
+          <span>✓ Arquivos seguros</span>
+          <span>✓ Pagamentos claros</span>
+        </div>
+      </div>
+
+      <div class="hero-demo reveal delay-1" id="produto">
+        <div class="demo-window">
+          <div class="window-top">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <span class="window-title">clientportal.app / dashboard</span>
+            <span class="live-dot">● LIVE</span>
+          </div>
+
+          <div class="dashboard-mini">
+            <aside class="mini-sidebar">
+              <div class="mini-logo">CP</div>
+              <div class="mini-nav active">⌂</div>
+              <div class="mini-nav">▣</div>
+              <div class="mini-nav">◌</div>
+              <div class="mini-nav">□</div>
+              <div class="mini-nav">R$</div>
+            </aside>
+
+            <div class="mini-content">
+              <div class="mini-header">
+                <div>
+                  <small>SEGUNDA, 12 OUT</small>
+                  <h3>Bom dia, Maria <span>👋</span></h3>
+                </div>
+                <button class="avatar">MC</button>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card" data-demo="projects">
+                  <small>PROJETOS ATIVOS</small>
+                  <strong>03</strong>
+                  <span class="metric-green">↑ 1 este mês</span>
+                </div>
+                <div class="metric-card" data-demo="tasks">
+                  <small>TAREFAS PENDENTES</small>
+                  <strong>02</strong>
+                  <span>Precisam de você</span>
+                </div>
+                <div class="metric-card">
+                  <small>ARQUIVOS</small>
+                  <strong>12</strong>
+                  <span>Atualizados hoje</span>
+                </div>
+              </div>
+
+              <div class="mini-panel">
+                <div class="panel-heading">
+                  <div>
+                    <small>PROJETO EM DESTAQUE</small>
+                    <h4>Website redesign</h4>
+                  </div>
+                  <span class="status">Em desenvolvimento</span>
+                </div>
+                <div class="progress-label"><span>Progresso</span><b id="progressValue">78%</b></div>
+                <div class="progress"><span id="progressBar"></span></div>
+                <div class="project-meta">
+                  <span>Design → Desenvolvimento</span>
+                  <button id="projectBtn">Ver projeto →</button>
+                </div>
+              </div>
+
+              <div class="mini-bottom">
+                <div class="message-preview">
+                  <div class="message-avatar">RC</div>
+                  <div>
+                    <small>NOVA MENSAGEM</small>
+                    <p>“A última versão ficou incrível...”</p>
+                  </div>
+                  <span class="unread"></span>
+                </div>
+                <div class="payment-preview">
+                  <small>PRÓXIMO PAGAMENTO</small>
+                  <strong>R$ 1.250,00</strong>
+                  <span>Vence em 8 dias</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating-card floating-message">
+          <span class="float-icon">✦</span>
+          <div><b>Novo arquivo</b><small>Briefing-final.pdf</small></div>
+          <span class="check">✓</span>
+        </div>
+        <div class="floating-card floating-payment">
+          <span class="payment-icon">R$</span>
+          <div><b>Pagamento confirmado</b><small>Hoje, 09:42</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="logos section reveal">
+      <p>FEITO PARA EMPRESAS QUE QUEREM ELEVAR A EXPERIÊNCIA</p>
+      <div class="logo-row">
+        <span>nord</span><span>vertex</span><span>lumen</span><span>STUDIO 24</span><span>orbit</span>
+      </div>
+    </section>
+
+    <section class="features section" id="recursos">
+      <div class="section-heading reveal">
+        <div>
+          <div class="eyebrow">Tudo conectado</div>
+          <h2>Menos troca de e-mails.<br><em>Mais experiência.</em></h2>
+        </div>
+        <p>Uma central para manter cada etapa do relacionamento com o cliente clara, organizada e profissional.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card feature-large reveal">
+          <div class="feature-icon">▣</div>
+          <span class="feature-number">01</span>
+          <h3>Projetos</h3>
+          <p>Acompanhe etapas, aprovações e progresso em uma visão que seu cliente realmente entende.</p>
+          <div class="feature-ui project-ui">
+            <div class="fake-line long"></div>
+            <div class="fake-line"></div>
+            <div class="fake-progress"><span></span></div>
+            <div class="fake-labels"><span>Briefing</span><span>Design</span><span>Dev</span><span>Entrega</span></div>
+          </div>
+        </article>
+
+        <article class="feature-card reveal delay-1">
+          <div class="feature-icon">◌</div>
+          <span class="feature-number">02</span>
+          <h3>Mensagens</h3>
+          <p>Converse dentro do contexto de cada projeto.</p>
+          <div class="chat-bubbles"><i>Precisamos ajustar...</i><b>Feito! ✓</b></div>
+        </article>
+
+        <article class="feature-card reveal delay-2">
+          <div class="feature-icon">□</div>
+          <span class="feature-number">03</span>
+          <h3>Arquivos</h3>
+          <p>Documentos organizados em um espaço seguro.</p>
+          <div class="file-stack"><span>▧ contrato.pdf</span><span>▧ briefing.pdf</span><span>▧ proposta.pdf</span></div>
+        </article>
+
+        <article class="feature-card feature-wide reveal">
+          <div class="feature-icon">R$</div>
+          <span class="feature-number">04</span>
+          <h3>Financeiro</h3>
+          <p>Valores, pagamentos e vencimentos em uma visão simples e transparente.</p>
+          <div class="finance-ui"><strong>R$ 3.750</strong><span>saldo em aberto</span><div class="finance-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="how section" id="como-funciona">
+      <div class="section-heading centered reveal">
+        <div class="eyebrow">Como funciona</div>
+        <h2>Do caos à clareza em <em>3 passos.</em></h2>
+        <p>Uma experiência simples para você e ainda mais simples para o seu cliente.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal"><span>01</span><div class="step-line"></div><h3>Convide</h3><p>Envie um convite e dê ao cliente acesso ao workspace dele.</p></div>
+        <div class="step reveal delay-1"><span>02</span><div class="step-line"></div><h3>Colabore</h3><p>Compartilhe arquivos, atualizações, mensagens e aprovações.</p></div>
+        <div class="step reveal delay-2"><span>03</span><div class="step-line"></div><h3>Entregue</h3><p>Finalize projetos com tudo documentado e sob controle.</p></div>
+      </div>
+    </section>
+
+    <section class="testimonial section reveal">
+      <div class="quote-mark">“</div>
+      <blockquote>Finalmente um portal que faz nossa agência parecer tão organizada e premium quanto nosso trabalho.</blockquote>
+      <div class="person"><div class="person-avatar">MC</div><div><strong>Marina Costa</strong><span>Marketing Director · Nord Studio</span></div></div>
+    </section>
+
+    <section class="faq section" id="faq">
+      <div class="section-heading centered reveal">
+        <div class="eyebrow">FAQ</div>
+        <h2>Perguntas <em>frequentes.</em></h2>
+      </div>
+      <div class="faq-list reveal">
+        <button class="faq-item"><span>Posso convidar vários clientes?</span><b>+</b><p>Sim. Cada cliente recebe seu próprio espaço, com projetos, arquivos e informações separados.</p></button>
+        <button class="faq-item"><span>Os arquivos ficam separados por cliente?</span><b>+</b><p>Sim. O portal organiza os arquivos por workspace e projeto, evitando confusão entre documentos.</p></button>
+        <button class="faq-item"><span>Posso usar a identidade da minha empresa?</span><b>+</b><p>A estrutura foi pensada para permitir personalização de marca, cores e identidade visual.</p></button>
+        <button class="faq-item"><span>O ClientPortal possui versão mobile?</span><b>+</b><p>Sim. A interface é responsiva e foi desenhada para funcionar em desktop, tablet e celular.</p></button>
+      </div>
+    </section>
+
+    <section class="cta section reveal" id="cta">
+      <div class="cta-glow"></div>
+      <div class="eyebrow">Pronto para começar?</div>
+      <h2>Transforme seu relacionamento<br>com o cliente.</h2>
+      <p>Uma experiência melhor começa com um workspace melhor.</p>
+      <button class="btn btn-primary btn-large" id="startBtn">Começar gratuitamente <span>→</span></button>
+      <small>Sem cartão de crédito · Configuração em minutos</small>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand"><span class="brand-mark"><span></span><span></span><span></span></span> CLIENTPORTAL</div>
+    <span>© 2026 ClientPortal. Experiência do cliente, simplificada.</span>
+    <div><a href="#inicio">Início</a><a href="#recursos">Recursos</a><a href="#faq">FAQ</a></div>
+  </footer>
+
+  <div class="modal" id="demoModal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">×</button>
+      <div class="eyebrow">Demonstração interativa</div>
+      <h2>Veja o ClientPortal em ação.</h2>
+      <p>Clique nos elementos do dashboard para explorar a experiência.</p>
+      <div class="demo-interactive">
+        <button data-demo-tab="projects" class="demo-tab active">Projetos</button>
+        <button data-demo-tab="messages" class="demo-tab">Mensagens</button>
+        <button data-demo-tab="finance" class="demo-tab">Financeiro</button>
+        <div class="demo-content" id="demoContent">
+          <strong>Website redesign</strong>
+          <p>78% concluído · 2 tarefas aguardando aprovação.</p>
+          <div class="progress"><span style="width:78%"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span>✓</span><div><b id="toastTitle">Tudo certo!</b><small id="toastText">Ação realizada.</small></div></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
