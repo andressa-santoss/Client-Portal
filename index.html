@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ClientPortal — uma experiência premium para gerenciar clientes, projetos, arquivos, mensagens e pagamentos.">
+  <meta name="description"
+    content="ClientPortal — uma experiência premium para gerenciar clientes, projetos, arquivos, mensagens e pagamentos.">
   <title>ClientPortal — Seu cliente, em um só lugar</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <div class="cursor-glow" aria-hidden="true"></div>
 
@@ -24,8 +27,8 @@
     </nav>
 
     <div class="nav-actions">
-      <button class="btn btn-ghost" id="loginBtn">Entrar</button>
-      <a class="btn btn-primary" href="#cta">Começar grátis <span>→</span></a>
+      <a class="btn btn-ghost" href="login.html">Entrar</a>
+      <a class="btn btn-primary" href="cadastro.html">Começar grátis <span>→</span></a>
     </div>
 
     <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
@@ -55,7 +58,9 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#produto" class="btn btn-primary btn-large">Explorar portal <span>→</span></a>
+          <a href="cadastro.html" class="btn btn-primary btn-large">
+            Começar gratuitamente <span>→</span>
+          </a>
           <button class="btn btn-outline btn-large" id="demoBtn"><span class="play">▶</span> Ver demonstração</button>
         </div>
 
@@ -201,7 +206,8 @@
           <span class="feature-number">03</span>
           <h3>Arquivos</h3>
           <p>Documentos organizados em um espaço seguro.</p>
-          <div class="file-stack"><span>▧ contrato.pdf</span><span>▧ briefing.pdf</span><span>▧ proposta.pdf</span></div>
+          <div class="file-stack"><span>▧ contrato.pdf</span><span>▧ briefing.pdf</span><span>▧ proposta.pdf</span>
+          </div>
         </article>
 
         <article class="feature-card feature-wide reveal">
@@ -209,7 +215,9 @@
           <span class="feature-number">04</span>
           <h3>Financeiro</h3>
           <p>Valores, pagamentos e vencimentos em uma visão simples e transparente.</p>
-          <div class="finance-ui"><strong>R$ 3.750</strong><span>saldo em aberto</span><div class="finance-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="finance-ui"><strong>R$ 3.750</strong><span>saldo em aberto</span>
+            <div class="finance-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
         </article>
       </div>
     </section>
@@ -222,16 +230,32 @@
       </div>
 
       <div class="steps">
-        <div class="step reveal"><span>01</span><div class="step-line"></div><h3>Convide</h3><p>Envie um convite e dê ao cliente acesso ao workspace dele.</p></div>
-        <div class="step reveal delay-1"><span>02</span><div class="step-line"></div><h3>Colabore</h3><p>Compartilhe arquivos, atualizações, mensagens e aprovações.</p></div>
-        <div class="step reveal delay-2"><span>03</span><div class="step-line"></div><h3>Entregue</h3><p>Finalize projetos com tudo documentado e sob controle.</p></div>
+        <div class="step reveal"><span>01</span>
+          <div class="step-line"></div>
+          <h3>Convide</h3>
+          <p>Envie um convite e dê ao cliente acesso ao workspace dele.</p>
+        </div>
+        <div class="step reveal delay-1"><span>02</span>
+          <div class="step-line"></div>
+          <h3>Colabore</h3>
+          <p>Compartilhe arquivos, atualizações, mensagens e aprovações.</p>
+        </div>
+        <div class="step reveal delay-2"><span>03</span>
+          <div class="step-line"></div>
+          <h3>Entregue</h3>
+          <p>Finalize projetos com tudo documentado e sob controle.</p>
+        </div>
       </div>
     </section>
 
     <section class="testimonial section reveal">
       <div class="quote-mark">“</div>
-      <blockquote>Finalmente um portal que faz nossa agência parecer tão organizada e premium quanto nosso trabalho.</blockquote>
-      <div class="person"><div class="person-avatar">MC</div><div><strong>Marina Costa</strong><span>Marketing Director · Nord Studio</span></div></div>
+      <blockquote>Finalmente um portal que faz nossa agência parecer tão organizada e premium quanto nosso trabalho.
+      </blockquote>
+      <div class="person">
+        <div class="person-avatar">MC</div>
+        <div><strong>Marina Costa</strong><span>Marketing Director · Nord Studio</span></div>
+      </div>
     </section>
 
     <section class="faq section" id="faq">
@@ -240,10 +264,18 @@
         <h2>Perguntas <em>frequentes.</em></h2>
       </div>
       <div class="faq-list reveal">
-        <button class="faq-item"><span>Posso convidar vários clientes?</span><b>+</b><p>Sim. Cada cliente recebe seu próprio espaço, com projetos, arquivos e informações separados.</p></button>
-        <button class="faq-item"><span>Os arquivos ficam separados por cliente?</span><b>+</b><p>Sim. O portal organiza os arquivos por workspace e projeto, evitando confusão entre documentos.</p></button>
-        <button class="faq-item"><span>Posso usar a identidade da minha empresa?</span><b>+</b><p>A estrutura foi pensada para permitir personalização de marca, cores e identidade visual.</p></button>
-        <button class="faq-item"><span>O ClientPortal possui versão mobile?</span><b>+</b><p>Sim. A interface é responsiva e foi desenhada para funcionar em desktop, tablet e celular.</p></button>
+        <button class="faq-item"><span>Posso convidar vários clientes?</span><b>+</b>
+          <p>Sim. Cada cliente recebe seu próprio espaço, com projetos, arquivos e informações separados.</p>
+        </button>
+        <button class="faq-item"><span>Os arquivos ficam separados por cliente?</span><b>+</b>
+          <p>Sim. O portal organiza os arquivos por workspace e projeto, evitando confusão entre documentos.</p>
+        </button>
+        <button class="faq-item"><span>Posso usar a identidade da minha empresa?</span><b>+</b>
+          <p>A estrutura foi pensada para permitir personalização de marca, cores e identidade visual.</p>
+        </button>
+        <button class="faq-item"><span>O ClientPortal possui versão mobile?</span><b>+</b>
+          <p>Sim. A interface é responsiva e foi desenhada para funcionar em desktop, tablet e celular.</p>
+        </button>
       </div>
     </section>
 
@@ -283,8 +315,11 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"><span>✓</span><div><b id="toastTitle">Tudo certo!</b><small id="toastText">Ação realizada.</small></div></div>
+  <div class="toast" id="toast"><span>✓</span>
+    <div><b id="toastTitle">Tudo certo!</b><small id="toastText">Ação realizada.</small></div>
+  </div>
 
-  <script src="script.js"></script>
+  <script src="script/script.js"></script>
 </body>
+
 </html>

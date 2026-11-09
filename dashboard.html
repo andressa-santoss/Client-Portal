@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel administrativo do ClientPortal.">
+    <title>Dashboard | ClientPortal</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="app-page" data-page="dashboard">
+
+    <div class="app-layout">
+
+        <!-- MENU LATERAL -->
+        <aside class="sidebar" id="sidebar">
+
+            <a href="dashboard.html" class="brand sidebar-brand">
+                <span class="brand-mark">
+                    <span></span><span></span><span></span>
+                </span>
+                CLIENT<span>PORTAL</span>
+            </a>
+
+            <div class="sidebar-label">MENU PRINCIPAL</div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link active">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="projetos.html" class="sidebar-link">
+                    <span class="nav-icon">▣</span>
+                    <span>Projetos</span>
+                    <span class="nav-count">12</span>
+                </a>
+
+                <a href="tarefas.html" class="sidebar-link">
+                    <span class="nav-icon">☑</span>
+                    <span>Tarefas</span>
+                </a>
+
+                <a href="clientes.html" class="sidebar-link">
+                    <span class="nav-icon">♙</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a href="mensagens.html" class="sidebar-link">
+                    <span class="nav-icon">▤</span>
+                    <span>Mensagens</span>
+                    <span class="nav-notification"></span>
+                </a>
+
+                <a href="arquivos.html" class="sidebar-link">
+                    <span class="nav-icon">▧</span>
+                    <span>Arquivos</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-label sidebar-label-spaced">GESTÃO</div>
+
+            <nav class="sidebar-nav">
+                <a href="financeiro.html" class="sidebar-link">
+                    <span class="nav-icon">＄</span>
+                    <span>Financeiro</span>
+                </a>
+
+                <a href="relatorios.html" class="sidebar-link">
+                    <span class="nav-icon">▥</span>
+                    <span>Relatórios</span>
+                </a>
+
+                <a href="configuracoes.html" class="sidebar-link">
+                    <span class="nav-icon">⚙</span>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-help">
+                    <div class="help-icon">?</div>
+                    <div>
+                        <strong>Precisa de ajuda?</strong>
+                        <span>Acesse nosso suporte</span>
+                    </div>
+                </div>
+
+                <button type="button" class="sidebar-profile" id="profileButton">
+                    <span class="profile-avatar">AD</span>
+                    <span class="profile-info">
+                        <strong>Administrador</strong>
+                        <small>Empresa</small>
+                    </span>
+                    <span class="profile-more">···</span>
+                </button>
+
+                <div class="profile-menu" id="profileMenu">
+                    <a href="configuracoes.html">Minha conta</a>
+                    <a href="login.html">Sair da conta</a>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="dashboard-main">
+
+            <!-- CABEÇALHO -->
+            <header class="dashboard-topbar">
+
+                <div class="topbar-left">
+                    <button class="mobile-menu-button" id="mobileMenuButton"
+                            type="button" aria-label="Abrir menu">
+                        ☰
+                    </button>
+
+                    <div class="breadcrumb">
+                        <span>Workspace</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <strong>Dashboard</strong>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+
+                    <div class="topbar-date" id="dashboardDate"></div>
+
+                    <button class="icon-button notification-button"
+                            type="button" aria-label="Notificações">
+                        ♧
+                        <span></span>
+                    </button>
+
+                    <div class="topbar-divider"></div>
+
+                    <div class="topbar-user">
+                        <span class="profile-avatar">AD</span>
+                        <div>
+                            <strong>Administrador</strong>
+                            <small>Gestor da empresa</small>
+                        </div>
+                    </div>
+
+                </div>
+            </header>
+
+            <!-- CONTEÚDO -->
+            <div class="dashboard-content">
+
+                <!-- BOAS-VINDAS -->
+                <section class="dashboard-welcome">
+                    <div>
+                        <div class="welcome-eyebrow">
+                            <span class="welcome-pulse"></span>
+                            VISÃO GERAL DA EMPRESA
+                        </div>
+
+                        <h1>Bom dia, <em>Administrador.</em></h1>
+
+                        <p>
+                            Aqui está o resumo do que está acontecendo no seu
+                            workspace hoje.
+                        </p>
+                    </div>
+
+                    <a href="projetos.html" class="dashboard-primary-button">
+                        <span>＋</span> Novo projeto
+                    </a>
+                </section>
+
+                <!-- INDICADORES -->
+                <section class="dashboard-stats">
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">Projetos ativos</span>
+                            <span class="stat-icon blue">▣</span>
+                        </div>
+
+                        <div class="stat-value">12</div>
+
+                        <div class="stat-footer">
+                            <span class="stat-positive">+2</span>
+                            <span>em relação ao mês passado</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">Clientes</span>
+                            <span class="stat-icon purple">♙</span>
+                        </div>
+
+                        <div class="stat-value">08</div>
+
+                        <div class="stat-footer">
+                            <span class="stat-positive">+1</span>
+                            <span>novo cliente este mês</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">Tarefas pendentes</span>
+                            <span class="stat-icon orange">☑</span>
+                        </div>
+
+                        <div class="stat-value">24</div>
+
+                        <div class="stat-footer">
+                            <span class="stat-neutral">08</span>
+                            <span>com prazo nesta semana</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span class="stat-label">Aguardando aprovação</span>
+                            <span class="stat-icon green">✓</span>
+                        </div>
+
+                        <div class="stat-value">03</div>
+
+                        <div class="stat-footer">
+                            <span>Entregas aguardando retorno</span>
+                        </div>
+                    </article>
+
+                </section>
+
+                <!-- ÁREA PRINCIPAL -->
+                <section class="dashboard-grid">
+
+                    <!-- PROJETOS -->
+                    <div class="dashboard-panel projects-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Projetos recentes</h2>
+                                <p>Acompanhe o andamento dos seus projetos.</p>
+                            </div>
+
+                            <a href="projetos.html" class="panel-link">
+                                Ver todos <span>→</span>
+                            </a>
+                        </div>
+
+                        <div class="projects-table-wrapper">
+                            <table class="projects-table">
+                                <thead>
+                                    <tr>
+                                        <th>PROJETO</th>
+                                        <th>CLIENTE</th>
+                                        <th>PROGRESSO</th>
+                                        <th>STATUS</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="project-name">
+                                                <span class="project-color blue-bg">W</span>
+                                                <div>
+                                                    <strong>Website institucional</strong>
+                                                    <small>Desenvolvimento web</small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>Studio Criativo</td>
+
+                                        <td>
+                                            <div class="progress-info">
+                                                <span>75%</span>
+                                            </div>
+                                            <div class="progress-track">
+                                                <span style="width:75%"></span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-progress">
+                                                Em andamento
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="project-name">
+                                                <span class="project-color purple-bg">A</span>
+                                                <div>
+                                                    <strong>Identidade visual</strong>
+                                                    <small>Design e branding</small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>Alpha Solutions</td>
+
+                                        <td>
+                                            <div class="progress-info">
+                                                <span>45%</span>
+                                            </div>
+                                            <div class="progress-track">
+                                                <span style="width:45%"></span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-review">
+                                                Em revisão
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="project-name">
+                                                <span class="project-color orange-bg">M</span>
+                                                <div>
+                                                    <strong>Aplicativo mobile</strong>
+                                                    <small>Desenvolvimento</small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>MoveTech</td>
+
+                                        <td>
+                                            <div class="progress-info">
+                                                <span>90%</span>
+                                            </div>
+                                            <div class="progress-track">
+                                                <span style="width:90%"></span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-progress">
+                                                Em andamento
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="project-name">
+                                                <span class="project-color green-bg">N</span>
+                                                <div>
+                                                    <strong>Landing page</strong>
+                                                    <small>Design e desenvolvimento</small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>Nova Agência</td>
+
+                                        <td>
+                                            <div class="progress-info">
+                                                <span>100%</span>
+                                            </div>
+                                            <div class="progress-track">
+                                                <span style="width:100%"></span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <span class="status-badge status-complete">
+                                                Concluído
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- RESUMO DE TAREFAS -->
+                    <div class="dashboard-panel tasks-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Minhas tarefas</h2>
+                                <p>Atividades prioritárias.</p>
+                            </div>
+
+                            <a href="tarefas.html" class="panel-link">
+                                Ver todas <span>→</span>
+                            </a>
+                        </div>
+
+                        <div class="task-list">
+
+                            <label class="dashboard-task">
+                                <input type="checkbox">
+                                <span class="task-check"></span>
+                                <span class="task-content">
+                                    <strong>Revisar layout do website</strong>
+                                    <small>Website institucional</small>
+                                </span>
+                                <span class="task-priority high">Alta</span>
+                            </label>
+
+                            <label class="dashboard-task">
+                                <input type="checkbox">
+                                <span class="task-check"></span>
+                                <span class="task-content">
+                                    <strong>Enviar proposta ao cliente</strong>
+                                    <small>Identidade visual</small>
+                                </span>
+                                <span class="task-priority medium">Média</span>
+                            </label>
+
+                            <label class="dashboard-task">
+                                <input type="checkbox">
+                                <span class="task-check"></span>
+                                <span class="task-content">
+                                    <strong>Validar versão mobile</strong>
+                                    <small>Aplicativo mobile</small>
+                                </span>
+                                <span class="task-priority high">Alta</span>
+                            </label>
+
+                            <label class="dashboard-task">
+                                <input type="checkbox">
+                                <span class="task-check"></span>
+                                <span class="task-content">
+                                    <strong>Atualizar documentos</strong>
+                                    <small>Projeto interno</small>
+                                </span>
+                                <span class="task-priority low">Baixa</span>
+                            </label>
+
+                        </div>
+
+                        <a href="tarefas.html" class="task-footer-link">
+                            Acessar gerenciamento de tarefas →
+                        </a>
+
+                    </div>
+
+                </section>
+
+                <!-- ATIVIDADES E APROVAÇÕES -->
+                <section class="dashboard-bottom-grid">
+
+                    <div class="dashboard-panel activity-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Atividades recentes</h2>
+                                <p>Últimas movimentações do workspace.</p>
+                            </div>
+
+                            <a href="#" class="panel-link">Ver histórico →</a>
+                        </div>
+
+                        <div class="activity-list">
+
+                            <div class="activity-item">
+                                <span class="activity-avatar blue-bg">MC</span>
+                                <div class="activity-description">
+                                    <p><strong>Mariana Costa</strong> adicionou um arquivo ao projeto.</p>
+                                    <small>Website institucional · Há 20 minutos</small>
+                                </div>
+                                <span class="activity-dot blue-dot"></span>
+                            </div>
+
+                            <div class="activity-item">
+                                <span class="activity-avatar purple-bg">RA</span>
+                                <div class="activity-description">
+                                    <p><strong>Rafael Alves</strong> atualizou o progresso de uma tarefa.</p>
+                                    <small>Aplicativo mobile · Há 1 hora</small>
+                                </div>
+                                <span class="activity-dot purple-dot"></span>
+                            </div>
+
+                            <div class="activity-item">
+                                <span class="activity-avatar orange-bg">JS</span>
+                                <div class="activity-description">
+                                    <p><strong>João Silva</strong> enviou uma entrega para aprovação.</p>
+                                    <small>Identidade visual · Há 3 horas</small>
+                                </div>
+                                <span class="activity-dot orange-dot"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-panel approval-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Aprovações</h2>
+                                <p>Precisam da sua atenção.</p>
+                            </div>
+
+                            <span class="approval-counter">03</span>
+                        </div>
+
+                        <div class="approval-content">
+                            <div class="approval-icon">◷</div>
+
+                            <div>
+                                <strong>Identidade visual</strong>
+                                <p>Alpha Solutions</p>
+                                <small>Enviado há 2 horas</small>
+                            </div>
+                        </div>
+
+                        <div class="approval-content">
+                            <div class="approval-icon">◷</div>
+
+                            <div>
+                                <strong>Layout da página inicial</strong>
+                                <p>Studio Criativo</p>
+                                <small>Enviado ontem</small>
+                            </div>
+                        </div>
+
+                        <a href="aprovacoes.html" class="approval-link">
+                            Ver todas as aprovações →
+                        </a>
+
+                    </div>
+
+                </section>
+
+                <footer class="dashboard-footer">
+                    <span>© <span data-ano>2026</span> ClientPortal</span>
+                    <span>Gestão de projetos e relacionamento com clientes.</span>
+                </footer>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="script/script.js" defer></script>
+</body>
+</html>

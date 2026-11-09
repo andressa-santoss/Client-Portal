@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crie sua conta no ClientPortal.">
+    <title>Criar conta — ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <main class="auth-layout">
+        <a href="index.html" class="brand auth-brand">
+            <span class="brand-mark">
+                <span></span><span></span><span></span>
+            </span>
+            <span>CLIENT<span>PORTAL</span></span>
+        </a>
+
+        <section class="auth-card">
+            <a href="index.html" class="auth-back">← Voltar para o início</a>
+
+            <div class="auth-heading">
+                <div class="eyebrow">
+                    <span class="pulse"></span>
+                    Comece gratuitamente
+                </div>
+
+                <h1>Crie sua <em>conta.</em></h1>
+                <p>Organize seus projetos e ofereça uma experiência melhor aos seus clientes.</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+
+                <div class="form-group">
+                    <label for="registerName">Seu nome</label>
+                    <input
+                        type="text"
+                        id="registerName"
+                        name="name"
+                        placeholder="Ex.: Maria Costa"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="registerCompany">Nome da empresa</label>
+                    <input
+                        type="text"
+                        id="registerCompany"
+                        name="company"
+                        placeholder="Ex.: Studio Criativo"
+                        autocomplete="organization"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="registerEmail">E-mail profissional</label>
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        name="email"
+                        placeholder="voce@empresa.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPassword">Senha</label>
+                    <div class="password-field">
+                        <input
+                            type="password"
+                            id="registerPassword"
+                            name="password"
+                            placeholder="Mínimo de 6 caracteres"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+                        <button type="button" class="password-toggle" data-toggle-password="registerPassword">
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar senha</label>
+                    <div class="password-field">
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Digite sua senha novamente"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" data-toggle-password="confirmPassword">
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <label class="auth-terms">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <span>
+                        Concordo com os <a href="#" class="terms-link">Termos de Uso</a>
+                        e a <a href="#" class="terms-link">Política de Privacidade</a>.
+                    </span>
+                </label>
+
+                <div id="registerMessage" class="auth-message" role="status" aria-live="polite"></div>
+
+                <button type="submit" class="btn btn-primary auth-submit">
+                    Criar minha conta <span>→</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Já possui uma conta?
+                <a href="login.html">Entrar</a>
+            </div>
+        </section>
+
+        <p class="auth-copyright">
+            © <span data-ano></span> ClientPortal. Todos os direitos reservados.
+        </p>
+    </main>
+
+    <script src="script/script.js" defer></script>
+</body>
+</html>
