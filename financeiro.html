@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel financeiro do ClientPortal">
+    <title>Financeiro | ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="script/script.js" defer></script>
+</head>
+
+<body class="app-page" data-page="financeiro">
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <a href="dashboard.html" class="brand">
+                <span class="brand-icon">C</span>
+                <span>Client<span>Portal</span></span>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="sidebar-label">MENU PRINCIPAL</span>
+
+            <a href="dashboard.html" class="sidebar-link">
+                <span>▦</span> Dashboard
+            </a>
+            <a href="projetos.html" class="sidebar-link">
+                <span>▣</span> Projetos
+            </a>
+            <a href="tarefas.html" class="sidebar-link">
+                <span>☷</span> Tarefas
+            </a>
+            <a href="clientes.html" class="sidebar-link">
+                <span>♙</span> Clientes
+            </a>
+            <a href="mensagens.html" class="sidebar-link">
+                <span>✉</span> Mensagens
+            </a>
+            <a href="arquivos.html" class="sidebar-link">
+                <span>▤</span> Arquivos
+            </a>
+            <a href="financeiro.html" class="sidebar-link active">
+                <span>＄</span> Financeiro
+            </a>
+
+            <span class="sidebar-label">GESTÃO</span>
+
+            <a href="relatorios.html" class="sidebar-link">
+                <span>▥</span> Relatórios
+            </a>
+            <a href="configuracoes.html" class="sidebar-link">
+                <span>⚙</span> Configurações
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span>ClientPortal</span>
+            <small>Gestão inteligente de clientes</small>
+        </div>
+
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- CONTEÚDO -->
+    <main class="dashboard-main">
+
+        <!-- TOPBAR -->
+        <header class="dashboard-topbar">
+
+            <button type="button" id="mobileMenuButton"
+                    class="mobile-menu-button"
+                    aria-label="Abrir menu">☰</button>
+
+            <div class="topbar-breadcrumb">
+                <span>Gestão</span>
+                <span>/</span>
+                <strong>Financeiro</strong>
+            </div>
+
+            <div class="topbar-actions">
+                <span id="financeDate" class="finance-current-date"></span>
+
+                <div class="profile-container">
+                    <button type="button" class="profile-button"
+                            id="profileButton">
+                        <span class="profile-avatar">AS</span>
+                        <span class="profile-name">Administrador</span>
+                        <span>⌄</span>
+                    </button>
+
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="configuracoes.html">Configurações</a>
+                        <a href="login.html">Sair</a>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- PÁGINA -->
+        <div class="dashboard-content finance-content">
+
+            <section class="finance-welcome">
+                <div>
+                    <span class="finance-eyebrow">CONTROLE FINANCEIRO</span>
+                    <h1>Financeiro</h1>
+                    <p>
+                        Acompanhe suas cobranças, pagamentos e
+                        movimentações financeiras.
+                    </p>
+                </div>
+
+                <button type="button" class="dashboard-primary-button"
+                        id="newInvoiceButton">
+                    <span>＋</span> Nova fatura
+                </button>
+            </section>
+
+            <!-- INDICADORES -->
+            <section class="finance-stats">
+
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top">
+                        <span>Faturamento total</span>
+                        <span class="finance-stat-icon blue">＄</span>
+                    </div>
+                    <strong id="totalRevenue">R$ 0,00</strong>
+                    <small>Valor de todas as faturas</small>
+                </article>
+
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top">
+                        <span>Recebido</span>
+                        <span class="finance-stat-icon green">✓</span>
+                    </div>
+                    <strong id="totalReceived">R$ 0,00</strong>
+                    <small>Pagamentos confirmados</small>
+                </article>
+
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top">
+                        <span>Pendente</span>
+                        <span class="finance-stat-icon orange">◷</span>
+                    </div>
+                    <strong id="totalPending">R$ 0,00</strong>
+                    <small>Aguardando pagamento</small>
+                </article>
+
+                <article class="finance-stat-card">
+                    <div class="finance-stat-top">
+                        <span>Em atraso</span>
+                        <span class="finance-stat-icon red">!</span>
+                    </div>
+                    <strong id="totalOverdue">R$ 0,00</strong>
+                    <small>Faturas vencidas e não pagas</small>
+                </article>
+
+            </section>
+
+            <!-- PAINEL DE FATURAS -->
+            <section class="dashboard-panel finance-panel">
+
+                <div class="finance-panel-heading">
+                    <div>
+                        <h2>Faturas e cobranças</h2>
+                        <p>Gerencie os pagamentos dos seus clientes.</p>
+                    </div>
+
+                    <span id="invoiceCount" class="finance-count">0 faturas</span>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="finance-toolbar">
+
+                    <div class="finance-search">
+                        <span>⌕</span>
+                        <input type="search" id="invoiceSearch"
+                               placeholder="Buscar cliente ou descrição...">
+                    </div>
+
+                    <select id="invoiceStatusFilter">
+                        <option value="all">Todos os status</option>
+                        <option value="pending">Pendente</option>
+                        <option value="paid">Pago</option>
+                        <option value="overdue">Atrasado</option>
+                    </select>
+
+                    <select id="invoiceSort">
+                        <option value="recent">Mais recentes</option>
+                        <option value="oldest">Mais antigas</option>
+                        <option value="highest">Maior valor</option>
+                        <option value="lowest">Menor valor</option>
+                    </select>
+
+                </div>
+
+                <!-- TABELA -->
+                <div class="finance-table-wrapper">
+
+                    <table class="finance-table">
+                        <thead>
+                            <tr>
+                                <th>Fatura</th>
+                                <th>Cliente</th>
+                                <th>Emissão</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="invoiceTableBody"></tbody>
+                    </table>
+
+                    <div class="finance-empty" id="invoiceEmpty" hidden>
+                        <span>▤</span>
+                        <strong>Nenhuma fatura encontrada</strong>
+                        <small>Cadastre uma nova fatura ou altere os filtros.</small>
+                    </div>
+
+                </div>
+
+                <div class="finance-table-footer">
+                    <span id="invoiceResultCount">Mostrando 0 faturas</span>
+                </div>
+
+            </section>
+
+        </div>
+
+        <footer class="dashboard-footer">
+            <span>© <span data-ano></span> ClientPortal. Todos os direitos reservados.</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- MODAL NOVA FATURA -->
+<div class="finance-modal-overlay" id="invoiceModal"
+     aria-hidden="true">
+
+    <div class="finance-modal">
+
+        <div class="finance-modal-header">
+            <div>
+                <span class="finance-eyebrow">GESTÃO FINANCEIRA</span>
+                <h2 id="invoiceModalTitle">Nova fatura</h2>
+                <p>Preencha os dados da cobrança.</p>
+            </div>
+
+            <button type="button" class="finance-close-button"
+                    id="closeInvoiceModal">×</button>
+        </div>
+
+        <form id="invoiceForm">
+
+            <input type="hidden" id="invoiceId">
+
+            <div class="finance-form-grid">
+
+                <div class="finance-form-group full">
+                    <label for="invoiceClient">Cliente *</label>
+                    <select id="invoiceClient" required>
+                        <option value="">Selecione um cliente</option>
+                    </select>
+                </div>
+
+                <div class="finance-form-group full">
+                    <label for="invoiceDescription">Descrição *</label>
+                    <input type="text" id="invoiceDescription"
+                           maxlength="100"
+                           placeholder="Ex.: Desenvolvimento de website"
+                           required>
+                </div>
+
+                <div class="finance-form-group">
+                    <label for="invoiceAmount">Valor (R$) *</label>
+                    <input type="number" id="invoiceAmount"
+                           min="0.01" step="0.01"
+                           placeholder="0,00" required>
+                </div>
+
+                <div class="finance-form-group">
+                    <label for="invoiceIssueDate">Data de emissão *</label>
+                    <input type="date" id="invoiceIssueDate" required>
+                </div>
+
+                <div class="finance-form-group">
+                    <label for="invoiceDueDate">Vencimento *</label>
+                    <input type="date" id="invoiceDueDate" required>
+                </div>
+
+                <div class="finance-form-group">
+                    <label for="invoiceStatus">Status *</label>
+                    <select id="invoiceStatus" required>
+                        <option value="pending">Pendente</option>
+                        <option value="paid">Pago</option>
+                    </select>
+                </div>
+
+                <div class="finance-form-group full"
+                     id="paymentDateGroup" hidden>
+                    <label for="invoicePaymentDate">Data do pagamento</label>
+                    <input type="date" id="invoicePaymentDate">
+                </div>
+
+            </div>
+
+            <p class="finance-form-message" id="invoiceFormMessage"></p>
+
+            <div class="finance-modal-actions">
+                <button type="button" class="finance-secondary-button"
+                        id="cancelInvoiceButton">Cancelar</button>
+
+                <button type="submit" class="dashboard-primary-button"
+                        id="saveInvoiceButton">Salvar fatura</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

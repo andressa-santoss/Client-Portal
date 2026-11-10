@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Central de mensagens do ClientPortal.">
+    <title>Mensagens | ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="script/script.js" defer></script>
+</head>
+
+<body class="app-page" data-page="mensagens">
+
+<div class="app-layout">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar" id="sidebar">
+
+        <a href="dashboard.html" class="brand sidebar-brand">
+            <span class="brand-mark">
+                <span></span><span></span><span></span>
+            </span>
+            CLIENT<span>PORTAL</span>
+        </a>
+
+        <div class="sidebar-label">MENU PRINCIPAL</div>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html" class="sidebar-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="projetos.html" class="sidebar-link">
+                <span class="nav-icon">▣</span>
+                <span>Projetos</span>
+                <span class="nav-count" id="sidebarProjectCount">04</span>
+            </a>
+
+            <a href="tarefas.html" class="sidebar-link">
+                <span class="nav-icon">☑</span>
+                <span>Tarefas</span>
+            </a>
+
+            <a href="clientes.html" class="sidebar-link">
+                <span class="nav-icon">♙</span>
+                <span>Clientes</span>
+            </a>
+
+            <a href="mensagens.html" class="sidebar-link active">
+                <span class="nav-icon">▤</span>
+                <span>Mensagens</span>
+                <span class="nav-notification"></span>
+            </a>
+
+            <a href="arquivos.html" class="sidebar-link">
+                <span class="nav-icon">▧</span>
+                <span>Arquivos</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-label sidebar-label-spaced">GESTÃO</div>
+
+        <nav class="sidebar-nav">
+
+            <a href="financeiro.html" class="sidebar-link">
+                <span class="nav-icon">＄</span>
+                <span>Financeiro</span>
+            </a>
+
+            <a href="relatorios.html" class="sidebar-link">
+                <span class="nav-icon">▥</span>
+                <span>Relatórios</span>
+            </a>
+
+            <a href="configuracoes.html" class="sidebar-link">
+                <span class="nav-icon">⚙</span>
+                <span>Configurações</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-help">
+                <div class="help-icon">?</div>
+                <div>
+                    <strong>Precisa de ajuda?</strong>
+                    <span>Acesse nosso suporte</span>
+                </div>
+            </div>
+
+            <button type="button" class="sidebar-profile" id="profileButton">
+                <span class="profile-avatar">AD</span>
+                <span class="profile-info">
+                    <strong>Administrador</strong>
+                    <small>Empresa</small>
+                </span>
+                <span class="profile-more">···</span>
+            </button>
+
+            <div class="profile-menu" id="profileMenu">
+                <a href="configuracoes.html">Minha conta</a>
+                <a href="login.html">Sair da conta</a>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+
+            <div class="topbar-left">
+
+                <button class="mobile-menu-button"
+                        id="mobileMenuButton"
+                        type="button"
+                        aria-label="Abrir menu">
+                    ☰
+                </button>
+
+                <div class="breadcrumb">
+                    <span>Workspace</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <strong>Mensagens</strong>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <div class="topbar-date" id="messagesDate"></div>
+
+                <button class="icon-button notification-button"
+                        type="button"
+                        aria-label="Notificações">
+                    ♧
+                    <span></span>
+                </button>
+
+                <div class="topbar-divider"></div>
+
+                <div class="topbar-user">
+                    <span class="profile-avatar">AD</span>
+                    <div>
+                        <strong>Administrador</strong>
+                        <small>Gestor da empresa</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="dashboard-content messages-page">
+
+            <!-- APRESENTAÇÃO -->
+            <section class="messages-welcome">
+
+                <div>
+                    <div class="welcome-eyebrow">
+                        <span class="welcome-pulse"></span>
+                        COMUNICAÇÃO
+                    </div>
+
+                    <h1>Central de <em>mensagens.</em></h1>
+
+                    <p>
+                        Converse com seus clientes e mantenha toda
+                        a comunicação dos projetos organizada.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- INDICADORES -->
+            <section class="messages-stats">
+
+                <article class="message-stat-card">
+                    <div class="message-stat-heading">
+                        <span>Total de conversas</span>
+                        <span class="message-stat-icon blue">▤</span>
+                    </div>
+                    <strong id="totalConversations">0</strong>
+                    <small>Conversas registradas</small>
+                </article>
+
+                <article class="message-stat-card">
+                    <div class="message-stat-heading">
+                        <span>Não lidas</span>
+                        <span class="message-stat-icon orange">✉</span>
+                    </div>
+                    <strong id="unreadMessages">0</strong>
+                    <small>Mensagens aguardando leitura</small>
+                </article>
+
+                <article class="message-stat-card">
+                    <div class="message-stat-heading">
+                        <span>Clientes atendidos</span>
+                        <span class="message-stat-icon green">♙</span>
+                    </div>
+                    <strong id="clientsMessaged">0</strong>
+                    <small>Clientes com conversas</small>
+                </article>
+
+            </section>
+
+            <!-- PAINEL DE CONVERSAS -->
+            <section class="dashboard-panel messages-panel">
+
+                <div class="messages-panel-heading">
+                    <div>
+                        <h2>Suas conversas</h2>
+                        <p>Selecione um cliente para visualizar o histórico.</p>
+                    </div>
+
+                    <span class="messages-online-indicator">
+                        <span></span>
+                        Central de atendimento
+                    </span>
+                </div>
+
+                <div class="messages-layout">
+
+                    <!-- LISTA DE CONVERSAS -->
+                    <aside class="messages-sidebar">
+
+                        <div class="messages-sidebar-heading">
+                            <h3>Conversas</h3>
+                            <span id="conversationCount">0</span>
+                        </div>
+
+                        <div class="messages-search">
+                            <span>⌕</span>
+                            <input type="search"
+                                   id="conversationSearch"
+                                   placeholder="Buscar conversa..."
+                                   aria-label="Buscar conversa">
+                        </div>
+
+                        <div class="messages-filters">
+
+                            <button type="button"
+                                    class="message-filter active"
+                                    data-message-filter="all">
+                                Todas
+                            </button>
+
+                            <button type="button"
+                                    class="message-filter"
+                                    data-message-filter="unread">
+                                Não lidas
+                            </button>
+
+                        </div>
+
+                        <div class="conversation-list"
+                             id="conversationList">
+
+                            <!-- Conversas preenchidas pelo JavaScript -->
+
+                        </div>
+
+                        <div class="conversation-empty" id="conversationEmpty" hidden>
+                            <span>✉</span>
+                            <strong>Nenhuma conversa encontrada</strong>
+                            <small>Experimente alterar sua pesquisa.</small>
+                        </div>
+
+                    </aside>
+
+                    <!-- ÁREA DO CHAT -->
+                    <section class="messages-chat" id="messagesChat">
+
+                        <!-- ESTADO INICIAL -->
+                        <div class="messages-chat-empty" id="chatEmpty">
+
+                            <div class="chat-empty-icon">✉</div>
+
+                            <h3>Suas conversas começam aqui</h3>
+
+                            <p>
+                                Selecione uma conversa ao lado para
+                                visualizar as mensagens e responder
+                                aos seus clientes.
+                            </p>
+
+                        </div>
+
+                        <!-- CONVERSA SELECIONADA -->
+                        <div class="chat-content" id="chatContent" hidden>
+
+                            <!-- CABEÇALHO DO CHAT -->
+                            <header class="chat-header">
+
+                                <div class="chat-contact">
+
+                                    <span class="chat-avatar"
+                                          id="chatAvatar">CL</span>
+
+                                    <div>
+                                        <strong id="chatClientName">Cliente</strong>
+                                        <small id="chatClientCompany">Empresa</small>
+                                    </div>
+
+                                </div>
+
+                                <div class="chat-header-actions">
+
+                                    <span class="chat-status">
+                                        <span></span>
+                                        Conversa
+                                    </span>
+
+                                    <button type="button"
+                                            id="chatDetailsButton"
+                                            class="chat-more-button"
+                                            title="Ver informações do cliente"
+                                            aria-label="Ver informações do cliente">
+                                        ⋯
+                                    </button>
+
+                                </div>
+
+                            </header>
+
+                            <!-- IDENTIFICAÇÃO DO PROJETO -->
+                            <div class="chat-project-info" id="chatProjectInfo">
+                                <span>▣</span>
+                                <span>
+                                    Projeto:
+                                    <strong id="chatProjectName">Não vinculado</strong>
+                                </span>
+                            </div>
+
+                            <!-- HISTÓRICO -->
+                            <div class="chat-messages"
+                                 id="chatMessages"
+                                 aria-live="polite">
+
+                                <!-- Mensagens preenchidas pelo JavaScript -->
+
+                            </div>
+
+                            <!-- FORMULÁRIO DE ENVIO -->
+                            <form class="chat-composer" id="messageForm">
+
+                                <input type="text"
+                                       id="messageInput"
+                                       placeholder="Escreva sua mensagem..."
+                                       maxlength="2000"
+                                       autocomplete="off"
+                                       aria-label="Escreva sua mensagem"
+                                       required>
+
+                                <button type="submit"
+                                        id="sendMessageButton"
+                                        class="send-message-button"
+                                        aria-label="Enviar mensagem">
+                                    <span>Enviar</span>
+                                    <span>➤</span>
+                                </button>
+
+                            </form>
+
+                            <div class="chat-composer-footer">
+                                <span>Pressione Enter para enviar sua mensagem.</span>
+                                <span id="messageCharacterCount">0/2000</span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+            <footer class="dashboard-footer">
+                <span>© <span data-ano>2026</span> ClientPortal</span>
+                <span>Gestão de projetos e relacionamento com clientes.</span>
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- MODAL DE INFORMAÇÕES DO CLIENTE -->
+<div class="client-modal-overlay"
+     id="chatClientModal"
+     aria-hidden="true">
+
+    <section class="client-modal chat-client-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="chatClientModalTitle">
+
+        <div class="client-modal-header">
+
+            <div>
+                <span class="modal-eyebrow">RELACIONAMENTO</span>
+                <h2 id="chatClientModalTitle">Informações do cliente</h2>
+                <p>Dados do contato desta conversa.</p>
+            </div>
+
+            <button type="button"
+                    class="modal-close"
+                    id="closeChatClientModal"
+                    aria-label="Fechar">
+                ×
+            </button>
+
+        </div>
+
+        <div id="chatClientDetails"></div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

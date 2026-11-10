@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Central de arquivos e documentos do ClientPortal.">
+    <title>Arquivos | ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="script/script.js" defer></script>
+</head>
+
+<body class="app-page" data-page="arquivos">
+
+<div class="app-layout">
+
+    <aside class="sidebar" id="sidebar">
+
+        <a href="dashboard.html" class="brand sidebar-brand">
+            <span class="brand-mark"><span></span><span></span><span></span></span>
+            CLIENT<span>PORTAL</span>
+        </a>
+
+        <div class="sidebar-label">MENU PRINCIPAL</div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link">
+                <span class="nav-icon">▦</span><span>Dashboard</span>
+            </a>
+            <a href="projetos.html" class="sidebar-link">
+                <span class="nav-icon">▣</span><span>Projetos</span>
+                <span class="nav-count" id="sidebarProjectCount">04</span>
+            </a>
+            <a href="tarefas.html" class="sidebar-link">
+                <span class="nav-icon">☑</span><span>Tarefas</span>
+            </a>
+            <a href="clientes.html" class="sidebar-link">
+                <span class="nav-icon">♙</span><span>Clientes</span>
+            </a>
+            <a href="mensagens.html" class="sidebar-link">
+                <span class="nav-icon">▤</span><span>Mensagens</span>
+            </a>
+            <a href="arquivos.html" class="sidebar-link active">
+                <span class="nav-icon">▧</span><span>Arquivos</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-label sidebar-label-spaced">GESTÃO</div>
+
+        <nav class="sidebar-nav">
+            <a href="financeiro.html" class="sidebar-link">
+                <span class="nav-icon">＄</span><span>Financeiro</span>
+            </a>
+            <a href="relatorios.html" class="sidebar-link">
+                <span class="nav-icon">▥</span><span>Relatórios</span>
+            </a>
+            <a href="configuracoes.html" class="sidebar-link">
+                <span class="nav-icon">⚙</span><span>Configurações</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-help">
+                <div class="help-icon">?</div>
+                <div>
+                    <strong>Precisa de ajuda?</strong>
+                    <span>Acesse nosso suporte</span>
+                </div>
+            </div>
+
+            <button type="button" class="sidebar-profile" id="profileButton">
+                <span class="profile-avatar">AD</span>
+                <span class="profile-info">
+                    <strong>Administrador</strong>
+                    <small>Empresa</small>
+                </span>
+                <span class="profile-more">···</span>
+            </button>
+
+            <div class="profile-menu" id="profileMenu">
+                <a href="configuracoes.html">Minha conta</a>
+                <a href="login.html">Sair da conta</a>
+            </div>
+        </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu-button" id="mobileMenuButton"
+                        type="button" aria-label="Abrir menu">☰</button>
+
+                <div class="breadcrumb">
+                    <span>Workspace</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <strong>Arquivos</strong>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="topbar-date" id="filesDate"></div>
+                <button class="icon-button notification-button"
+                        type="button" aria-label="Notificações">♧<span></span></button>
+                <div class="topbar-divider"></div>
+                <div class="topbar-user">
+                    <span class="profile-avatar">AD</span>
+                    <div>
+                        <strong>Administrador</strong>
+                        <small>Gestor da empresa</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content files-page">
+
+            <section class="files-welcome">
+                <div>
+                    <div class="welcome-eyebrow">
+                        <span class="welcome-pulse"></span>
+                        DOCUMENTOS E MATERIAIS
+                    </div>
+                    <h1>Central de <em>arquivos.</em></h1>
+                    <p>Organize documentos, materiais e entregáveis dos seus projetos.</p>
+                </div>
+
+                <button type="button" class="dashboard-primary-button"
+                        id="openUploadModal">
+                    <span>＋</span> Enviar arquivo
+                </button>
+            </section>
+
+            <section class="files-stats">
+                <article class="file-stat-card">
+                    <div class="file-stat-heading">
+                        <span>Total de arquivos</span>
+                        <span class="file-stat-icon blue">▧</span>
+                    </div>
+                    <strong id="totalFiles">0</strong>
+                    <small>Arquivos armazenados</small>
+                </article>
+
+                <article class="file-stat-card">
+                    <div class="file-stat-heading">
+                        <span>Documentos</span>
+                        <span class="file-stat-icon green">▤</span>
+                    </div>
+                    <strong id="documentFiles">0</strong>
+                    <small>PDF e documentos de texto</small>
+                </article>
+
+                <article class="file-stat-card">
+                    <div class="file-stat-heading">
+                        <span>Imagens</span>
+                        <span class="file-stat-icon purple">▣</span>
+                    </div>
+                    <strong id="imageFiles">0</strong>
+                    <small>Imagens armazenadas</small>
+                </article>
+
+                <article class="file-stat-card">
+                    <div class="file-stat-heading">
+                        <span>Espaço utilizado</span>
+                        <span class="file-stat-icon orange">◫</span>
+                    </div>
+                    <strong id="storageUsed">0 KB</strong>
+                    <small>Espaço ocupado pelos arquivos</small>
+                </article>
+            </section>
+
+            <section class="dashboard-panel files-panel">
+
+                <div class="files-panel-heading">
+                    <div>
+                        <h2>Todos os arquivos</h2>
+                        <p>Consulte e gerencie os documentos da empresa.</p>
+                    </div>
+                    <span class="files-count" id="filesCount">0 arquivos</span>
+                </div>
+
+                <div class="files-toolbar">
+
+                    <div class="files-search">
+                        <span>⌕</span>
+                        <input type="search" id="fileSearch"
+                               placeholder="Buscar arquivo..."
+                               aria-label="Buscar arquivo">
+                    </div>
+
+                    <select id="fileCategoryFilter" aria-label="Filtrar categoria">
+                        <option value="all">Todas as categorias</option>
+                        <option value="documento">Documentos</option>
+                        <option value="imagem">Imagens</option>
+                        <option value="planilha">Planilhas</option>
+                        <option value="apresentacao">Apresentações</option>
+                        <option value="outro">Outros</option>
+                    </select>
+
+                    <select id="fileProjectFilter" aria-label="Filtrar projeto">
+                        <option value="all">Todos os projetos</option>
+                    </select>
+
+                </div>
+
+                <div class="files-table-wrapper">
+                    <table class="projects-table files-table">
+                        <thead>
+                            <tr>
+                                <th>ARQUIVO</th>
+                                <th>CATEGORIA</th>
+                                <th>PROJETO</th>
+                                <th>TAMANHO</th>
+                                <th>DATA DE ENVIO</th>
+                                <th>AÇÕES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filesTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="files-empty" id="filesEmpty" hidden>
+                    <div class="files-empty-icon">▧</div>
+                    <h3>Nenhum arquivo encontrado</h3>
+                    <p>Envie seu primeiro arquivo ou altere os filtros da pesquisa.</p>
+                    <button type="button" class="dashboard-primary-button"
+                            id="emptyUploadButton">Enviar primeiro arquivo</button>
+                </div>
+
+                <div class="files-table-footer">
+                    <span id="filesResultCount">Mostrando 0 arquivos</span>
+                </div>
+
+            </section>
+
+            <footer class="dashboard-footer">
+                <span>© <span data-files-year>2026</span> ClientPortal</span>
+                <span>Gestão de projetos e relacionamento com clientes.</span>
+            </footer>
+
+        </div>
+    </main>
+</div>
+
+<!-- MODAL DE UPLOAD -->
+<div class="files-modal-overlay" id="fileUploadModal"
+     aria-hidden="true">
+
+    <section class="files-modal" role="dialog" aria-modal="true"
+             aria-labelledby="fileModalTitle">
+
+        <div class="files-modal-header">
+            <div>
+                <span class="modal-eyebrow">BIBLIOTECA DE DOCUMENTOS</span>
+                <h2 id="fileModalTitle">Enviar arquivo</h2>
+                <p>Adicione um documento à central de arquivos.</p>
+            </div>
+            <button type="button" class="modal-close"
+                    id="closeFileModal" aria-label="Fechar">×</button>
+        </div>
+
+        <form id="fileUploadForm">
+
+            <label class="file-upload-zone" for="fileInput" id="fileDropZone">
+                <span class="file-upload-icon">↑</span>
+                <strong>Selecione um arquivo do seu computador</strong>
+                <small>Ou arraste o arquivo até aqui</small>
+                <span class="file-upload-formats">Tamanho máximo: 15 MB por arquivo</span>
+                <input type="file" id="fileInput" required>
+            </label>
+
+            <div class="selected-file" id="selectedFile" hidden>
+                <span class="selected-file-icon">▤</span>
+                <div>
+                    <strong id="selectedFileName"></strong>
+                    <small id="selectedFileSize"></small>
+                </div>
+                <button type="button" id="removeSelectedFile"
+                        aria-label="Remover arquivo selecionado">×</button>
+            </div>
+
+            <div class="files-form-group">
+                <label for="fileDescription">Descrição <span>(opcional)</span></label>
+                <input type="text" id="fileDescription"
+                       maxlength="160" placeholder="Ex.: Briefing atualizado do projeto">
+            </div>
+
+            <div class="files-form-grid">
+                <div class="files-form-group">
+                    <label for="fileCategory">Categoria</label>
+                    <select id="fileCategory" required>
+                        <option value="documento">Documento</option>
+                        <option value="imagem">Imagem</option>
+                        <option value="planilha">Planilha</option>
+                        <option value="apresentacao">Apresentação</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="files-form-group">
+                    <label for="fileProject">Projeto relacionado</label>
+                    <select id="fileProject">
+                        <option value="">Nenhum projeto</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="files-modal-actions">
+                <button type="button" class="files-cancel-button"
+                        id="cancelFileUpload">Cancelar</button>
+                <button type="submit" class="dashboard-primary-button"
+                        id="saveFileButton">Salvar arquivo</button>
+            </div>
+
+            <p class="files-form-message" id="fileFormMessage"
+               role="status" aria-live="polite"></p>
+
+        </form>
+    </section>
+</div>
+
+<!-- MODAL DE VISUALIZAÇÃO -->
+<div class="files-modal-overlay files-preview-overlay"
+     id="filePreviewModal" aria-hidden="true">
+
+    <section class="files-preview-modal" role="dialog"
+             aria-modal="true" aria-labelledby="previewFileName">
+
+        <div class="files-preview-header">
+            <div>
+                <span class="modal-eyebrow">VISUALIZAÇÃO</span>
+                <h2 id="previewFileName">Arquivo</h2>
+            </div>
+            <button type="button" class="modal-close"
+                    id="closePreviewModal" aria-label="Fechar">×</button>
+        </div>
+
+        <div class="files-preview-content" id="filePreviewContent"></div>
+    </section>
+</div>
+
+</body>
+</html>
