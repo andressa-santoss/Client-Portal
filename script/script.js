@@ -5,157 +5,157 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =====================================
-     1. ELEMENTOS DA LANDING PAGE
-  ===================================== */
+    /* =====================================
+       1. ELEMENTOS DA LANDING PAGE
+    ===================================== */
 
-  const navbar = document.getElementById("navbar");
-  const menuToggle = document.getElementById("menuToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
-  const modal = document.getElementById("demoModal");
-  const toast = document.getElementById("toast");
+    const navbar = document.getElementById("navbar");
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const modal = document.getElementById("demoModal");
+    const toast = document.getElementById("toast");
 
-  /* =====================================
-     2. ANO AUTOMÁTICO
-  ===================================== */
+    /* =====================================
+       2. ANO AUTOMÁTICO
+    ===================================== */
 
-  document.querySelectorAll("[data-ano]").forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  /* =====================================
-     3. MENU E NAVEGAÇÃO
-  ===================================== */
-
-  if (navbar) {
-    window.addEventListener("scroll", () => {
-      navbar.classList.toggle("scrolled", window.scrollY > 30);
-    });
-  }
-
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener("click", () => {
-      const open = mobileMenu.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", open);
+    document.querySelectorAll("[data-ano]").forEach(element => {
+        element.textContent = new Date().getFullYear();
     });
 
-    document.querySelectorAll(".mobile-menu a").forEach(link => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-      });
+    /* =====================================
+       3. MENU E NAVEGAÇÃO
+    ===================================== */
+
+    if (navbar) {
+        window.addEventListener("scroll", () => {
+            navbar.classList.toggle("scrolled", window.scrollY > 30);
+        });
+    }
+
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener("click", () => {
+            const open = mobileMenu.classList.toggle("open");
+            menuToggle.setAttribute("aria-expanded", open);
+        });
+
+        document.querySelectorAll(".mobile-menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                mobileMenu.classList.remove("open");
+                menuToggle.setAttribute("aria-expanded", "false");
+            });
+        });
+    }
+
+    /* =====================================
+       4. ANIMAÇÕES AO ROLAR A PÁGINA
+    ===================================== */
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: .12 });
+
+        document.querySelectorAll(".reveal").forEach(element => {
+            observer.observe(element);
+        });
+    }
+
+    /* =====================================
+       5. EFEITO DE CURSOR
+    ===================================== */
+
+    const cursorGlow = document.querySelector(".cursor-glow");
+
+    if (cursorGlow) {
+        window.addEventListener("pointermove", event => {
+            cursorGlow.style.left = `${event.clientX}px`;
+            cursorGlow.style.top = `${event.clientY}px`;
+        });
+    }
+
+    /* =====================================
+       6. NOTIFICAÇÕES DA LANDING PAGE
+    ===================================== */
+
+    function showToast(title, text) {
+        const toastTitle = document.getElementById("toastTitle");
+        const toastText = document.getElementById("toastText");
+
+        if (!toast || !toastTitle || !toastText) return;
+
+        toastTitle.textContent = title;
+        toastText.textContent = text;
+
+        toast.classList.add("show");
+
+        clearTimeout(window.toastTimer);
+
+        window.toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 3200);
+    }
+
+    /* =====================================
+       7. MODAL DE DEMONSTRAÇÃO
+    ===================================== */
+
+    function closeModal() {
+        if (!modal) return;
+
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+    }
+
+    const demoBtn = document.getElementById("demoBtn");
+
+    if (demoBtn && modal) {
+        demoBtn.addEventListener("click", () => {
+            modal.classList.add("show");
+            modal.setAttribute("aria-hidden", "false");
+        });
+    }
+
+    const closeModalBtn = document.getElementById("closeModal");
+    const modalBackdrop = document.querySelector(".modal-backdrop");
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", closeModal);
+    }
+
+    if (modalBackdrop) {
+        modalBackdrop.addEventListener("click", closeModal);
+    }
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeModal();
     });
-  }
 
-  /* =====================================
-     4. ANIMAÇÕES AO ROLAR A PÁGINA
-  ===================================== */
+    /* =====================================
+       8. ABAS DA DEMONSTRAÇÃO
+    ===================================== */
 
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: .12 });
+    const demoContent = document.getElementById("demoContent");
 
-    document.querySelectorAll(".reveal").forEach(element => {
-      observer.observe(element);
-    });
-  }
+    document.querySelectorAll(".demo-tab").forEach(tab => {
 
-  /* =====================================
-     5. EFEITO DE CURSOR
-  ===================================== */
+        tab.addEventListener("click", () => {
 
-  const cursorGlow = document.querySelector(".cursor-glow");
+            document.querySelectorAll(".demo-tab").forEach(item => {
+                item.classList.remove("active");
+            });
 
-  if (cursorGlow) {
-    window.addEventListener("pointermove", event => {
-      cursorGlow.style.left = `${event.clientX}px`;
-      cursorGlow.style.top = `${event.clientY}px`;
-    });
-  }
+            tab.classList.add("active");
 
-  /* =====================================
-     6. NOTIFICAÇÕES DA LANDING PAGE
-  ===================================== */
+            const type = tab.dataset.demoTab;
 
-  function showToast(title, text) {
-    const toastTitle = document.getElementById("toastTitle");
-    const toastText = document.getElementById("toastText");
-
-    if (!toast || !toastTitle || !toastText) return;
-
-    toastTitle.textContent = title;
-    toastText.textContent = text;
-
-    toast.classList.add("show");
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer = setTimeout(() => {
-      toast.classList.remove("show");
-    }, 3200);
-  }
-
-  /* =====================================
-     7. MODAL DE DEMONSTRAÇÃO
-  ===================================== */
-
-  function closeModal() {
-    if (!modal) return;
-
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-  }
-
-  const demoBtn = document.getElementById("demoBtn");
-
-  if (demoBtn && modal) {
-    demoBtn.addEventListener("click", () => {
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden", "false");
-    });
-  }
-
-  const closeModalBtn = document.getElementById("closeModal");
-  const modalBackdrop = document.querySelector(".modal-backdrop");
-
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener("click", closeModal);
-  }
-
-  if (modalBackdrop) {
-    modalBackdrop.addEventListener("click", closeModal);
-  }
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeModal();
-  });
-
-  /* =====================================
-     8. ABAS DA DEMONSTRAÇÃO
-  ===================================== */
-
-  const demoContent = document.getElementById("demoContent");
-
-  document.querySelectorAll(".demo-tab").forEach(tab => {
-
-    tab.addEventListener("click", () => {
-
-      document.querySelectorAll(".demo-tab").forEach(item => {
-        item.classList.remove("active");
-      });
-
-      tab.classList.add("active");
-
-      const type = tab.dataset.demoTab;
-
-      const content = {
-        projects: `
+            const content = {
+                projects: `
                     <strong>Website redesign</strong>
                     <p>78% concluído · 2 tarefas aguardando aprovação.</p>
                     <div class="progress">
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `,
 
-        messages: `
+                messages: `
                     <strong>3 conversas recentes</strong>
                     <p>“A última versão ficou incrível. Podemos publicar.”</p>
                     <div class="progress">
@@ -171,264 +171,264 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `,
 
-        finance: `
+                finance: `
                     <strong>R$ 3.750,00</strong>
                     <p>Saldo em aberto · próximo vencimento em 8 dias.</p>
                     <div class="progress">
                         <span style="width:64%"></span>
                     </div>
                 `
-      };
+            };
 
-      if (demoContent && content[type]) {
-        demoContent.innerHTML = content[type];
-      }
+            if (demoContent && content[type]) {
+                demoContent.innerHTML = content[type];
+            }
 
-    });
-
-  });
-
-  /* =====================================
-     9. BOTÃO DO PROJETO DEMONSTRATIVO
-  ===================================== */
-
-  const projectBtn = document.getElementById("projectBtn");
-
-  if (projectBtn) {
-    projectBtn.addEventListener("click", () => {
-      showToast(
-        "Projeto aberto",
-        "Detalhes do Website redesign carregados."
-      );
-    });
-  }
-
-  /* =====================================
-     10. CARDS DE INDICADORES
-  ===================================== */
-
-  document.querySelectorAll(".metric-card[data-demo]").forEach(card => {
-
-    card.addEventListener("click", () => {
-
-      const type = card.dataset.demo;
-
-      showToast(
-        type === "projects" ? "Projetos" : "Tarefas",
-        type === "projects"
-          ? "Você tem 3 projetos ativos."
-          : "2 tarefas aguardam sua aprovação."
-      );
-
-    });
-
-  });
-
-  /* =====================================
-     11. FAQ
-  ===================================== */
-
-  document.querySelectorAll(".faq-item").forEach(item => {
-
-    item.addEventListener("click", () => {
-
-      const wasOpen = item.classList.contains("open");
-
-      document.querySelectorAll(".faq-item").forEach(element => {
-        element.classList.remove("open");
-      });
-
-      if (!wasOpen) {
-        item.classList.add("open");
-      }
-
-    });
-
-  });
-
-  /* =====================================
-     12. LINKS INTERNOS
-  ===================================== */
-
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-
-    link.addEventListener("click", event => {
-
-      const href = link.getAttribute("href");
-
-      if (!href || href === "#") return;
-
-      const target = document.querySelector(href);
-
-      if (target) {
-        event.preventDefault();
-
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
         });
-      }
 
     });
 
-  });
+    /* =====================================
+       9. BOTÃO DO PROJETO DEMONSTRATIVO
+    ===================================== */
 
-  /* =====================================
-     13. EFEITO DE PROFUNDIDADE NO DASHBOARD
-  ===================================== */
+    const projectBtn = document.getElementById("projectBtn");
 
-  const demo = document.querySelector(".demo-window");
+    if (projectBtn) {
+        projectBtn.addEventListener("click", () => {
+            showToast(
+                "Projeto aberto",
+                "Detalhes do Website redesign carregados."
+            );
+        });
+    }
 
-  if (demo) {
+    /* =====================================
+       10. CARDS DE INDICADORES
+    ===================================== */
 
-    window.addEventListener("pointermove", event => {
+    document.querySelectorAll(".metric-card[data-demo]").forEach(card => {
 
-      if (window.innerWidth < 900) return;
+        card.addEventListener("click", () => {
 
-      const rect = demo.getBoundingClientRect();
+            const type = card.dataset.demo;
 
-      if (
-        event.clientX < rect.left - 100 ||
-        event.clientX > rect.right + 100 ||
-        event.clientY < rect.top - 100 ||
-        event.clientY > rect.bottom + 100
-      ) return;
+            showToast(
+                type === "projects" ? "Projetos" : "Tarefas",
+                type === "projects"
+                    ? "Você tem 3 projetos ativos."
+                    : "2 tarefas aguardam sua aprovação."
+            );
 
-      const x = (event.clientX - rect.left) / rect.width - .5;
-      const y = (event.clientY - rect.top) / rect.height - .5;
-
-      demo.style.transform =
-        `perspective(1400px) rotateY(${x * 3}deg) rotateX(${y * -2}deg)`;
+        });
 
     });
 
-    demo.addEventListener("mouseleave", () => {
-      demo.style.transform =
-        "perspective(1400px) rotateY(-3deg)";
+    /* =====================================
+       11. FAQ
+    ===================================== */
+
+    document.querySelectorAll(".faq-item").forEach(item => {
+
+        item.addEventListener("click", () => {
+
+            const wasOpen = item.classList.contains("open");
+
+            document.querySelectorAll(".faq-item").forEach(element => {
+                element.classList.remove("open");
+            });
+
+            if (!wasOpen) {
+                item.classList.add("open");
+            }
+
+        });
+
     });
 
-  }
+    /* =====================================
+       12. LINKS INTERNOS
+    ===================================== */
 
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
 
-  /* =========================================
-     14. LOGIN - CLIENT PORTAL
-  ========================================= */
+        link.addEventListener("click", event => {
 
-  const loginForm = document.getElementById("loginForm");
+            const href = link.getAttribute("href");
 
-  if (loginForm) {
+            if (!href || href === "#") return;
 
-    const passwordInput = document.getElementById("password");
-    const togglePassword = document.getElementById("togglePassword");
-    const forgotPassword = document.getElementById("forgotPassword");
-    const authToast = document.getElementById("authToast");
+            const target = document.querySelector(href);
 
-    /* Notificações do login */
+            if (target) {
+                event.preventDefault();
 
-    function loginNotification(message) {
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
 
-      if (!authToast) return;
+        });
 
-      authToast.textContent = message;
-      authToast.classList.add("show");
+    });
 
-      clearTimeout(window.authToastTimer);
+    /* =====================================
+       13. EFEITO DE PROFUNDIDADE NO DASHBOARD
+    ===================================== */
 
-      window.authToastTimer = setTimeout(() => {
-        authToast.classList.remove("show");
-      }, 3500);
+    const demo = document.querySelector(".demo-window");
+
+    if (demo) {
+
+        window.addEventListener("pointermove", event => {
+
+            if (window.innerWidth < 900) return;
+
+            const rect = demo.getBoundingClientRect();
+
+            if (
+                event.clientX < rect.left - 100 ||
+                event.clientX > rect.right + 100 ||
+                event.clientY < rect.top - 100 ||
+                event.clientY > rect.bottom + 100
+            ) return;
+
+            const x = (event.clientX - rect.left) / rect.width - .5;
+            const y = (event.clientY - rect.top) / rect.height - .5;
+
+            demo.style.transform =
+                `perspective(1400px) rotateY(${x * 3}deg) rotateX(${y * -2}deg)`;
+
+        });
+
+        demo.addEventListener("mouseleave", () => {
+            demo.style.transform =
+                "perspective(1400px) rotateY(-3deg)";
+        });
 
     }
 
-    /* Mostrar e ocultar senha */
 
-    if (passwordInput && togglePassword) {
+    /* =========================================
+       14. LOGIN - CLIENT PORTAL
+    ========================================= */
 
-      togglePassword.addEventListener("click", () => {
+    const loginForm = document.getElementById("loginForm");
 
-        const showing = passwordInput.type === "text";
+    if (loginForm) {
 
-        passwordInput.type = showing ? "password" : "text";
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+        const forgotPassword = document.getElementById("forgotPassword");
+        const authToast = document.getElementById("authToast");
 
-        togglePassword.textContent = showing
-          ? "Mostrar"
-          : "Ocultar";
+        /* Notificações do login */
 
-        togglePassword.setAttribute(
-          "aria-label",
-          showing ? "Mostrar senha" : "Ocultar senha"
-        );
+        function loginNotification(message) {
 
-      });
+            if (!authToast) return;
 
-    }
+            authToast.textContent = message;
+            authToast.classList.add("show");
 
-    /* Recuperação de senha */
+            clearTimeout(window.authToastTimer);
 
-    if (forgotPassword) {
+            window.authToastTimer = setTimeout(() => {
+                authToast.classList.remove("show");
+            }, 3500);
 
-      forgotPassword.addEventListener("click", event => {
-
-        event.preventDefault();
-
-        const email = document.getElementById("email");
-
-        if (!email || !email.value.trim()) {
-          loginNotification(
-            "Informe seu e-mail para recuperar sua senha."
-          );
-
-          if (email) email.focus();
-
-          return;
         }
 
-        loginNotification(
-          "A recuperação de senha será habilitada com o Firebase."
-        );
+        /* Mostrar e ocultar senha */
 
-      });
+        if (passwordInput && togglePassword) {
+
+            togglePassword.addEventListener("click", () => {
+
+                const showing = passwordInput.type === "text";
+
+                passwordInput.type = showing ? "password" : "text";
+
+                togglePassword.textContent = showing
+                    ? "Mostrar"
+                    : "Ocultar";
+
+                togglePassword.setAttribute(
+                    "aria-label",
+                    showing ? "Mostrar senha" : "Ocultar senha"
+                );
+
+            });
+
+        }
+
+        /* Recuperação de senha */
+
+        if (forgotPassword) {
+
+            forgotPassword.addEventListener("click", event => {
+
+                event.preventDefault();
+
+                const email = document.getElementById("email");
+
+                if (!email || !email.value.trim()) {
+                    loginNotification(
+                        "Informe seu e-mail para recuperar sua senha."
+                    );
+
+                    if (email) email.focus();
+
+                    return;
+                }
+
+                loginNotification(
+                    "A recuperação de senha será habilitada com o Firebase."
+                );
+
+            });
+
+        }
+
+        /* Envio do formulário */
+
+        loginForm.addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const email = document.getElementById("email");
+            const accountType = document.getElementById("accountType");
+
+            if (!email || !passwordInput || !accountType) return;
+
+            const emailValue = email.value.trim();
+            const password = passwordInput.value;
+            const type = accountType.value;
+
+            if (!emailValue || !password) {
+                loginNotification("Preencha todos os campos.");
+                return;
+            }
+
+            if (password.length < 6) {
+                loginNotification(
+                    "A senha deve ter pelo menos 6 caracteres."
+                );
+                return;
+            }
+
+            loginNotification(
+                type === "company"
+                    ? "A autenticação da empresa será conectada ao Firebase."
+                    : "A autenticação do cliente será conectada ao Firebase."
+            );
+
+            // A autenticação real será implementada posteriormente.
+
+        });
 
     }
-
-    /* Envio do formulário */
-
-    loginForm.addEventListener("submit", event => {
-
-      event.preventDefault();
-
-      const email = document.getElementById("email");
-      const accountType = document.getElementById("accountType");
-
-      if (!email || !passwordInput || !accountType) return;
-
-      const emailValue = email.value.trim();
-      const password = passwordInput.value;
-      const type = accountType.value;
-
-      if (!emailValue || !password) {
-        loginNotification("Preencha todos os campos.");
-        return;
-      }
-
-      if (password.length < 6) {
-        loginNotification(
-          "A senha deve ter pelo menos 6 caracteres."
-        );
-        return;
-      }
-
-      loginNotification(
-        type === "company"
-          ? "A autenticação da empresa será conectada ao Firebase."
-          : "A autenticação do cliente será conectada ao Firebase."
-      );
-
-      // A autenticação real será implementada posteriormente.
-
-    });
-
-  }
 
 });
 
@@ -438,72 +438,72 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  const registerForm = document.getElementById("registerForm");
+    const registerForm = document.getElementById("registerForm");
 
-  // Mostrar ou ocultar senha
-  document.querySelectorAll("[data-toggle-password]").forEach(button => {
-    button.addEventListener("click", () => {
-      const inputId = button.dataset.togglePassword;
-      const passwordInput = document.getElementById(inputId);
+    // Mostrar ou ocultar senha
+    document.querySelectorAll("[data-toggle-password]").forEach(button => {
+        button.addEventListener("click", () => {
+            const inputId = button.dataset.togglePassword;
+            const passwordInput = document.getElementById(inputId);
 
-      if (!passwordInput) return;
+            if (!passwordInput) return;
 
-      const showingPassword = passwordInput.type === "text";
+            const showingPassword = passwordInput.type === "text";
 
-      passwordInput.type = showingPassword ? "password" : "text";
-      button.textContent = showingPassword ? "Mostrar" : "Ocultar";
+            passwordInput.type = showingPassword ? "password" : "text";
+            button.textContent = showingPassword ? "Mostrar" : "Ocultar";
+        });
     });
-  });
 
-  // Processar formulário de cadastro
-  if (registerForm) {
-    registerForm.addEventListener("submit", event => {
-      event.preventDefault();
+    // Processar formulário de cadastro
+    if (registerForm) {
+        registerForm.addEventListener("submit", event => {
+            event.preventDefault();
 
-      const name = document.getElementById("registerName").value.trim();
-      const company = document.getElementById("registerCompany").value.trim();
-      const email = document.getElementById("registerEmail").value.trim();
-      const password = document.getElementById("registerPassword").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const acceptTerms = document.getElementById("acceptTerms").checked;
-      const message = document.getElementById("registerMessage");
+            const name = document.getElementById("registerName").value.trim();
+            const company = document.getElementById("registerCompany").value.trim();
+            const email = document.getElementById("registerEmail").value.trim();
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const acceptTerms = document.getElementById("acceptTerms").checked;
+            const message = document.getElementById("registerMessage");
 
-      const showMessage = (text, type) => {
-        message.textContent = text;
-        message.className = `auth-message show ${type}`;
-      };
+            const showMessage = (text, type) => {
+                message.textContent = text;
+                message.className = `auth-message show ${type}`;
+            };
 
-      if (!name || !company || !email || !password || !confirmPassword) {
-        showMessage("Preencha todos os campos para continuar.", "error");
-        return;
-      }
+            if (!name || !company || !email || !password || !confirmPassword) {
+                showMessage("Preencha todos os campos para continuar.", "error");
+                return;
+            }
 
-      if (password.length < 6) {
-        showMessage("A senha precisa ter pelo menos 6 caracteres.", "error");
-        return;
-      }
+            if (password.length < 6) {
+                showMessage("A senha precisa ter pelo menos 6 caracteres.", "error");
+                return;
+            }
 
-      if (password !== confirmPassword) {
-        showMessage("As senhas digitadas não são iguais.", "error");
-        return;
-      }
+            if (password !== confirmPassword) {
+                showMessage("As senhas digitadas não são iguais.", "error");
+                return;
+            }
 
-      if (!acceptTerms) {
-        showMessage("Você precisa aceitar os termos para continuar.", "error");
-        return;
-      }
+            if (!acceptTerms) {
+                showMessage("Você precisa aceitar os termos para continuar.", "error");
+                return;
+            }
 
-      showMessage(
-        "A tela de cadastro está validada! A próxima etapa será conectar o formulário ao Firebase para criar e salvar sua conta.",
-        "success"
-      );
+            showMessage(
+                "A tela de cadastro está validada! A próxima etapa será conectar o formulário ao Firebase para criar e salvar sua conta.",
+                "success"
+            );
+        });
+    }
+
+    // Atualizar ano automaticamente
+    document.querySelectorAll("[data-ano]").forEach(element => {
+        element.textContent = new Date().getFullYear();
     });
-  }
-
-  // Atualizar ano automaticamente
-  document.querySelectorAll("[data-ano]").forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
 });
 
 /* =========================================
@@ -511,79 +511,79 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const dashboard = document.querySelector('[data-page="dashboard"]');
+    const dashboard = document.querySelector('[data-page="dashboard"]');
 
-  // Executa somente na página do Dashboard
-  if (!dashboard) return;
+    // Executa somente na página do Dashboard
+    if (!dashboard) return;
 
-  // Data atual
-  const dateElement = document.getElementById('dashboardDate');
+    // Data atual
+    const dateElement = document.getElementById('dashboardDate');
 
-  if (dateElement) {
-    dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    }).format(new Date());
-  }
-
-  // Atualiza o ano automaticamente
-  document.querySelectorAll('[data-ano]').forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  // Menu lateral no celular
-  const sidebar = document.getElementById('sidebar');
-  const mobileMenuButton = document.getElementById('mobileMenuButton');
-  const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-  function closeSidebar() {
-    sidebar?.classList.remove('mobile-open');
-    sidebarOverlay?.classList.remove('show');
-  }
-
-  mobileMenuButton?.addEventListener('click', () => {
-    sidebar?.classList.toggle('mobile-open');
-    sidebarOverlay?.classList.toggle('show');
-  });
-
-  sidebarOverlay?.addEventListener('click', closeSidebar);
-
-  // Fecha menu ao acessar uma página
-  sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', closeSidebar);
-  });
-
-  // Menu do perfil
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-
-  profileButton?.addEventListener('click', () => {
-    profileMenu?.classList.toggle('show');
-  });
-
-  document.addEventListener('click', event => {
-    if (
-      profileMenu &&
-      profileButton &&
-      !profileMenu.contains(event.target) &&
-      !profileButton.contains(event.target)
-    ) {
-      profileMenu.classList.remove('show');
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        }).format(new Date());
     }
-  });
 
-  // Interação visual das tarefas
-  dashboard.querySelectorAll('.dashboard-task input').forEach(input => {
-    input.addEventListener('change', () => {
-      const task = input.closest('.dashboard-task');
-
-      if (task) {
-        task.classList.toggle('task-completed', input.checked);
-      }
+    // Atualiza o ano automaticamente
+    document.querySelectorAll('[data-ano]').forEach(element => {
+        element.textContent = new Date().getFullYear();
     });
-  });
+
+    // Menu lateral no celular
+    const sidebar = document.getElementById('sidebar');
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function closeSidebar() {
+        sidebar?.classList.remove('mobile-open');
+        sidebarOverlay?.classList.remove('show');
+    }
+
+    mobileMenuButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('mobile-open');
+        sidebarOverlay?.classList.toggle('show');
+    });
+
+    sidebarOverlay?.addEventListener('click', closeSidebar);
+
+    // Fecha menu ao acessar uma página
+    sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
+
+    // Menu do perfil
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileButton?.addEventListener('click', () => {
+        profileMenu?.classList.toggle('show');
+    });
+
+    document.addEventListener('click', event => {
+        if (
+            profileMenu &&
+            profileButton &&
+            !profileMenu.contains(event.target) &&
+            !profileButton.contains(event.target)
+        ) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+    // Interação visual das tarefas
+    dashboard.querySelectorAll('.dashboard-task input').forEach(input => {
+        input.addEventListener('change', () => {
+            const task = input.closest('.dashboard-task');
+
+            if (task) {
+                task.classList.toggle('task-completed', input.checked);
+            }
+        });
+    });
 
 })();
 
@@ -593,151 +593,311 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const page = document.querySelector('[data-page="projetos"]');
-  if (!page) return;
+    const page = document.querySelector('[data-page="projetos"]');
+    if (!page) return;
 
-  const STORAGE_KEY = 'clientPortalProjects';
+    const STORAGE_KEY = 'clientPortalProjects';
 
-  const initialProjects = [
-    {
-      id: 'p1',
-      name: 'Website institucional',
-      client: 'Studio Criativo',
-      responsible: 'Mariana Costa',
-      start: '2026-10-01',
-      deadline: '2026-11-20',
-      progress: 75,
-      status: 'Em andamento',
-      description: 'Desenvolvimento do website institucional.'
-    },
-    {
-      id: 'p2',
-      name: 'Identidade visual',
-      client: 'Alpha Solutions',
-      responsible: 'Rafael Alves',
-      start: '2026-10-05',
-      deadline: '2026-11-25',
-      progress: 45,
-      status: 'Em revisão',
-      description: 'Criação da identidade visual da empresa.'
-    },
-    {
-      id: 'p3',
-      name: 'Aplicativo mobile',
-      client: 'MoveTech',
-      responsible: 'João Silva',
-      start: '2026-09-15',
-      deadline: '2026-10-30',
-      progress: 90,
-      status: 'Em andamento',
-      description: 'Desenvolvimento de aplicativo mobile.'
-    },
-    {
-      id: 'p4',
-      name: 'Landing page',
-      client: 'Nova Agência',
-      responsible: 'Ana Martins',
-      start: '2026-09-01',
-      deadline: '2026-10-15',
-      progress: 100,
-      status: 'Concluído',
-      description: 'Design e desenvolvimento de landing page.'
-    }
-  ];
-
-  const tableBody = document.getElementById('projectsTableBody');
-  const searchInput = document.getElementById('projectSearch');
-  const statusFilter = document.getElementById('projectStatusFilter');
-  const emptyState = document.getElementById('projectsEmpty');
-  const modal = document.getElementById('projectModal');
-  const form = document.getElementById('projectForm');
-
-  let projects = [];
-
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    projects = saved ? JSON.parse(saved) : initialProjects;
-
-    if (!Array.isArray(projects)) {
-      projects = initialProjects;
-    }
-  } catch (error) {
-    projects = initialProjects;
-  }
-
-  function saveProjects() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-  }
-
-  function formatDate(date) {
-    if (!date) return '—';
-
-    const parts = date.split('-');
-    if (parts.length !== 3) return '—';
-
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
-  }
-
-  function getEffectiveStatus(project) {
-    if (project.status !== 'Concluído' &&
-      project.deadline &&
-      project.deadline < new Date().toISOString().slice(0, 10)) {
-      return 'Atrasado';
-    }
-
-    return project.status;
-  }
-
-  function getStatusClass(status) {
-    const classes = {
-      'Em andamento': 'status-progress',
-      'Em revisão': 'status-review',
-      'Concluído': 'status-complete',
-      'Pausado': 'status-review',
-      'Atrasado': 'status-delayed'
-    };
-
-    return classes[status] || 'status-review';
-  }
-
-  function getProjectColor(name) {
-    const colors = [
-      ['blue-bg', '#'],
-      ['purple-bg', '#'],
-      ['orange-bg', '#'],
-      ['green-bg', '#']
+    const initialProjects = [
+        {
+            id: 'p1',
+            name: 'Website institucional',
+            client: 'Studio Criativo',
+            responsible: 'Mariana Costa',
+            start: '2026-10-01',
+            deadline: '2026-11-20',
+            progress: 75,
+            status: 'Em andamento',
+            description: 'Desenvolvimento do website institucional.'
+        },
+        {
+            id: 'p2',
+            name: 'Identidade visual',
+            client: 'Alpha Solutions',
+            responsible: 'Rafael Alves',
+            start: '2026-10-05',
+            deadline: '2026-11-25',
+            progress: 45,
+            status: 'Em revisão',
+            description: 'Criação da identidade visual da empresa.'
+        },
+        {
+            id: 'p3',
+            name: 'Aplicativo mobile',
+            client: 'MoveTech',
+            responsible: 'João Silva',
+            start: '2026-09-15',
+            deadline: '2026-10-30',
+            progress: 90,
+            status: 'Em andamento',
+            description: 'Desenvolvimento de aplicativo mobile.'
+        },
+        {
+            id: 'p4',
+            name: 'Landing page',
+            client: 'Nova Agência',
+            responsible: 'Ana Martins',
+            start: '2026-09-01',
+            deadline: '2026-10-15',
+            progress: 100,
+            status: 'Concluído',
+            description: 'Design e desenvolvimento de landing page.'
+        }
     ];
 
-    const index = name.length % colors.length;
-    return colors[index][0];
-  }
+    const tableBody = document.getElementById('projectsTableBody');
+    const searchInput = document.getElementById('projectSearch');
+    const statusFilter = document.getElementById('projectStatusFilter');
+    const emptyState = document.getElementById('projectsEmpty');
+    const modal = document.getElementById('projectModal');
+    const form = document.getElementById('projectForm');
 
-  function renderProjects() {
-    const search = searchInput.value.trim().toLowerCase();
-    const selectedStatus = statusFilter.value;
+    let projects = [];
 
-    const filtered = projects.filter(project => {
-      const matchesSearch =
-        project.name.toLowerCase().includes(search) ||
-        project.client.toLowerCase().includes(search);
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        projects = saved ? JSON.parse(saved) : initialProjects;
 
-      const matchesStatus =
-        !selectedStatus ||
-        getEffectiveStatus(project) === selectedStatus;
+        if (!Array.isArray(projects)) {
+            projects = initialProjects;
+        }
+    } catch (error) {
+        projects = initialProjects;
+    }
 
-      return matchesSearch && matchesStatus;
-    });
+    function saveProjects() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    }
 
-    tableBody.innerHTML = '';
+    function formatDate(date) {
+        if (!date) return '—';
 
-    filtered.forEach(project => {
-      const status = getEffectiveStatus(project);
-      const color = getProjectColor(project.name);
-      const progress = Math.min(100, Math.max(0, Number(project.progress) || 0));
+        const parts = date.split('-');
+        if (parts.length !== 3) return '—';
 
-      const row = document.createElement('tr');
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
 
-      row.innerHTML = `
+    // DOWNLOAD DA FATURA EM PDF
+    const downloadInvoicePDF = (invoice) => {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+            alert('Não foi possível carregar a ferramenta de PDF. Verifique sua conexão e tente novamente.');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const clientName = getClientName(invoice);
+        const clientCompany = getClientCompany(invoice);
+        const status = getStatus(invoice);
+        const statusText = statusLabel(status);
+
+        // Cabeçalho
+        doc.setFillColor(16, 22, 36);
+        doc.rect(0, 0, 210, 42, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(22);
+        doc.text('ClientPortal', 18, 20);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text('DOCUMENTO FINANCEIRO', 18, 29);
+
+        doc.setFontSize(11);
+        doc.text(`Fatura: ${String(invoice.id)}`, 192, 20, {
+            align: 'right'
+        });
+
+        // Título
+        doc.setTextColor(30, 40, 58);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text('Fatura de cobrança', 18, 60);
+
+        // Dados do cliente
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, 68, 192, 68);
+
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('CLIENTE', 18, 80);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(30, 40, 58);
+        doc.text(doc.splitTextToSize(clientName, 170), 18, 88);
+
+        let currentY = 98;
+
+        if (clientCompany) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(100, 110, 125);
+            doc.text('Empresa', 18, currentY);
+
+            doc.setTextColor(30, 40, 58);
+            doc.text(doc.splitTextToSize(clientCompany, 170), 18, currentY + 7);
+
+            currentY += 19;
+        }
+
+        // Descrição
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, currentY, 192, currentY);
+
+        currentY += 12;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('DESCRIÇÃO DO SERVIÇO', 18, currentY);
+
+        currentY += 8;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(30, 40, 58);
+
+        const descriptionLines = doc.splitTextToSize(
+            invoice.description || 'Sem descrição',
+            170
+        );
+
+        doc.text(descriptionLines, 18, currentY);
+
+        currentY += descriptionLines.length * 7 + 12;
+
+        // Valor
+        doc.setFillColor(242, 246, 253);
+        doc.roundedRect(18, currentY, 174, 27, 3, 3, 'F');
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('VALOR DA FATURA', 25, currentY + 10);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(17);
+        doc.setTextColor(45, 105, 220);
+        doc.text(formatCurrency(invoice.amount), 185, currentY + 18, {
+            align: 'right'
+        });
+
+        currentY += 43;
+
+        // Datas e status
+        const details = [
+            ['Data de emissão', formatDate(invoice.issueDate)],
+            ['Data de vencimento', formatDate(invoice.dueDate)],
+            ['Status', statusText]
+        ];
+
+        if (status === 'paid' && invoice.paymentDate) {
+            details.push([
+                'Data do pagamento',
+                formatDate(invoice.paymentDate)
+            ]);
+        }
+
+        doc.setFontSize(10);
+
+        details.forEach(([label, value]) => {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(100, 110, 125);
+            doc.text(label, 18, currentY);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 40, 58);
+            doc.text(String(value), 192, currentY, {
+                align: 'right'
+            });
+
+            currentY += 12;
+        });
+
+        // Rodapé
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, 270, 192, 270);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(130, 140, 155);
+        doc.text(
+            'Documento gerado pelo sistema ClientPortal.',
+            105,
+            279,
+            { align: 'center' }
+        );
+
+        const safeId = String(invoice.id).replace(/[^a-zA-Z0-9_-]/g, '');
+        doc.save(`fatura-${safeId || 'clientportal'}.pdf`);
+    };
+
+
+
+    function getEffectiveStatus(project) {
+        if (project.status !== 'Concluído' &&
+            project.deadline &&
+            project.deadline < new Date().toISOString().slice(0, 10)) {
+            return 'Atrasado';
+        }
+
+        return project.status;
+    }
+
+    function getStatusClass(status) {
+        const classes = {
+            'Em andamento': 'status-progress',
+            'Em revisão': 'status-review',
+            'Concluído': 'status-complete',
+            'Pausado': 'status-review',
+            'Atrasado': 'status-delayed'
+        };
+
+        return classes[status] || 'status-review';
+    }
+
+    function getProjectColor(name) {
+        const colors = [
+            ['blue-bg', '#'],
+            ['purple-bg', '#'],
+            ['orange-bg', '#'],
+            ['green-bg', '#']
+        ];
+
+        const index = name.length % colors.length;
+        return colors[index][0];
+    }
+
+    function renderProjects() {
+        const search = searchInput.value.trim().toLowerCase();
+        const selectedStatus = statusFilter.value;
+
+        const filtered = projects.filter(project => {
+            const matchesSearch =
+                project.name.toLowerCase().includes(search) ||
+                project.client.toLowerCase().includes(search);
+
+            const matchesStatus =
+                !selectedStatus ||
+                getEffectiveStatus(project) === selectedStatus;
+
+            return matchesSearch && matchesStatus;
+        });
+
+        tableBody.innerHTML = '';
+
+        filtered.forEach(project => {
+            const status = getEffectiveStatus(project);
+            const color = getProjectColor(project.name);
+            const progress = Math.min(100, Math.max(0, Number(project.progress) || 0));
+
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
                 <td>
                     <div class="project-name-cell">
                         <span class="project-color ${color}">
@@ -808,237 +968,237 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
             `;
 
-      tableBody.appendChild(row);
+            tableBody.appendChild(row);
+        });
+
+        emptyState.hidden = filtered.length > 0;
+
+        document.getElementById('projectsResultCount').textContent =
+            `${filtered.length} ${filtered.length === 1 ? 'projeto' : 'projetos'}`;
+
+        updateStatistics();
+    }
+
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[char]);
+    }
+
+    function updateStatistics() {
+        const total = projects.length;
+        const active = projects.filter(p =>
+            ['Em andamento', 'Em revisão'].includes(getEffectiveStatus(p))
+        ).length;
+        const completed = projects.filter(p =>
+            p.status === 'Concluído'
+        ).length;
+        const delayed = projects.filter(p =>
+            getEffectiveStatus(p) === 'Atrasado'
+        ).length;
+
+        document.getElementById('totalProjects').textContent = total;
+        document.getElementById('activeProjects').textContent = active;
+        document.getElementById('completedProjects').textContent = completed;
+        document.getElementById('delayedProjects').textContent = delayed;
+        document.getElementById('sidebarProjectCount').textContent = total;
+    }
+
+    function openModal(project = null) {
+        form.reset();
+
+        document.getElementById('projectId').value = '';
+
+        if (project) {
+            document.getElementById('projectModalTitle').textContent =
+                'Editar projeto';
+
+            document.getElementById('projectId').value = project.id;
+            document.getElementById('projectName').value = project.name;
+            document.getElementById('projectClient').value = project.client;
+            document.getElementById('projectResponsible').value = project.responsible;
+            document.getElementById('projectStart').value = project.start;
+            document.getElementById('projectDeadline').value = project.deadline;
+            document.getElementById('projectStatus').value = project.status;
+            document.getElementById('projectProgress').value = project.progress;
+            document.getElementById('projectDescription').value =
+                project.description || '';
+        } else {
+            document.getElementById('projectModalTitle').textContent =
+                'Novo projeto';
+
+            document.getElementById('projectStatus').value = 'Em andamento';
+            document.getElementById('projectProgress').value = 0;
+        }
+
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        document.getElementById('projectName').focus();
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('newProjectButton').addEventListener('click', () => {
+        openModal();
     });
 
-    emptyState.hidden = filtered.length > 0;
+    document.getElementById('closeProjectModal').addEventListener('click', closeModal);
+    document.getElementById('cancelProjectButton').addEventListener('click', closeModal);
 
-    document.getElementById('projectsResultCount').textContent =
-      `${filtered.length} ${filtered.length === 1 ? 'projeto' : 'projetos'}`;
+    modal.addEventListener('click', event => {
+        if (event.target === modal) closeModal();
+    });
 
-    updateStatistics();
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[char]);
-  }
-
-  function updateStatistics() {
-    const total = projects.length;
-    const active = projects.filter(p =>
-      ['Em andamento', 'Em revisão'].includes(getEffectiveStatus(p))
-    ).length;
-    const completed = projects.filter(p =>
-      p.status === 'Concluído'
-    ).length;
-    const delayed = projects.filter(p =>
-      getEffectiveStatus(p) === 'Atrasado'
-    ).length;
-
-    document.getElementById('totalProjects').textContent = total;
-    document.getElementById('activeProjects').textContent = active;
-    document.getElementById('completedProjects').textContent = completed;
-    document.getElementById('delayedProjects').textContent = delayed;
-    document.getElementById('sidebarProjectCount').textContent = total;
-  }
-
-  function openModal(project = null) {
-    form.reset();
-
-    document.getElementById('projectId').value = '';
-
-    if (project) {
-      document.getElementById('projectModalTitle').textContent =
-        'Editar projeto';
-
-      document.getElementById('projectId').value = project.id;
-      document.getElementById('projectName').value = project.name;
-      document.getElementById('projectClient').value = project.client;
-      document.getElementById('projectResponsible').value = project.responsible;
-      document.getElementById('projectStart').value = project.start;
-      document.getElementById('projectDeadline').value = project.deadline;
-      document.getElementById('projectStatus').value = project.status;
-      document.getElementById('projectProgress').value = project.progress;
-      document.getElementById('projectDescription').value =
-        project.description || '';
-    } else {
-      document.getElementById('projectModalTitle').textContent =
-        'Novo projeto';
-
-      document.getElementById('projectStatus').value = 'Em andamento';
-      document.getElementById('projectProgress').value = 0;
-    }
-
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-
-    document.getElementById('projectName').focus();
-  }
-
-  function closeModal() {
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  document.getElementById('newProjectButton').addEventListener('click', () => {
-    openModal();
-  });
-
-  document.getElementById('closeProjectModal').addEventListener('click', closeModal);
-  document.getElementById('cancelProjectButton').addEventListener('click', closeModal);
-
-  modal.addEventListener('click', event => {
-    if (event.target === modal) closeModal();
-  });
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && modal.classList.contains('show')) {
-      closeModal();
-    }
-  });
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-
-    const id = document.getElementById('projectId').value;
-    const start = document.getElementById('projectStart').value;
-    const deadline = document.getElementById('projectDeadline').value;
-    const progress = Number(document.getElementById('projectProgress').value);
-    const status = document.getElementById('projectStatus').value;
-
-    if (deadline < start) {
-      alert('O prazo de entrega não pode ser anterior à data de início.');
-      return;
-    }
-
-    if (status === 'Concluído' && progress !== 100) {
-      alert('Um projeto concluído precisa estar com 100% de progresso.');
-      return;
-    }
-
-    const projectData = {
-      id: id || `p${Date.now()}`,
-      name: document.getElementById('projectName').value.trim(),
-      client: document.getElementById('projectClient').value.trim(),
-      responsible: document.getElementById('projectResponsible').value.trim(),
-      start,
-      deadline,
-      progress,
-      status,
-      description: document.getElementById('projectDescription').value.trim()
-    };
-
-    if (status === 'Concluído') {
-      projectData.progress = 100;
-    }
-
-    if (id) {
-      projects = projects.map(project =>
-        project.id === id ? projectData : project
-      );
-    } else {
-      projects.unshift(projectData);
-    }
-
-    saveProjects();
-    renderProjects();
-    closeModal();
-  });
-
-  tableBody.addEventListener('click', event => {
-    const button = event.target.closest('[data-action]');
-    if (!button) return;
-
-    const id = button.dataset.id;
-    const action = button.dataset.action;
-    const project = projects.find(item => item.id === id);
-
-    if (!project) return;
-
-    if (action === 'edit') {
-      openModal(project);
-    }
-
-
-    if (action === 'delete') {
-      openDeleteModal(
-        `Deseja realmente excluir o projeto "${project.name}"?`,
-        () => {
-          projects = projects.filter(item => item.id !== id);
-          saveProjects();
-          renderProjects();
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
         }
-      );
+    });
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const id = document.getElementById('projectId').value;
+        const start = document.getElementById('projectStart').value;
+        const deadline = document.getElementById('projectDeadline').value;
+        const progress = Number(document.getElementById('projectProgress').value);
+        const status = document.getElementById('projectStatus').value;
+
+        if (deadline < start) {
+            alert('O prazo de entrega não pode ser anterior à data de início.');
+            return;
+        }
+
+        if (status === 'Concluído' && progress !== 100) {
+            alert('Um projeto concluído precisa estar com 100% de progresso.');
+            return;
+        }
+
+        const projectData = {
+            id: id || `p${Date.now()}`,
+            name: document.getElementById('projectName').value.trim(),
+            client: document.getElementById('projectClient').value.trim(),
+            responsible: document.getElementById('projectResponsible').value.trim(),
+            start,
+            deadline,
+            progress,
+            status,
+            description: document.getElementById('projectDescription').value.trim()
+        };
+
+        if (status === 'Concluído') {
+            projectData.progress = 100;
+        }
+
+        if (id) {
+            projects = projects.map(project =>
+                project.id === id ? projectData : project
+            );
+        } else {
+            projects.unshift(projectData);
+        }
+
+        saveProjects();
+        renderProjects();
+        closeModal();
+    });
+
+    tableBody.addEventListener('click', event => {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        const action = button.dataset.action;
+        const project = projects.find(item => item.id === id);
+
+        if (!project) return;
+
+        if (action === 'edit') {
+            openModal(project);
+        }
+
+
+        if (action === 'delete') {
+            openDeleteModal(
+                `Deseja realmente excluir o projeto "${project.name}"?`,
+                () => {
+                    projects = projects.filter(item => item.id !== id);
+                    saveProjects();
+                    renderProjects();
+                }
+            );
+        }
+
+    });
+
+    searchInput.addEventListener('input', renderProjects);
+    statusFilter.addEventListener('change', renderProjects);
+
+    // Cabeçalho e menu lateral
+    const dateElement = document.getElementById('projectsDate');
+
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        }).format(new Date());
     }
 
-  });
+    document.querySelectorAll('[data-ano]').forEach(element => {
+        element.textContent = new Date().getFullYear();
+    });
 
-  searchInput.addEventListener('input', renderProjects);
-  statusFilter.addEventListener('change', renderProjects);
+    const sidebar = document.getElementById('sidebar');
+    const mobileButton = document.getElementById('mobileMenuButton');
+    const overlay = document.getElementById('sidebarOverlay');
 
-  // Cabeçalho e menu lateral
-  const dateElement = document.getElementById('projectsDate');
-
-  if (dateElement) {
-    dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    }).format(new Date());
-  }
-
-  document.querySelectorAll('[data-ano]').forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  const sidebar = document.getElementById('sidebar');
-  const mobileButton = document.getElementById('mobileMenuButton');
-  const overlay = document.getElementById('sidebarOverlay');
-
-  function closeSidebar() {
-    sidebar?.classList.remove('mobile-open');
-    overlay?.classList.remove('show');
-  }
-
-  mobileButton?.addEventListener('click', () => {
-    sidebar?.classList.toggle('mobile-open');
-    overlay?.classList.toggle('show');
-  });
-
-  overlay?.addEventListener('click', closeSidebar);
-
-  sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', closeSidebar);
-  });
-
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-
-  profileButton?.addEventListener('click', () => {
-    profileMenu?.classList.toggle('show');
-  });
-
-  document.addEventListener('click', event => {
-    if (
-      profileMenu &&
-      profileButton &&
-      !profileMenu.contains(event.target) &&
-      !profileButton.contains(event.target)
-    ) {
-      profileMenu.classList.remove('show');
+    function closeSidebar() {
+        sidebar?.classList.remove('mobile-open');
+        overlay?.classList.remove('show');
     }
-  });
 
-  renderProjects();
+    mobileButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('mobile-open');
+        overlay?.classList.toggle('show');
+    });
+
+    overlay?.addEventListener('click', closeSidebar);
+
+    sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
+
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileButton?.addEventListener('click', () => {
+        profileMenu?.classList.toggle('show');
+    });
+
+    document.addEventListener('click', event => {
+        if (
+            profileMenu &&
+            profileButton &&
+            !profileMenu.contains(event.target) &&
+            !profileButton.contains(event.target)
+        ) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+    renderProjects();
 })();
 
 
@@ -1047,162 +1207,162 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const page = document.querySelector('[data-page="clientes"]');
-  if (!page) return;
+    const page = document.querySelector('[data-page="clientes"]');
+    if (!page) return;
 
-  const CLIENT_STORAGE_KEY = 'clientPortalClients';
-  const PROJECT_STORAGE_KEY = 'clientPortalProjects';
+    const CLIENT_STORAGE_KEY = 'clientPortalClients';
+    const PROJECT_STORAGE_KEY = 'clientPortalProjects';
 
-  const initialClients = [
-    {
-      id: 'c1',
-      name: 'Mariana Costa',
-      company: 'Studio Criativo',
-      email: 'mariana@studiocriativo.com',
-      phone: '(11) 98765-4321',
-      document: '',
-      status: 'Ativo',
-      notes: 'Cliente do projeto de website institucional.'
-    },
-    {
-      id: 'c2',
-      name: 'Rafael Alves',
-      company: 'Alpha Solutions',
-      email: 'rafael@alphasolutions.com',
-      phone: '(11) 97654-3210',
-      document: '',
-      status: 'Ativo',
-      notes: 'Cliente do projeto de identidade visual.'
-    },
-    {
-      id: 'c3',
-      name: 'João Silva',
-      company: 'MoveTech',
-      email: 'joao@movetech.com',
-      phone: '(11) 96543-2109',
-      document: '',
-      status: 'Ativo',
-      notes: 'Cliente do projeto de aplicativo mobile.'
-    },
-    {
-      id: 'c4',
-      name: 'Ana Martins',
-      company: 'Nova Agência',
-      email: 'ana@novaagencia.com',
-      phone: '(11) 95432-1098',
-      document: '',
-      status: 'Inativo',
-      notes: 'Projeto de landing page concluído.'
-    }
-  ];
-
-  const tableBody = document.getElementById('clientsTableBody');
-  const searchInput = document.getElementById('clientSearch');
-  const statusFilter = document.getElementById('clientStatusFilter');
-  const emptyState = document.getElementById('clientsEmpty');
-
-  const modal = document.getElementById('clientModal');
-  const detailsModal = document.getElementById('clientDetailsModal');
-  const form = document.getElementById('clientForm');
-
-  let clients = [];
-
-  try {
-    const saved = localStorage.getItem(CLIENT_STORAGE_KEY);
-    clients = saved ? JSON.parse(saved) : initialClients;
-
-    if (!Array.isArray(clients)) {
-      clients = initialClients;
-    }
-  } catch (error) {
-    clients = initialClients;
-  }
-
-  function saveClients() {
-    localStorage.setItem(
-      CLIENT_STORAGE_KEY,
-      JSON.stringify(clients)
-    );
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[char]);
-  }
-
-  function getInitials(name) {
-    return String(name || '')
-      .trim()
-      .split(/\s+/)
-      .slice(0, 2)
-      .map(part => part.charAt(0).toUpperCase())
-      .join('');
-  }
-
-  function getProjects() {
-    try {
-      const saved = localStorage.getItem(PROJECT_STORAGE_KEY);
-
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : [];
-      }
-    } catch (error) {
-      console.error('Não foi possível carregar os projetos.', error);
-    }
-
-    return [
-      { client: 'Studio Criativo' },
-      { client: 'Alpha Solutions' },
-      { client: 'MoveTech' },
-      { client: 'Nova Agência' }
+    const initialClients = [
+        {
+            id: 'c1',
+            name: 'Mariana Costa',
+            company: 'Studio Criativo',
+            email: 'mariana@studiocriativo.com',
+            phone: '(11) 98765-4321',
+            document: '',
+            status: 'Ativo',
+            notes: 'Cliente do projeto de website institucional.'
+        },
+        {
+            id: 'c2',
+            name: 'Rafael Alves',
+            company: 'Alpha Solutions',
+            email: 'rafael@alphasolutions.com',
+            phone: '(11) 97654-3210',
+            document: '',
+            status: 'Ativo',
+            notes: 'Cliente do projeto de identidade visual.'
+        },
+        {
+            id: 'c3',
+            name: 'João Silva',
+            company: 'MoveTech',
+            email: 'joao@movetech.com',
+            phone: '(11) 96543-2109',
+            document: '',
+            status: 'Ativo',
+            notes: 'Cliente do projeto de aplicativo mobile.'
+        },
+        {
+            id: 'c4',
+            name: 'Ana Martins',
+            company: 'Nova Agência',
+            email: 'ana@novaagencia.com',
+            phone: '(11) 95432-1098',
+            document: '',
+            status: 'Inativo',
+            notes: 'Projeto de landing page concluído.'
+        }
     ];
-  }
 
-  function getClientProjectCount(client) {
-    return getProjects().filter(project =>
-      String(project.client || '').trim().toLowerCase() ===
-      String(client.company || '').trim().toLowerCase()
-    ).length;
-  }
+    const tableBody = document.getElementById('clientsTableBody');
+    const searchInput = document.getElementById('clientSearch');
+    const statusFilter = document.getElementById('clientStatusFilter');
+    const emptyState = document.getElementById('clientsEmpty');
 
-  function getStatusClass(status) {
-    return status === 'Ativo'
-      ? 'status-complete'
-      : 'status-inactive';
-  }
+    const modal = document.getElementById('clientModal');
+    const detailsModal = document.getElementById('clientDetailsModal');
+    const form = document.getElementById('clientForm');
 
-  function renderClients() {
-    const search = searchInput.value.trim().toLowerCase();
-    const selectedStatus = statusFilter.value;
+    let clients = [];
 
-    const filtered = clients.filter(client => {
-      const searchableText = [
-        client.name,
-        client.company,
-        client.email,
-        client.phone
-      ].join(' ').toLowerCase();
+    try {
+        const saved = localStorage.getItem(CLIENT_STORAGE_KEY);
+        clients = saved ? JSON.parse(saved) : initialClients;
 
-      const matchesSearch = searchableText.includes(search);
-      const matchesStatus =
-        !selectedStatus || client.status === selectedStatus;
+        if (!Array.isArray(clients)) {
+            clients = initialClients;
+        }
+    } catch (error) {
+        clients = initialClients;
+    }
 
-      return matchesSearch && matchesStatus;
-    });
+    function saveClients() {
+        localStorage.setItem(
+            CLIENT_STORAGE_KEY,
+            JSON.stringify(clients)
+        );
+    }
 
-    tableBody.innerHTML = '';
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[char]);
+    }
 
-    filtered.forEach(client => {
-      const row = document.createElement('tr');
-      const projectCount = getClientProjectCount(client);
+    function getInitials(name) {
+        return String(name || '')
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map(part => part.charAt(0).toUpperCase())
+            .join('');
+    }
 
-      row.innerHTML = `
+    function getProjects() {
+        try {
+            const saved = localStorage.getItem(PROJECT_STORAGE_KEY);
+
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return Array.isArray(parsed) ? parsed : [];
+            }
+        } catch (error) {
+            console.error('Não foi possível carregar os projetos.', error);
+        }
+
+        return [
+            { client: 'Studio Criativo' },
+            { client: 'Alpha Solutions' },
+            { client: 'MoveTech' },
+            { client: 'Nova Agência' }
+        ];
+    }
+
+    function getClientProjectCount(client) {
+        return getProjects().filter(project =>
+            String(project.client || '').trim().toLowerCase() ===
+            String(client.company || '').trim().toLowerCase()
+        ).length;
+    }
+
+    function getStatusClass(status) {
+        return status === 'Ativo'
+            ? 'status-complete'
+            : 'status-inactive';
+    }
+
+    function renderClients() {
+        const search = searchInput.value.trim().toLowerCase();
+        const selectedStatus = statusFilter.value;
+
+        const filtered = clients.filter(client => {
+            const searchableText = [
+                client.name,
+                client.company,
+                client.email,
+                client.phone
+            ].join(' ').toLowerCase();
+
+            const matchesSearch = searchableText.includes(search);
+            const matchesStatus =
+                !selectedStatus || client.status === selectedStatus;
+
+            return matchesSearch && matchesStatus;
+        });
+
+        tableBody.innerHTML = '';
+
+        filtered.forEach(client => {
+            const row = document.createElement('tr');
+            const projectCount = getClientProjectCount(client);
+
+            row.innerHTML = `
                 <td>
                     <div class="client-name-cell">
                         <span class="client-avatar">
@@ -1270,98 +1430,98 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
             `;
 
-      tableBody.appendChild(row);
-    });
+            tableBody.appendChild(row);
+        });
 
-    emptyState.hidden = filtered.length > 0;
+        emptyState.hidden = filtered.length > 0;
 
-    document.getElementById('clientsResultCount').textContent =
-      `${filtered.length} ${filtered.length === 1 ? 'cliente' : 'clientes'}`;
+        document.getElementById('clientsResultCount').textContent =
+            `${filtered.length} ${filtered.length === 1 ? 'cliente' : 'clientes'}`;
 
-    updateStatistics();
-  }
-
-  function updateStatistics() {
-    const total = clients.length;
-    const active = clients.filter(client =>
-      client.status === 'Ativo'
-    ).length;
-    const inactive = clients.filter(client =>
-      client.status === 'Inativo'
-    ).length;
-
-    const linkedProjects = clients.reduce((sum, client) => {
-      return sum + getClientProjectCount(client);
-    }, 0);
-
-    document.getElementById('totalClients').textContent = total;
-    document.getElementById('activeClients').textContent = active;
-    document.getElementById('inactiveClients').textContent = inactive;
-    document.getElementById('linkedProjects').textContent = linkedProjects;
-  }
-
-  function openClientModal(client = null) {
-    form.reset();
-    document.getElementById('clientId').value = '';
-
-    if (client) {
-      document.getElementById('clientModalTitle').textContent =
-        'Editar cliente';
-
-      document.getElementById('clientId').value = client.id;
-      document.getElementById('clientName').value = client.name;
-      document.getElementById('clientCompany').value = client.company;
-      document.getElementById('clientEmail').value = client.email;
-      document.getElementById('clientPhone').value = client.phone;
-      document.getElementById('clientStatus').value = client.status;
-      document.getElementById('clientDocument').value =
-        client.document || '';
-      document.getElementById('clientNotes').value =
-        client.notes || '';
-    } else {
-      document.getElementById('clientModalTitle').textContent =
-        'Novo cliente';
-
-      document.getElementById('clientStatus').value = 'Ativo';
+        updateStatistics();
     }
 
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    function updateStatistics() {
+        const total = clients.length;
+        const active = clients.filter(client =>
+            client.status === 'Ativo'
+        ).length;
+        const inactive = clients.filter(client =>
+            client.status === 'Inativo'
+        ).length;
 
-    document.getElementById('clientName').focus();
-  }
+        const linkedProjects = clients.reduce((sum, client) => {
+            return sum + getClientProjectCount(client);
+        }, 0);
 
-  function closeClientModal() {
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+        document.getElementById('totalClients').textContent = total;
+        document.getElementById('activeClients').textContent = active;
+        document.getElementById('inactiveClients').textContent = inactive;
+        document.getElementById('linkedProjects').textContent = linkedProjects;
+    }
 
-  function closeDetailsModal() {
-    detailsModal.classList.remove('show');
-    detailsModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+    function openClientModal(client = null) {
+        form.reset();
+        document.getElementById('clientId').value = '';
 
-  function showClientDetails(client) {
-    const relatedProjects = getProjects().filter(project =>
-      String(project.client || '').trim().toLowerCase() ===
-      String(client.company || '').trim().toLowerCase()
-    );
+        if (client) {
+            document.getElementById('clientModalTitle').textContent =
+                'Editar cliente';
 
-    const projectList = relatedProjects.length
-      ? relatedProjects.map(project => `
+            document.getElementById('clientId').value = client.id;
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('clientCompany').value = client.company;
+            document.getElementById('clientEmail').value = client.email;
+            document.getElementById('clientPhone').value = client.phone;
+            document.getElementById('clientStatus').value = client.status;
+            document.getElementById('clientDocument').value =
+                client.document || '';
+            document.getElementById('clientNotes').value =
+                client.notes || '';
+        } else {
+            document.getElementById('clientModalTitle').textContent =
+                'Novo cliente';
+
+            document.getElementById('clientStatus').value = 'Ativo';
+        }
+
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        document.getElementById('clientName').focus();
+    }
+
+    function closeClientModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    function closeDetailsModal() {
+        detailsModal.classList.remove('show');
+        detailsModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    function showClientDetails(client) {
+        const relatedProjects = getProjects().filter(project =>
+            String(project.client || '').trim().toLowerCase() ===
+            String(client.company || '').trim().toLowerCase()
+        );
+
+        const projectList = relatedProjects.length
+            ? relatedProjects.map(project => `
                 <div class="client-detail-project">
                     ${escapeHTML(project.name || 'Projeto sem nome')}
                 </div>
             `).join('')
-      : '<p>Nenhum projeto vinculado a este cliente.</p>';
+            : '<p>Nenhum projeto vinculado a este cliente.</p>';
 
-    document.getElementById('clientDetailsTitle').textContent =
-      client.company;
+        document.getElementById('clientDetailsTitle').textContent =
+            client.company;
 
-    document.getElementById('clientDetailsContent').innerHTML = `
+        document.getElementById('clientDetailsContent').innerHTML = `
             <div class="client-detail-profile">
                 <span class="client-avatar">
                     ${escapeHTML(getInitials(client.name))}
@@ -1405,164 +1565,164 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-    detailsModal.classList.add('show');
-    detailsModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  document.getElementById('newClientButton').addEventListener('click', () => {
-    openClientModal();
-  });
-
-  document.getElementById('closeClientModal').addEventListener('click', closeClientModal);
-  document.getElementById('cancelClientButton').addEventListener('click', closeClientModal);
-  document.getElementById('closeClientDetails').addEventListener('click', closeDetailsModal);
-
-  modal.addEventListener('click', event => {
-    if (event.target === modal) closeClientModal();
-  });
-
-  detailsModal.addEventListener('click', event => {
-    if (event.target === detailsModal) closeDetailsModal();
-  });
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      closeClientModal();
-      closeDetailsModal();
-    }
-  });
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-
-    const id = document.getElementById('clientId').value;
-    const email = document.getElementById('clientEmail').value.trim().toLowerCase();
-
-    const duplicateEmail = clients.some(client =>
-      client.email.toLowerCase() === email && client.id !== id
-    );
-
-    if (duplicateEmail) {
-      alert('Já existe um cliente cadastrado com este e-mail.');
-      return;
+        detailsModal.classList.add('show');
+        detailsModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
     }
 
-    const clientData = {
-      id: id || `c${Date.now()}`,
-      name: document.getElementById('clientName').value.trim(),
-      company: document.getElementById('clientCompany').value.trim(),
-      email,
-      phone: document.getElementById('clientPhone').value.trim(),
-      status: document.getElementById('clientStatus').value,
-      document: document.getElementById('clientDocument').value.trim(),
-      notes: document.getElementById('clientNotes').value.trim()
-    };
+    document.getElementById('newClientButton').addEventListener('click', () => {
+        openClientModal();
+    });
 
-    if (id) {
-      clients = clients.map(client =>
-        client.id === id ? clientData : client
-      );
-    } else {
-      clients.unshift(clientData);
+    document.getElementById('closeClientModal').addEventListener('click', closeClientModal);
+    document.getElementById('cancelClientButton').addEventListener('click', closeClientModal);
+    document.getElementById('closeClientDetails').addEventListener('click', closeDetailsModal);
+
+    modal.addEventListener('click', event => {
+        if (event.target === modal) closeClientModal();
+    });
+
+    detailsModal.addEventListener('click', event => {
+        if (event.target === detailsModal) closeDetailsModal();
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeClientModal();
+            closeDetailsModal();
+        }
+    });
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const id = document.getElementById('clientId').value;
+        const email = document.getElementById('clientEmail').value.trim().toLowerCase();
+
+        const duplicateEmail = clients.some(client =>
+            client.email.toLowerCase() === email && client.id !== id
+        );
+
+        if (duplicateEmail) {
+            alert('Já existe um cliente cadastrado com este e-mail.');
+            return;
+        }
+
+        const clientData = {
+            id: id || `c${Date.now()}`,
+            name: document.getElementById('clientName').value.trim(),
+            company: document.getElementById('clientCompany').value.trim(),
+            email,
+            phone: document.getElementById('clientPhone').value.trim(),
+            status: document.getElementById('clientStatus').value,
+            document: document.getElementById('clientDocument').value.trim(),
+            notes: document.getElementById('clientNotes').value.trim()
+        };
+
+        if (id) {
+            clients = clients.map(client =>
+                client.id === id ? clientData : client
+            );
+        } else {
+            clients.unshift(clientData);
+        }
+
+        saveClients();
+        renderClients();
+        closeClientModal();
+    });
+
+    tableBody.addEventListener('click', event => {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        const action = button.dataset.action;
+        const client = clients.find(item => item.id === id);
+
+        if (!client) return;
+
+        if (action === 'details') {
+            showClientDetails(client);
+        }
+
+        if (action === 'edit') {
+            openClientModal(client);
+        }
+
+        if (action === 'delete') {
+            const confirmed = confirm(
+                `Deseja realmente excluir o cliente "${client.company}"?`
+            );
+
+            if (!confirmed) return;
+
+            clients = clients.filter(item => item.id !== id);
+            saveClients();
+            renderClients();
+        }
+    });
+
+    searchInput.addEventListener('input', renderClients);
+    statusFilter.addEventListener('change', renderClients);
+
+    // DATA DO CABEÇALHO
+    const dateElement = document.getElementById('clientsDate');
+
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        }).format(new Date());
     }
 
-    saveClients();
+    document.querySelectorAll('[data-ano]').forEach(element => {
+        element.textContent = new Date().getFullYear();
+    });
+
+    // MENU MOBILE
+    const sidebar = document.getElementById('sidebar');
+    const mobileButton = document.getElementById('mobileMenuButton');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function closeSidebar() {
+        sidebar?.classList.remove('mobile-open');
+        overlay?.classList.remove('show');
+    }
+
+    mobileButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('mobile-open');
+        overlay?.classList.toggle('show');
+    });
+
+    overlay?.addEventListener('click', closeSidebar);
+
+    sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
+
+    // MENU DO PERFIL
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileButton?.addEventListener('click', () => {
+        profileMenu?.classList.toggle('show');
+    });
+
+    document.addEventListener('click', event => {
+        if (
+            profileMenu &&
+            profileButton &&
+            !profileMenu.contains(event.target) &&
+            !profileButton.contains(event.target)
+        ) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
     renderClients();
-    closeClientModal();
-  });
-
-  tableBody.addEventListener('click', event => {
-    const button = event.target.closest('[data-action]');
-    if (!button) return;
-
-    const id = button.dataset.id;
-    const action = button.dataset.action;
-    const client = clients.find(item => item.id === id);
-
-    if (!client) return;
-
-    if (action === 'details') {
-      showClientDetails(client);
-    }
-
-    if (action === 'edit') {
-      openClientModal(client);
-    }
-
-    if (action === 'delete') {
-      const confirmed = confirm(
-        `Deseja realmente excluir o cliente "${client.company}"?`
-      );
-
-      if (!confirmed) return;
-
-      clients = clients.filter(item => item.id !== id);
-      saveClients();
-      renderClients();
-    }
-  });
-
-  searchInput.addEventListener('input', renderClients);
-  statusFilter.addEventListener('change', renderClients);
-
-  // DATA DO CABEÇALHO
-  const dateElement = document.getElementById('clientsDate');
-
-  if (dateElement) {
-    dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    }).format(new Date());
-  }
-
-  document.querySelectorAll('[data-ano]').forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  // MENU MOBILE
-  const sidebar = document.getElementById('sidebar');
-  const mobileButton = document.getElementById('mobileMenuButton');
-  const overlay = document.getElementById('sidebarOverlay');
-
-  function closeSidebar() {
-    sidebar?.classList.remove('mobile-open');
-    overlay?.classList.remove('show');
-  }
-
-  mobileButton?.addEventListener('click', () => {
-    sidebar?.classList.toggle('mobile-open');
-    overlay?.classList.toggle('show');
-  });
-
-  overlay?.addEventListener('click', closeSidebar);
-
-  sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', closeSidebar);
-  });
-
-  // MENU DO PERFIL
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-
-  profileButton?.addEventListener('click', () => {
-    profileMenu?.classList.toggle('show');
-  });
-
-  document.addEventListener('click', event => {
-    if (
-      profileMenu &&
-      profileButton &&
-      !profileMenu.contains(event.target) &&
-      !profileButton.contains(event.target)
-    ) {
-      profileMenu.classList.remove('show');
-    }
-  });
-
-  renderClients();
 })();
 
 
@@ -1571,166 +1731,166 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const page = document.querySelector('[data-page="tarefas"]');
-  if (!page) return;
+    const page = document.querySelector('[data-page="tarefas"]');
+    if (!page) return;
 
-  const TASK_KEY = 'clientPortalTasks';
-  const PROJECT_KEY = 'clientPortalProjects';
+    const TASK_KEY = 'clientPortalTasks';
+    const PROJECT_KEY = 'clientPortalProjects';
 
-  const form = document.getElementById('taskForm');
-  const modal = document.getElementById('taskModal');
-  const tableBody = document.getElementById('tasksTableBody');
-  const searchInput = document.getElementById('taskSearch');
-  const statusFilter = document.getElementById('taskStatusFilter');
-  const priorityFilter = document.getElementById('taskPriorityFilter');
-  const projectSelect = document.getElementById('taskProject');
-  const emptyState = document.getElementById('tasksEmpty');
+    const form = document.getElementById('taskForm');
+    const modal = document.getElementById('taskModal');
+    const tableBody = document.getElementById('tasksTableBody');
+    const searchInput = document.getElementById('taskSearch');
+    const statusFilter = document.getElementById('taskStatusFilter');
+    const priorityFilter = document.getElementById('taskPriorityFilter');
+    const projectSelect = document.getElementById('taskProject');
+    const emptyState = document.getElementById('tasksEmpty');
 
-  let tasks = readStorage(TASK_KEY);
+    let tasks = readStorage(TASK_KEY);
 
-  function readStorage(key) {
-    try {
-      const data = JSON.parse(localStorage.getItem(key) || '[]');
-      return Array.isArray(data) ? data : [];
-    } catch (error) {
-      console.error(`Erro ao carregar ${key}:`, error);
-      return [];
-    }
-  }
-
-  function saveTasks() {
-    localStorage.setItem(TASK_KEY, JSON.stringify(tasks));
-  }
-
-  function getProjects() {
-    return readStorage(PROJECT_KEY);
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[char]);
-  }
-
-  function formatDate(date) {
-    if (!date) return '—';
-
-    const parts = date.split('-');
-    if (parts.length !== 3) return date;
-
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
-  }
-
-  function isOverdue(task) {
-    if (task.status === 'Concluída' || !task.deadline) {
-      return false;
+    function readStorage(key) {
+        try {
+            const data = JSON.parse(localStorage.getItem(key) || '[]');
+            return Array.isArray(data) ? data : [];
+        } catch (error) {
+            console.error(`Erro ao carregar ${key}:`, error);
+            return [];
+        }
     }
 
-    const deadline = new Date(`${task.deadline}T23:59:59`);
-    return !Number.isNaN(deadline.getTime()) &&
-      deadline < new Date();
-  }
+    function saveTasks() {
+        localStorage.setItem(TASK_KEY, JSON.stringify(tasks));
+    }
 
-  function getTaskStatusClass(task) {
-    if (isOverdue(task)) return 'overdue';
+    function getProjects() {
+        return readStorage(PROJECT_KEY);
+    }
 
-    if (task.status === 'Concluída') return 'completed';
-    if (task.status === 'Em andamento') return 'progress';
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[char]);
+    }
 
-    return 'pending';
-  }
+    function formatDate(date) {
+        if (!date) return '—';
 
-  function getTaskStatusLabel(task) {
-    return isOverdue(task) ? 'Atrasada' : task.status;
-  }
+        const parts = date.split('-');
+        if (parts.length !== 3) return date;
 
-  function getPriorityClass(priority) {
-    if (priority === 'Alta') return 'high';
-    if (priority === 'Baixa') return 'low';
-    return 'medium';
-  }
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
 
-  // PREENCHE A LISTA DE PROJETOS
-  function updateProjectOptions(selectedId = '') {
-    const projects = getProjects();
+    function isOverdue(task) {
+        if (task.status === 'Concluída' || !task.deadline) {
+            return false;
+        }
 
-    projectSelect.innerHTML = `
+        const deadline = new Date(`${task.deadline}T23:59:59`);
+        return !Number.isNaN(deadline.getTime()) &&
+            deadline < new Date();
+    }
+
+    function getTaskStatusClass(task) {
+        if (isOverdue(task)) return 'overdue';
+
+        if (task.status === 'Concluída') return 'completed';
+        if (task.status === 'Em andamento') return 'progress';
+
+        return 'pending';
+    }
+
+    function getTaskStatusLabel(task) {
+        return isOverdue(task) ? 'Atrasada' : task.status;
+    }
+
+    function getPriorityClass(priority) {
+        if (priority === 'Alta') return 'high';
+        if (priority === 'Baixa') return 'low';
+        return 'medium';
+    }
+
+    // PREENCHE A LISTA DE PROJETOS
+    function updateProjectOptions(selectedId = '') {
+        const projects = getProjects();
+
+        projectSelect.innerHTML = `
             <option value="">Selecione um projeto</option>
         `;
 
-    projects.forEach(project => {
-      const option = document.createElement('option');
-      option.value = project.id;
-      option.textContent = project.name || 'Projeto sem nome';
-      option.selected = String(project.id) === String(selectedId);
-      projectSelect.appendChild(option);
-    });
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name || 'Projeto sem nome';
+            option.selected = String(project.id) === String(selectedId);
+            projectSelect.appendChild(option);
+        });
 
-    projectSelect.disabled = projects.length === 0;
-  }
+        projectSelect.disabled = projects.length === 0;
+    }
 
-  function getProjectName(projectId) {
-    const project = getProjects().find(item =>
-      String(item.id) === String(projectId)
-    );
+    function getProjectName(projectId) {
+        const project = getProjects().find(item =>
+            String(item.id) === String(projectId)
+        );
 
-    return project?.name || 'Projeto não encontrado';
-  }
+        return project?.name || 'Projeto não encontrado';
+    }
 
-  // INDICADORES
-  function updateStatistics() {
-    const total = tasks.length;
-    const pending = tasks.filter(task =>
-      task.status === 'Pendente'
-    ).length;
-    const progress = tasks.filter(task =>
-      task.status === 'Em andamento'
-    ).length;
-    const completed = tasks.filter(task =>
-      task.status === 'Concluída'
-    ).length;
+    // INDICADORES
+    function updateStatistics() {
+        const total = tasks.length;
+        const pending = tasks.filter(task =>
+            task.status === 'Pendente'
+        ).length;
+        const progress = tasks.filter(task =>
+            task.status === 'Em andamento'
+        ).length;
+        const completed = tasks.filter(task =>
+            task.status === 'Concluída'
+        ).length;
 
-    document.getElementById('totalTasks').textContent = total;
-    document.getElementById('pendingTasks').textContent = pending;
-    document.getElementById('progressTasks').textContent = progress;
-    document.getElementById('completedTasks').textContent = completed;
-  }
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('pendingTasks').textContent = pending;
+        document.getElementById('progressTasks').textContent = progress;
+        document.getElementById('completedTasks').textContent = completed;
+    }
 
-  // TABELA
-  function renderTasks() {
-    const search = searchInput.value.trim().toLowerCase();
-    const selectedStatus = statusFilter.value;
-    const selectedPriority = priorityFilter.value;
+    // TABELA
+    function renderTasks() {
+        const search = searchInput.value.trim().toLowerCase();
+        const selectedStatus = statusFilter.value;
+        const selectedPriority = priorityFilter.value;
 
-    const filtered = tasks.filter(task => {
-      const projectName = getProjectName(task.projectId);
+        const filtered = tasks.filter(task => {
+            const projectName = getProjectName(task.projectId);
 
-      const searchable = [
-        task.title,
-        task.description,
-        projectName,
-        task.responsible
-      ].join(' ').toLowerCase();
+            const searchable = [
+                task.title,
+                task.description,
+                projectName,
+                task.responsible
+            ].join(' ').toLowerCase();
 
-      const matchesSearch = searchable.includes(search);
-      const matchesStatus =
-        !selectedStatus || task.status === selectedStatus;
-      const matchesPriority =
-        !selectedPriority || task.priority === selectedPriority;
+            const matchesSearch = searchable.includes(search);
+            const matchesStatus =
+                !selectedStatus || task.status === selectedStatus;
+            const matchesPriority =
+                !selectedPriority || task.priority === selectedPriority;
 
-      return matchesSearch && matchesStatus && matchesPriority;
-    });
+            return matchesSearch && matchesStatus && matchesPriority;
+        });
 
-    tableBody.innerHTML = '';
+        tableBody.innerHTML = '';
 
-    filtered.forEach(task => {
-      const row = document.createElement('tr');
+        filtered.forEach(task => {
+            const row = document.createElement('tr');
 
-      row.innerHTML = `
+            row.innerHTML = `
                 <td>
                     <div class="task-title-cell">
                         <strong>${escapeHTML(task.title)}</strong>
@@ -1791,227 +1951,227 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
             `;
 
-      tableBody.appendChild(row);
+            tableBody.appendChild(row);
+        });
+
+        emptyState.hidden = filtered.length > 0;
+
+        document.getElementById('tasksResultCount').textContent =
+            `${filtered.length} ${filtered.length === 1 ? 'tarefa' : 'tarefas'}`;
+
+        updateStatistics();
+    }
+
+    // ABRIR MODAL
+    function openTaskModal(task = null) {
+        form.reset();
+
+        document.getElementById('taskId').value = '';
+
+        updateProjectOptions(task?.projectId || '');
+
+        if (task) {
+            document.getElementById('taskModalTitle').textContent =
+                'Editar tarefa';
+
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('taskTitle').value = task.title;
+            document.getElementById('taskDescription').value =
+                task.description || '';
+            document.getElementById('taskResponsible').value =
+                task.responsible;
+            document.getElementById('taskDeadline').value =
+                task.deadline;
+            document.getElementById('taskPriority').value =
+                task.priority;
+            document.getElementById('taskStatus').value =
+                task.status;
+        } else {
+            document.getElementById('taskModalTitle').textContent =
+                'Nova tarefa';
+
+            document.getElementById('taskPriority').value = 'Média';
+            document.getElementById('taskStatus').value = 'Pendente';
+        }
+
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        document.getElementById('taskTitle').focus();
+    }
+
+    function closeTaskModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    // NOVA TAREFA
+    document.getElementById('newTaskButton').addEventListener('click', () => {
+        if (getProjects().length === 0) {
+            alert('Cadastre um projeto antes de criar uma tarefa.');
+            return;
+        }
+
+        openTaskModal();
     });
 
-    emptyState.hidden = filtered.length > 0;
+    // FECHAR MODAL
+    document.getElementById('closeTaskModal')
+        .addEventListener('click', closeTaskModal);
 
-    document.getElementById('tasksResultCount').textContent =
-      `${filtered.length} ${filtered.length === 1 ? 'tarefa' : 'tarefas'}`;
+    document.getElementById('cancelTaskButton')
+        .addEventListener('click', closeTaskModal);
 
-    updateStatistics();
-  }
+    modal.addEventListener('click', event => {
+        if (event.target === modal) closeTaskModal();
+    });
 
-  // ABRIR MODAL
-  function openTaskModal(task = null) {
-    form.reset();
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeTaskModal();
+    });
 
-    document.getElementById('taskId').value = '';
+    // SALVAR TAREFA
+    form.addEventListener('submit', event => {
+        event.preventDefault();
 
-    updateProjectOptions(task?.projectId || '');
+        const id = document.getElementById('taskId').value;
+        const projectId = projectSelect.value;
 
-    if (task) {
-      document.getElementById('taskModalTitle').textContent =
-        'Editar tarefa';
+        const projectExists = getProjects().some(project =>
+            String(project.id) === String(projectId)
+        );
 
-      document.getElementById('taskId').value = task.id;
-      document.getElementById('taskTitle').value = task.title;
-      document.getElementById('taskDescription').value =
-        task.description || '';
-      document.getElementById('taskResponsible').value =
-        task.responsible;
-      document.getElementById('taskDeadline').value =
-        task.deadline;
-      document.getElementById('taskPriority').value =
-        task.priority;
-      document.getElementById('taskStatus').value =
-        task.status;
-    } else {
-      document.getElementById('taskModalTitle').textContent =
-        'Nova tarefa';
+        if (!projectExists) {
+            alert('Selecione um projeto válido.');
+            return;
+        }
 
-      document.getElementById('taskPriority').value = 'Média';
-      document.getElementById('taskStatus').value = 'Pendente';
+        const taskData = {
+            id: id || `task-${Date.now()}`,
+            title: document.getElementById('taskTitle').value.trim(),
+            description: document.getElementById('taskDescription').value.trim(),
+            projectId,
+            responsible: document.getElementById('taskResponsible').value.trim(),
+            deadline: document.getElementById('taskDeadline').value,
+            priority: document.getElementById('taskPriority').value,
+            status: document.getElementById('taskStatus').value
+        };
+
+        if (id) {
+            tasks = tasks.map(task =>
+                task.id === id ? taskData : task
+            );
+        } else {
+            tasks.unshift(taskData);
+        }
+
+        saveTasks();
+        renderTasks();
+        closeTaskModal();
+    });
+
+    // EDITAR E EXCLUIR
+    tableBody.addEventListener('click', event => {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        const action = button.dataset.action;
+        const task = tasks.find(item => item.id === id);
+
+        if (!task) return;
+
+        if (action === 'edit') {
+            openTaskModal(task);
+        }
+
+        if (action === 'delete') {
+            const confirmed = confirm(
+                `Deseja realmente excluir a tarefa "${task.title}"?`
+            );
+
+            if (!confirmed) return;
+
+            tasks = tasks.filter(item => item.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+    });
+
+    // PESQUISA E FILTROS
+    searchInput.addEventListener('input', renderTasks);
+    statusFilter.addEventListener('change', renderTasks);
+    priorityFilter.addEventListener('change', renderTasks);
+
+    // DATA DO CABEÇALHO
+    const dateElement = document.getElementById('tasksDate');
+
+    if (dateElement) {
+        dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        }).format(new Date());
     }
 
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    document.querySelectorAll('[data-task-year]').forEach(element => {
+        element.textContent = new Date().getFullYear();
+    });
 
-    document.getElementById('taskTitle').focus();
-  }
+    // MENU MOBILE
+    const sidebar = document.getElementById('sidebar');
+    const mobileButton = document.getElementById('mobileMenuButton');
+    const overlay = document.getElementById('sidebarOverlay');
 
-  function closeTaskModal() {
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  // NOVA TAREFA
-  document.getElementById('newTaskButton').addEventListener('click', () => {
-    if (getProjects().length === 0) {
-      alert('Cadastre um projeto antes de criar uma tarefa.');
-      return;
+    function closeSidebar() {
+        sidebar?.classList.remove('mobile-open');
+        overlay?.classList.remove('show');
     }
 
-    openTaskModal();
-  });
+    mobileButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('mobile-open');
+        overlay?.classList.toggle('show');
+    });
 
-  // FECHAR MODAL
-  document.getElementById('closeTaskModal')
-    .addEventListener('click', closeTaskModal);
+    overlay?.addEventListener('click', closeSidebar);
 
-  document.getElementById('cancelTaskButton')
-    .addEventListener('click', closeTaskModal);
+    sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
 
-  modal.addEventListener('click', event => {
-    if (event.target === modal) closeTaskModal();
-  });
+    // MENU DO PERFIL
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
 
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeTaskModal();
-  });
+    profileButton?.addEventListener('click', () => {
+        profileMenu?.classList.toggle('show');
+    });
 
-  // SALVAR TAREFA
-  form.addEventListener('submit', event => {
-    event.preventDefault();
+    document.addEventListener('click', event => {
+        if (
+            profileMenu &&
+            profileButton &&
+            !profileMenu.contains(event.target) &&
+            !profileButton.contains(event.target)
+        ) {
+            profileMenu.classList.remove('show');
+        }
+    });
 
-    const id = document.getElementById('taskId').value;
-    const projectId = projectSelect.value;
+    // ATUALIZA QUANDO OS PROJETOS MUDAM
+    window.addEventListener('storage', event => {
+        if (event.key === PROJECT_KEY) {
+            updateProjectOptions();
+            renderTasks();
+        }
+    });
 
-    const projectExists = getProjects().some(project =>
-      String(project.id) === String(projectId)
-    );
-
-    if (!projectExists) {
-      alert('Selecione um projeto válido.');
-      return;
-    }
-
-    const taskData = {
-      id: id || `task-${Date.now()}`,
-      title: document.getElementById('taskTitle').value.trim(),
-      description: document.getElementById('taskDescription').value.trim(),
-      projectId,
-      responsible: document.getElementById('taskResponsible').value.trim(),
-      deadline: document.getElementById('taskDeadline').value,
-      priority: document.getElementById('taskPriority').value,
-      status: document.getElementById('taskStatus').value
-    };
-
-    if (id) {
-      tasks = tasks.map(task =>
-        task.id === id ? taskData : task
-      );
-    } else {
-      tasks.unshift(taskData);
-    }
-
-    saveTasks();
+    // PRIMEIRA RENDERIZAÇÃO
+    updateProjectOptions();
     renderTasks();
-    closeTaskModal();
-  });
-
-  // EDITAR E EXCLUIR
-  tableBody.addEventListener('click', event => {
-    const button = event.target.closest('[data-action]');
-    if (!button) return;
-
-    const id = button.dataset.id;
-    const action = button.dataset.action;
-    const task = tasks.find(item => item.id === id);
-
-    if (!task) return;
-
-    if (action === 'edit') {
-      openTaskModal(task);
-    }
-
-    if (action === 'delete') {
-      const confirmed = confirm(
-        `Deseja realmente excluir a tarefa "${task.title}"?`
-      );
-
-      if (!confirmed) return;
-
-      tasks = tasks.filter(item => item.id !== id);
-      saveTasks();
-      renderTasks();
-    }
-  });
-
-  // PESQUISA E FILTROS
-  searchInput.addEventListener('input', renderTasks);
-  statusFilter.addEventListener('change', renderTasks);
-  priorityFilter.addEventListener('change', renderTasks);
-
-  // DATA DO CABEÇALHO
-  const dateElement = document.getElementById('tasksDate');
-
-  if (dateElement) {
-    dateElement.textContent = new Intl.DateTimeFormat('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    }).format(new Date());
-  }
-
-  document.querySelectorAll('[data-task-year]').forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
-
-  // MENU MOBILE
-  const sidebar = document.getElementById('sidebar');
-  const mobileButton = document.getElementById('mobileMenuButton');
-  const overlay = document.getElementById('sidebarOverlay');
-
-  function closeSidebar() {
-    sidebar?.classList.remove('mobile-open');
-    overlay?.classList.remove('show');
-  }
-
-  mobileButton?.addEventListener('click', () => {
-    sidebar?.classList.toggle('mobile-open');
-    overlay?.classList.toggle('show');
-  });
-
-  overlay?.addEventListener('click', closeSidebar);
-
-  sidebar?.querySelectorAll('.sidebar-link').forEach(link => {
-    link.addEventListener('click', closeSidebar);
-  });
-
-  // MENU DO PERFIL
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-
-  profileButton?.addEventListener('click', () => {
-    profileMenu?.classList.toggle('show');
-  });
-
-  document.addEventListener('click', event => {
-    if (
-      profileMenu &&
-      profileButton &&
-      !profileMenu.contains(event.target) &&
-      !profileButton.contains(event.target)
-    ) {
-      profileMenu.classList.remove('show');
-    }
-  });
-
-  // ATUALIZA QUANDO OS PROJETOS MUDAM
-  window.addEventListener('storage', event => {
-    if (event.key === PROJECT_KEY) {
-      updateProjectOptions();
-      renderTasks();
-    }
-  });
-
-  // PRIMEIRA RENDERIZAÇÃO
-  updateProjectOptions();
-  renderTasks();
 
 })();
 
@@ -2022,321 +2182,321 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const page = document.querySelector('[data-page="mensagens"]');
+    const page = document.querySelector('[data-page="mensagens"]');
 
-  if (!page) return;
+    if (!page) return;
 
-  const MESSAGE_KEY = 'clientPortalMessages';
-  const CLIENT_KEY = 'clientPortalClients';
-  const PROJECT_KEY = 'clientPortalProjects';
+    const MESSAGE_KEY = 'clientPortalMessages';
+    const CLIENT_KEY = 'clientPortalClients';
+    const PROJECT_KEY = 'clientPortalProjects';
 
-  // ELEMENTOS
-  const conversationList = document.getElementById('conversationList');
-  const conversationSearch = document.getElementById('conversationSearch');
-  const conversationEmpty = document.getElementById('conversationEmpty');
-  const conversationCount = document.getElementById('conversationCount');
+    // ELEMENTOS
+    const conversationList = document.getElementById('conversationList');
+    const conversationSearch = document.getElementById('conversationSearch');
+    const conversationEmpty = document.getElementById('conversationEmpty');
+    const conversationCount = document.getElementById('conversationCount');
 
-  const chatEmpty = document.getElementById('chatEmpty');
-  const chatContent = document.getElementById('chatContent');
-  const chatMessages = document.getElementById('chatMessages');
+    const chatEmpty = document.getElementById('chatEmpty');
+    const chatContent = document.getElementById('chatContent');
+    const chatMessages = document.getElementById('chatMessages');
 
-  const chatAvatar = document.getElementById('chatAvatar');
-  const chatClientName = document.getElementById('chatClientName');
-  const chatClientCompany = document.getElementById('chatClientCompany');
-  const chatProjectName = document.getElementById('chatProjectName');
+    const chatAvatar = document.getElementById('chatAvatar');
+    const chatClientName = document.getElementById('chatClientName');
+    const chatClientCompany = document.getElementById('chatClientCompany');
+    const chatProjectName = document.getElementById('chatProjectName');
 
-  const messageForm = document.getElementById('messageForm');
-  const messageInput = document.getElementById('messageInput');
-  const messageCharacterCount = document.getElementById('messageCharacterCount');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const messageCharacterCount = document.getElementById('messageCharacterCount');
 
-  const totalConversations = document.getElementById('totalConversations');
-  const unreadMessages = document.getElementById('unreadMessages');
-  const clientsMessaged = document.getElementById('clientsMessaged');
+    const totalConversations = document.getElementById('totalConversations');
+    const unreadMessages = document.getElementById('unreadMessages');
+    const clientsMessaged = document.getElementById('clientsMessaged');
 
-  const chatClientModal = document.getElementById('chatClientModal');
-  const chatClientDetails = document.getElementById('chatClientDetails');
+    const chatClientModal = document.getElementById('chatClientModal');
+    const chatClientDetails = document.getElementById('chatClientDetails');
 
-  let selectedConversationId = null;
-  let activeFilter = 'all';
+    let selectedConversationId = null;
+    let activeFilter = 'all';
 
-  // UTILITÁRIOS
-  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  })[char]);
+    // UTILITÁRIOS
+    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    })[char]);
 
-  const readStorage = (key, fallback = []) => {
-    try {
-      const data = JSON.parse(localStorage.getItem(key));
-      return Array.isArray(data) ? data : fallback;
-    } catch {
-      return fallback;
-    }
-  };
+    const readStorage = (key, fallback = []) => {
+        try {
+            const data = JSON.parse(localStorage.getItem(key));
+            return Array.isArray(data) ? data : fallback;
+        } catch {
+            return fallback;
+        }
+    };
 
-  const saveMessages = () => {
-    localStorage.setItem(MESSAGE_KEY, JSON.stringify(conversations));
-  };
+    const saveMessages = () => {
+        localStorage.setItem(MESSAGE_KEY, JSON.stringify(conversations));
+    };
 
-  const getClients = () => {
-    const clients = readStorage(CLIENT_KEY);
+    const getClients = () => {
+        const clients = readStorage(CLIENT_KEY);
 
-    if (clients.length) return clients;
+        if (clients.length) return clients;
 
-    return [
-      {
-        id: 'demo-mariana',
-        name: 'Mariana Costa',
-        company: 'Studio Criativo',
-        email: 'mariana@studiocriativo.com',
-        phone: '(11) 99999-1111',
-        status: 'ativo'
-      },
-      {
-        id: 'demo-rafael',
-        name: 'Rafael Alves',
-        company: 'Alpha Solutions',
-        email: 'rafael@alphasolutions.com',
-        phone: '(11) 99999-2222',
-        status: 'ativo'
-      },
-      {
-        id: 'demo-joao',
-        name: 'João Silva',
-        company: 'MoveTech',
-        email: 'joao@movetech.com',
-        phone: '(11) 99999-3333',
-        status: 'ativo'
-      },
-      {
-        id: 'demo-ana',
-        name: 'Ana Martins',
-        company: 'Nova Agência',
-        email: 'ana@novaagencia.com',
-        phone: '(11) 99999-4444',
-        status: 'inativo'
-      }
-    ];
-  };
+        return [
+            {
+                id: 'demo-mariana',
+                name: 'Mariana Costa',
+                company: 'Studio Criativo',
+                email: 'mariana@studiocriativo.com',
+                phone: '(11) 99999-1111',
+                status: 'ativo'
+            },
+            {
+                id: 'demo-rafael',
+                name: 'Rafael Alves',
+                company: 'Alpha Solutions',
+                email: 'rafael@alphasolutions.com',
+                phone: '(11) 99999-2222',
+                status: 'ativo'
+            },
+            {
+                id: 'demo-joao',
+                name: 'João Silva',
+                company: 'MoveTech',
+                email: 'joao@movetech.com',
+                phone: '(11) 99999-3333',
+                status: 'ativo'
+            },
+            {
+                id: 'demo-ana',
+                name: 'Ana Martins',
+                company: 'Nova Agência',
+                email: 'ana@novaagencia.com',
+                phone: '(11) 99999-4444',
+                status: 'inativo'
+            }
+        ];
+    };
 
-  const getProjects = () => readStorage(PROJECT_KEY);
+    const getProjects = () => readStorage(PROJECT_KEY);
 
-  const getClientId = client =>
-    String(client.id || client.email || client.company || client.name);
+    const getClientId = client =>
+        String(client.id || client.email || client.company || client.name);
 
-  const getInitials = name => {
-    const parts = String(name || 'CL').trim().split(/\s+/);
+    const getInitials = name => {
+        const parts = String(name || 'CL').trim().split(/\s+/);
 
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
 
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  };
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    };
 
-  const formatTime = date => {
-    return new Date(date).toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+    const formatTime = date => {
+        return new Date(date).toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
 
-  const formatConversationTime = date => {
-    const messageDate = new Date(date);
-    const today = new Date();
+    const formatConversationTime = date => {
+        const messageDate = new Date(date);
+        const today = new Date();
 
-    const sameDay =
-      messageDate.getDate() === today.getDate() &&
-      messageDate.getMonth() === today.getMonth() &&
-      messageDate.getFullYear() === today.getFullYear();
+        const sameDay =
+            messageDate.getDate() === today.getDate() &&
+            messageDate.getMonth() === today.getMonth() &&
+            messageDate.getFullYear() === today.getFullYear();
 
-    if (sameDay) return formatTime(date);
+        if (sameDay) return formatTime(date);
 
-    return messageDate.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit'
-    });
-  };
+        return messageDate.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit'
+        });
+    };
 
-  const formatDateDivider = date => {
-    return new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
+    const formatDateDivider = date => {
+        return new Date(date).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+    };
 
-  const sortByRecent = list => {
-    return [...list].sort((a, b) => {
-      const dateA = new Date(
-        a.messages?.[a.messages.length - 1]?.createdAt || 0
-      );
+    const sortByRecent = list => {
+        return [...list].sort((a, b) => {
+            const dateA = new Date(
+                a.messages?.[a.messages.length - 1]?.createdAt || 0
+            );
 
-      const dateB = new Date(
-        b.messages?.[b.messages.length - 1]?.createdAt || 0
-      );
+            const dateB = new Date(
+                b.messages?.[b.messages.length - 1]?.createdAt || 0
+            );
 
-      return dateB - dateA;
-    });
-  };
+            return dateB - dateA;
+        });
+    };
 
-  // RELACIONAMENTO COM CLIENTES E PROJETOS
-  const findClient = conversation => {
-    return getClients().find(client =>
-      getClientId(client) === String(conversation.clientId)
-    ) || null;
-  };
+    // RELACIONAMENTO COM CLIENTES E PROJETOS
+    const findClient = conversation => {
+        return getClients().find(client =>
+            getClientId(client) === String(conversation.clientId)
+        ) || null;
+    };
 
-  const findProject = conversation => {
-    const client = findClient(conversation);
-    const company = client?.company || conversation.clientCompany;
+    const findProject = conversation => {
+        const client = findClient(conversation);
+        const company = client?.company || conversation.clientCompany;
 
-    return getProjects().find(project =>
-      String(project.client || '').trim().toLowerCase() ===
-      String(company || '').trim().toLowerCase()
-    ) || null;
-  };
+        return getProjects().find(project =>
+            String(project.client || '').trim().toLowerCase() ===
+            String(company || '').trim().toLowerCase()
+        ) || null;
+    };
 
-  const getConversationName = conversation => {
-    const client = findClient(conversation);
-    return client?.name || conversation.clientName || 'Cliente';
-  };
+    const getConversationName = conversation => {
+        const client = findClient(conversation);
+        return client?.name || conversation.clientName || 'Cliente';
+    };
 
-  const getConversationCompany = conversation => {
-    const client = findClient(conversation);
-    return client?.company || conversation.clientCompany || '';
-  };
+    const getConversationCompany = conversation => {
+        const client = findClient(conversation);
+        return client?.company || conversation.clientCompany || '';
+    };
 
-  const getLastMessage = conversation => {
-    const messages = conversation.messages || [];
+    const getLastMessage = conversation => {
+        const messages = conversation.messages || [];
 
-    return messages[messages.length - 1] || null;
-  };
+        return messages[messages.length - 1] || null;
+    };
 
-  // CONVERSAS DEMONSTRATIVAS
-  const createDemoConversations = () => {
-    const clients = getClients();
+    // CONVERSAS DEMONSTRATIVAS
+    const createDemoConversations = () => {
+        const clients = getClients();
 
-    const demoMessages = [
-      {
-        company: 'Studio Criativo',
-        message: 'Olá! Gostaria de saber como está o andamento do projeto.',
-        sender: 'client',
-        minutesAgo: 12,
-        unread: 2
-      },
-      {
-        company: 'Alpha Solutions',
-        message: 'Perfeito, obrigado pelo retorno!',
-        sender: 'client',
-        minutesAgo: 85,
-        unread: 0
-      },
-      {
-        company: 'MoveTech',
-        message: 'Enviei os materiais que você solicitou.',
-        sender: 'client',
-        minutesAgo: 180,
-        unread: 1
-      }
-    ];
-
-    return demoMessages
-      .map((demo, index) => {
-        const client = clients.find(item =>
-          String(item.company || '').trim().toLowerCase() ===
-          demo.company.toLowerCase()
-        );
-
-        if (!client) return null;
-
-        const lastDate = Date.now() - demo.minutesAgo * 60000;
-
-        const messages = [
-          {
-            id: `demo-${index}-1`,
-            sender: 'admin',
-            text: 'Olá! Tudo bem? Como posso ajudar?',
-            createdAt: new Date(lastDate - 3600000).toISOString()
-          },
-          {
-            id: `demo-${index}-2`,
-            sender: demo.sender,
-            text: demo.message,
-            createdAt: new Date(lastDate).toISOString()
-          }
+        const demoMessages = [
+            {
+                company: 'Studio Criativo',
+                message: 'Olá! Gostaria de saber como está o andamento do projeto.',
+                sender: 'client',
+                minutesAgo: 12,
+                unread: 2
+            },
+            {
+                company: 'Alpha Solutions',
+                message: 'Perfeito, obrigado pelo retorno!',
+                sender: 'client',
+                minutesAgo: 85,
+                unread: 0
+            },
+            {
+                company: 'MoveTech',
+                message: 'Enviei os materiais que você solicitou.',
+                sender: 'client',
+                minutesAgo: 180,
+                unread: 1
+            }
         ];
 
-        return {
-          id: `conversation-${getClientId(client)}`,
-          clientId: getClientId(client),
-          clientName: client.name,
-          clientCompany: client.company,
-          unread: demo.unread,
-          messages
-        };
-      })
-      .filter(Boolean);
-  };
+        return demoMessages
+            .map((demo, index) => {
+                const client = clients.find(item =>
+                    String(item.company || '').trim().toLowerCase() ===
+                    demo.company.toLowerCase()
+                );
 
-  let conversations = readStorage(MESSAGE_KEY);
+                if (!client) return null;
 
-  if (!conversations.length) {
-    conversations = createDemoConversations();
-    saveMessages();
-  }
+                const lastDate = Date.now() - demo.minutesAgo * 60000;
 
-  // NORMALIZA DADOS DAS CONVERSAS
-  conversations = conversations.map(conversation => ({
-    ...conversation,
-    unread: Number(conversation.unread) || 0,
-    messages: Array.isArray(conversation.messages)
-      ? conversation.messages
-      : []
-  }));
+                const messages = [
+                    {
+                        id: `demo-${index}-1`,
+                        sender: 'admin',
+                        text: 'Olá! Tudo bem? Como posso ajudar?',
+                        createdAt: new Date(lastDate - 3600000).toISOString()
+                    },
+                    {
+                        id: `demo-${index}-2`,
+                        sender: demo.sender,
+                        text: demo.message,
+                        createdAt: new Date(lastDate).toISOString()
+                    }
+                ];
 
-  // INDICADORES
-  const updateStats = () => {
-    const unreadTotal = conversations.reduce(
-      (total, conversation) => total + conversation.unread,
-      0
-    );
+                return {
+                    id: `conversation-${getClientId(client)}`,
+                    clientId: getClientId(client),
+                    clientName: client.name,
+                    clientCompany: client.company,
+                    unread: demo.unread,
+                    messages
+                };
+            })
+            .filter(Boolean);
+    };
 
-    totalConversations.textContent = conversations.length;
-    unreadMessages.textContent = unreadTotal;
-    clientsMessaged.textContent = conversations.length;
-    conversationCount.textContent = conversations.length;
-  };
+    let conversations = readStorage(MESSAGE_KEY);
 
-  // LISTA DE CONVERSAS
-  const renderConversations = () => {
-    const search = conversationSearch.value.trim().toLowerCase();
-
-    let filtered = sortByRecent(conversations);
-
-    if (activeFilter === 'unread') {
-      filtered = filtered.filter(conversation => conversation.unread > 0);
+    if (!conversations.length) {
+        conversations = createDemoConversations();
+        saveMessages();
     }
 
-    filtered = filtered.filter(conversation => {
-      const name = getConversationName(conversation).toLowerCase();
-      const company = getConversationCompany(conversation).toLowerCase();
+    // NORMALIZA DADOS DAS CONVERSAS
+    conversations = conversations.map(conversation => ({
+        ...conversation,
+        unread: Number(conversation.unread) || 0,
+        messages: Array.isArray(conversation.messages)
+            ? conversation.messages
+            : []
+    }));
 
-      return name.includes(search) || company.includes(search);
-    });
+    // INDICADORES
+    const updateStats = () => {
+        const unreadTotal = conversations.reduce(
+            (total, conversation) => total + conversation.unread,
+            0
+        );
 
-    conversationList.innerHTML = filtered.map(conversation => {
-      const lastMessage = getLastMessage(conversation);
-      const name = getConversationName(conversation);
-      const company = getConversationCompany(conversation);
-      const active = conversation.id === selectedConversationId;
+        totalConversations.textContent = conversations.length;
+        unreadMessages.textContent = unreadTotal;
+        clientsMessaged.textContent = conversations.length;
+        conversationCount.textContent = conversations.length;
+    };
 
-      const preview = lastMessage
-        ? `${lastMessage.sender === 'admin' ? 'Você: ' : ''}${lastMessage.text}`
-        : 'Nenhuma mensagem ainda';
+    // LISTA DE CONVERSAS
+    const renderConversations = () => {
+        const search = conversationSearch.value.trim().toLowerCase();
 
-      return `
+        let filtered = sortByRecent(conversations);
+
+        if (activeFilter === 'unread') {
+            filtered = filtered.filter(conversation => conversation.unread > 0);
+        }
+
+        filtered = filtered.filter(conversation => {
+            const name = getConversationName(conversation).toLowerCase();
+            const company = getConversationCompany(conversation).toLowerCase();
+
+            return name.includes(search) || company.includes(search);
+        });
+
+        conversationList.innerHTML = filtered.map(conversation => {
+            const lastMessage = getLastMessage(conversation);
+            const name = getConversationName(conversation);
+            const company = getConversationCompany(conversation);
+            const active = conversation.id === selectedConversationId;
+
+            const preview = lastMessage
+                ? `${lastMessage.sender === 'admin' ? 'Você: ' : ''}${lastMessage.text}`
+                : 'Nenhuma mensagem ainda';
+
+            return `
                 <button type="button"
                         class="conversation-item ${active ? 'active' : ''}"
                         data-conversation-id="${escapeHTML(conversation.id)}">
@@ -2351,8 +2511,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             <strong>${escapeHTML(name)}</strong>
                             <time>
                                 ${lastMessage
-          ? escapeHTML(formatConversationTime(lastMessage.createdAt))
-          : ''}
+                    ? escapeHTML(formatConversationTime(lastMessage.createdAt))
+                    : ''}
                             </time>
                         </span>
 
@@ -2366,58 +2526,58 @@ document.addEventListener("DOMContentLoaded", () => {
                             </span>
 
                             ${conversation.unread > 0
-          ? `<span class="conversation-unread">${conversation.unread}</span>`
-          : ''}
+                    ? `<span class="conversation-unread">${conversation.unread}</span>`
+                    : ''}
                         </span>
 
                     </span>
 
                 </button>
             `;
-    }).join('');
+        }).join('');
 
-    conversationEmpty.hidden = filtered.length > 0;
+        conversationEmpty.hidden = filtered.length > 0;
 
-    updateStats();
-  };
+        updateStats();
+    };
 
-  // MARCAR CONVERSA COMO LIDA
-  const markAsRead = conversation => {
-    if (!conversation || conversation.unread === 0) return;
+    // MARCAR CONVERSA COMO LIDA
+    const markAsRead = conversation => {
+        if (!conversation || conversation.unread === 0) return;
 
-    conversation.unread = 0;
-    saveMessages();
-    updateStats();
-    renderConversations();
-  };
+        conversation.unread = 0;
+        saveMessages();
+        updateStats();
+        renderConversations();
+    };
 
-  // HISTÓRICO DO CHAT
-  const renderChatMessages = conversation => {
-    const messages = conversation.messages || [];
+    // HISTÓRICO DO CHAT
+    const renderChatMessages = conversation => {
+        const messages = conversation.messages || [];
 
-    if (!messages.length) {
-      chatMessages.innerHTML = `
+        if (!messages.length) {
+            chatMessages.innerHTML = `
                 <div class="messages-chat-empty">
                     <div class="chat-empty-icon">✉</div>
                     <h3>Nenhuma mensagem ainda</h3>
                     <p>Envie a primeira mensagem para iniciar a conversa.</p>
                 </div>
             `;
-      return;
-    }
+            return;
+        }
 
-    let previousDate = '';
+        let previousDate = '';
 
-    chatMessages.innerHTML = messages.map(message => {
-      const date = formatDateDivider(message.createdAt);
-      const showDivider = date !== previousDate;
+        chatMessages.innerHTML = messages.map(message => {
+            const date = formatDateDivider(message.createdAt);
+            const showDivider = date !== previousDate;
 
-      previousDate = date;
+            previousDate = date;
 
-      return `
+            return `
                 ${showDivider
-          ? `<div class="chat-date-divider">${escapeHTML(date)}</div>`
-          : ''}
+                    ? `<div class="chat-date-divider">${escapeHTML(date)}</div>`
+                    : ''}
 
                 <article class="chat-message ${message.sender === 'admin' ? 'sent' : 'received'}">
 
@@ -2429,249 +2589,249 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </article>
             `;
-    }).join('');
+        }).join('');
 
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  };
-
-  // SELECIONAR CONVERSA
-  const selectConversation = id => {
-    const conversation = conversations.find(item =>
-      String(item.id) === String(id)
-    );
-
-    if (!conversation) return;
-
-    selectedConversationId = conversation.id;
-
-    chatEmpty.hidden = true;
-    chatContent.hidden = false;
-
-    const name = getConversationName(conversation);
-    const company = getConversationCompany(conversation);
-    const project = findProject(conversation);
-
-    chatAvatar.textContent = getInitials(name);
-    chatClientName.textContent = name;
-    chatClientCompany.textContent = company;
-    chatProjectName.textContent = project?.name || 'Não vinculado';
-
-    renderChatMessages(conversation);
-    markAsRead(conversation);
-    renderConversations();
-
-    messageInput.focus();
-  };
-
-  // ENVIAR MENSAGEM
-  messageForm.addEventListener('submit', event => {
-    event.preventDefault();
-
-    const text = messageInput.value.trim();
-
-    if (!text) return;
-
-    const conversation = conversations.find(item =>
-      item.id === selectedConversationId
-    );
-
-    if (!conversation) return;
-
-    const message = {
-      id: `message-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      sender: 'admin',
-      text,
-      createdAt: new Date().toISOString()
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     };
 
-    conversation.messages.push(message);
-    conversation.unread = 0;
+    // SELECIONAR CONVERSA
+    const selectConversation = id => {
+        const conversation = conversations.find(item =>
+            String(item.id) === String(id)
+        );
 
-    saveMessages();
+        if (!conversation) return;
 
-    messageInput.value = '';
-    messageCharacterCount.textContent = '0/2000';
+        selectedConversationId = conversation.id;
 
-    renderChatMessages(conversation);
-    renderConversations();
+        chatEmpty.hidden = true;
+        chatContent.hidden = false;
 
-    messageInput.focus();
-  });
+        const name = getConversationName(conversation);
+        const company = getConversationCompany(conversation);
+        const project = findProject(conversation);
 
-  // CONTADOR DE CARACTERES
-  messageInput.addEventListener('input', () => {
-    messageCharacterCount.textContent =
-      `${messageInput.value.length}/2000`;
-  });
+        chatAvatar.textContent = getInitials(name);
+        chatClientName.textContent = name;
+        chatClientCompany.textContent = company;
+        chatProjectName.textContent = project?.name || 'Não vinculado';
 
-  // PESQUISA
-  conversationSearch.addEventListener('input', renderConversations);
+        renderChatMessages(conversation);
+        markAsRead(conversation);
+        renderConversations();
 
-  // FILTROS
-  document.querySelectorAll('[data-message-filter]').forEach(button => {
-    button.addEventListener('click', () => {
-      activeFilter = button.dataset.messageFilter;
+        messageInput.focus();
+    };
 
-      document.querySelectorAll('[data-message-filter]').forEach(item => {
-        item.classList.toggle('active', item === button);
-      });
+    // ENVIAR MENSAGEM
+    messageForm.addEventListener('submit', event => {
+        event.preventDefault();
 
-      renderConversations();
+        const text = messageInput.value.trim();
+
+        if (!text) return;
+
+        const conversation = conversations.find(item =>
+            item.id === selectedConversationId
+        );
+
+        if (!conversation) return;
+
+        const message = {
+            id: `message-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            sender: 'admin',
+            text,
+            createdAt: new Date().toISOString()
+        };
+
+        conversation.messages.push(message);
+        conversation.unread = 0;
+
+        saveMessages();
+
+        messageInput.value = '';
+        messageCharacterCount.textContent = '0/2000';
+
+        renderChatMessages(conversation);
+        renderConversations();
+
+        messageInput.focus();
     });
-  });
 
-  // CLIQUE NAS CONVERSAS
-  conversationList.addEventListener('click', event => {
-    const button = event.target.closest('[data-conversation-id]');
+    // CONTADOR DE CARACTERES
+    messageInput.addEventListener('input', () => {
+        messageCharacterCount.textContent =
+            `${messageInput.value.length}/2000`;
+    });
 
-    if (!button) return;
+    // PESQUISA
+    conversationSearch.addEventListener('input', renderConversations);
 
-    selectConversation(button.dataset.conversationId);
-  });
+    // FILTROS
+    document.querySelectorAll('[data-message-filter]').forEach(button => {
+        button.addEventListener('click', () => {
+            activeFilter = button.dataset.messageFilter;
 
-  // MODAL DE INFORMAÇÕES DO CLIENTE
-  const openClientDetails = () => {
-    const conversation = conversations.find(item =>
-      item.id === selectedConversationId
-    );
+            document.querySelectorAll('[data-message-filter]').forEach(item => {
+                item.classList.toggle('active', item === button);
+            });
 
-    if (!conversation) return;
+            renderConversations();
+        });
+    });
 
-    const client = findClient(conversation);
-    const project = findProject(conversation);
+    // CLIQUE NAS CONVERSAS
+    conversationList.addEventListener('click', event => {
+        const button = event.target.closest('[data-conversation-id]');
 
-    const details = [
-      ['Nome', getConversationName(conversation)],
-      ['Empresa', getConversationCompany(conversation)],
-      ['E-mail', client?.email || 'Não informado'],
-      ['Telefone', client?.phone || 'Não informado'],
-      ['Documento', client?.document || client?.documento || 'Não informado'],
-      ['Projeto vinculado', project?.name || 'Nenhum projeto vinculado']
-    ];
+        if (!button) return;
 
-    chatClientDetails.innerHTML = details.map(([label, value]) => `
+        selectConversation(button.dataset.conversationId);
+    });
+
+    // MODAL DE INFORMAÇÕES DO CLIENTE
+    const openClientDetails = () => {
+        const conversation = conversations.find(item =>
+            item.id === selectedConversationId
+        );
+
+        if (!conversation) return;
+
+        const client = findClient(conversation);
+        const project = findProject(conversation);
+
+        const details = [
+            ['Nome', getConversationName(conversation)],
+            ['Empresa', getConversationCompany(conversation)],
+            ['E-mail', client?.email || 'Não informado'],
+            ['Telefone', client?.phone || 'Não informado'],
+            ['Documento', client?.document || client?.documento || 'Não informado'],
+            ['Projeto vinculado', project?.name || 'Nenhum projeto vinculado']
+        ];
+
+        chatClientDetails.innerHTML = details.map(([label, value]) => `
             <div class="chat-client-detail">
                 <small>${escapeHTML(label)}</small>
                 <strong>${escapeHTML(value)}</strong>
             </div>
         `).join('');
 
-    chatClientModal.style.display = 'flex';
-    chatClientModal.setAttribute('aria-hidden', 'false');
-  };
+        chatClientModal.style.display = 'flex';
+        chatClientModal.setAttribute('aria-hidden', 'false');
+    };
 
-  document.getElementById('chatDetailsButton')
-    .addEventListener('click', openClientDetails);
+    document.getElementById('chatDetailsButton')
+        .addEventListener('click', openClientDetails);
 
-  const closeClientModal = () => {
-    chatClientModal.style.display = 'none';
-    chatClientModal.setAttribute('aria-hidden', 'true');
-  };
+    const closeClientModal = () => {
+        chatClientModal.style.display = 'none';
+        chatClientModal.setAttribute('aria-hidden', 'true');
+    };
 
-  document.getElementById('closeChatClientModal')
-    .addEventListener('click', closeClientModal);
+    document.getElementById('closeChatClientModal')
+        .addEventListener('click', closeClientModal);
 
-  chatClientModal.addEventListener('click', event => {
-    if (event.target === chatClientModal) {
-      closeClientModal();
-    }
-  });
-
-  // DATA DO CABEÇALHO
-  const dateElement = document.getElementById('messagesDate');
-
-  if (dateElement) {
-    dateElement.textContent = new Date().toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
+    chatClientModal.addEventListener('click', event => {
+        if (event.target === chatClientModal) {
+            closeClientModal();
+        }
     });
-  }
 
-  // ANO DO RODAPÉ
-  document.querySelectorAll('[data-ano]').forEach(element => {
-    element.textContent = new Date().getFullYear();
-  });
+    // DATA DO CABEÇALHO
+    const dateElement = document.getElementById('messagesDate');
 
-  // MENU MOBILE
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  const mobileMenuButton = document.getElementById('mobileMenuButton');
-
-  const closeMobileMenu = () => {
-    sidebar?.classList.remove('mobile-open');
-
-    if (overlay) {
-      overlay.classList.remove('active');
-      overlay.style.display = '';
+    if (dateElement) {
+        dateElement.textContent = new Date().toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
     }
-  };
 
-  mobileMenuButton?.addEventListener('click', () => {
-    sidebar?.classList.toggle('mobile-open');
+    // ANO DO RODAPÉ
+    document.querySelectorAll('[data-ano]').forEach(element => {
+        element.textContent = new Date().getFullYear();
+    });
 
-    if (overlay) {
-      const isOpen = sidebar?.classList.contains('mobile-open');
+    // MENU MOBILE
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
 
-      overlay.classList.toggle('active', isOpen);
-      overlay.style.display = isOpen ? 'block' : '';
+    const closeMobileMenu = () => {
+        sidebar?.classList.remove('mobile-open');
+
+        if (overlay) {
+            overlay.classList.remove('active');
+            overlay.style.display = '';
+        }
+    };
+
+    mobileMenuButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('mobile-open');
+
+        if (overlay) {
+            const isOpen = sidebar?.classList.contains('mobile-open');
+
+            overlay.classList.toggle('active', isOpen);
+            overlay.style.display = isOpen ? 'block' : '';
+        }
+    });
+
+    overlay?.addEventListener('click', closeMobileMenu);
+
+    // MENU DO PERFIL
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileButton?.addEventListener('click', event => {
+        event.stopPropagation();
+
+        if (profileMenu) {
+            profileMenu.style.display =
+                profileMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    });
+
+    document.addEventListener('click', event => {
+        if (
+            profileMenu &&
+            !profileMenu.contains(event.target) &&
+            !profileButton?.contains(event.target)
+        ) {
+            profileMenu.style.display = 'none';
+        }
+    });
+
+    // ATUALIZAR DADOS SE CLIENTES OU PROJETOS FOREM ALTERADOS
+    window.addEventListener('storage', event => {
+        if (
+            event.key === CLIENT_KEY ||
+            event.key === PROJECT_KEY
+        ) {
+            renderConversations();
+
+            const selected = conversations.find(item =>
+                item.id === selectedConversationId
+            );
+
+            if (selected) {
+                chatClientName.textContent = getConversationName(selected);
+                chatClientCompany.textContent = getConversationCompany(selected);
+
+                const project = findProject(selected);
+                chatProjectName.textContent = project?.name || 'Não vinculado';
+            }
+        }
+    });
+
+    // INICIALIZAÇÃO
+    renderConversations();
+
+    if (conversations.length > 0) {
+        selectConversation(sortByRecent(conversations)[0].id);
     }
-  });
-
-  overlay?.addEventListener('click', closeMobileMenu);
-
-  // MENU DO PERFIL
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-
-  profileButton?.addEventListener('click', event => {
-    event.stopPropagation();
-
-    if (profileMenu) {
-      profileMenu.style.display =
-        profileMenu.style.display === 'block' ? 'none' : 'block';
-    }
-  });
-
-  document.addEventListener('click', event => {
-    if (
-      profileMenu &&
-      !profileMenu.contains(event.target) &&
-      !profileButton?.contains(event.target)
-    ) {
-      profileMenu.style.display = 'none';
-    }
-  });
-
-  // ATUALIZAR DADOS SE CLIENTES OU PROJETOS FOREM ALTERADOS
-  window.addEventListener('storage', event => {
-    if (
-      event.key === CLIENT_KEY ||
-      event.key === PROJECT_KEY
-    ) {
-      renderConversations();
-
-      const selected = conversations.find(item =>
-        item.id === selectedConversationId
-      );
-
-      if (selected) {
-        chatClientName.textContent = getConversationName(selected);
-        chatClientCompany.textContent = getConversationCompany(selected);
-
-        const project = findProject(selected);
-        chatProjectName.textContent = project?.name || 'Não vinculado';
-      }
-    }
-  });
-
-  // INICIALIZAÇÃO
-  renderConversations();
-
-  if (conversations.length > 0) {
-    selectConversation(sortByRecent(conversations)[0].id);
-  }
 
 })();
 
@@ -2683,526 +2843,526 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 (() => {
-  const page = document.querySelector('[data-page="arquivos"]');
-  if (!page) return;
+    const page = document.querySelector('[data-page="arquivos"]');
+    if (!page) return;
 
-  const DB_NAME = 'clientPortalFilesDB';
-  const DB_VERSION = 1;
-  const STORE_NAME = 'files';
-  const MAX_FILE_SIZE = 15 * 1024 * 1024;
+    const DB_NAME = 'clientPortalFilesDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'files';
+    const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
-  const PROJECT_KEY = 'clientPortalProjects';
+    const PROJECT_KEY = 'clientPortalProjects';
 
-  const $ = id => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
-  const elements = {
-    date: $('filesDate'),
+    const elements = {
+        date: $('filesDate'),
 
-    totalFiles: $('totalFiles'),
-    documentFiles: $('documentFiles'),
-    imageFiles: $('imageFiles'),
-    storageUsed: $('storageUsed'),
+        totalFiles: $('totalFiles'),
+        documentFiles: $('documentFiles'),
+        imageFiles: $('imageFiles'),
+        storageUsed: $('storageUsed'),
 
-    search: $('fileSearch'),
-    categoryFilter: $('fileCategoryFilter'),
-    projectFilter: $('fileProjectFilter'),
+        search: $('fileSearch'),
+        categoryFilter: $('fileCategoryFilter'),
+        projectFilter: $('fileProjectFilter'),
 
-    table: $('filesTableBody'),
-    empty: $('filesEmpty'),
-    count: $('filesCount'),
-    resultCount: $('filesResultCount'),
+        table: $('filesTableBody'),
+        empty: $('filesEmpty'),
+        count: $('filesCount'),
+        resultCount: $('filesResultCount'),
 
-    uploadModal: $('fileUploadModal'),
-    uploadForm: $('fileUploadForm'),
-    fileInput: $('fileInput'),
-    selectedFile: $('selectedFile'),
-    selectedFileName: $('selectedFileName'),
-    selectedFileSize: $('selectedFileSize'),
-    description: $('fileDescription'),
-    category: $('fileCategory'),
-    project: $('fileProject'),
-    formMessage: $('fileFormMessage'),
-    saveButton: $('saveFileButton'),
-    dropZone: $('fileDropZone'),
+        uploadModal: $('fileUploadModal'),
+        uploadForm: $('fileUploadForm'),
+        fileInput: $('fileInput'),
+        selectedFile: $('selectedFile'),
+        selectedFileName: $('selectedFileName'),
+        selectedFileSize: $('selectedFileSize'),
+        description: $('fileDescription'),
+        category: $('fileCategory'),
+        project: $('fileProject'),
+        formMessage: $('fileFormMessage'),
+        saveButton: $('saveFileButton'),
+        dropZone: $('fileDropZone'),
 
-    previewModal: $('filePreviewModal'),
-    previewName: $('previewFileName'),
-    previewContent: $('filePreviewContent'),
+        previewModal: $('filePreviewModal'),
+        previewName: $('previewFileName'),
+        previewContent: $('filePreviewContent'),
 
-    deleteModal: $('deleteFileModal'),
-    deleteName: $('deleteFileName'),
-    confirmDelete: $('confirmDeleteFile'),
-    cancelDelete: $('cancelDeleteFile'),
+        deleteModal: $('deleteFileModal'),
+        deleteName: $('deleteFileName'),
+        confirmDelete: $('confirmDeleteFile'),
+        cancelDelete: $('cancelDeleteFile'),
 
-    mobileMenuButton: $('mobileMenuButton'),
-    sidebar: $('sidebar'),
-    sidebarOverlay: $('sidebarOverlay'),
-    profileButton: $('profileButton'),
-    profileMenu: $('profileMenu')
-  };
+        mobileMenuButton: $('mobileMenuButton'),
+        sidebar: $('sidebar'),
+        sidebarOverlay: $('sidebarOverlay'),
+        profileButton: $('profileButton'),
+        profileMenu: $('profileMenu')
+    };
 
-  let files = [];
-  let selectedFile = null;
-  let filePendingDelete = null;
-  let previewURL = null;
-  let db = null;
+    let files = [];
+    let selectedFile = null;
+    let filePendingDelete = null;
+    let previewURL = null;
+    let db = null;
 
-  /* =========================================
-     INDEXED DB
-  ========================================= */
+    /* =========================================
+       INDEXED DB
+    ========================================= */
 
-  const openDatabase = () => {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, DB_VERSION);
+    const openDatabase = () => {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-      request.onupgradeneeded = event => {
-        const database = event.target.result;
+            request.onupgradeneeded = event => {
+                const database = event.target.result;
 
-        if (!database.objectStoreNames.contains(STORE_NAME)) {
-          database.createObjectStore(STORE_NAME, {
-            keyPath: 'id'
-          });
+                if (!database.objectStoreNames.contains(STORE_NAME)) {
+                    database.createObjectStore(STORE_NAME, {
+                        keyPath: 'id'
+                    });
+                }
+            };
+
+            request.onsuccess = event => {
+                db = event.target.result;
+                resolve(db);
+            };
+
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    const getAllFilesFromDB = () => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    const saveFileToDB = file => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.put(file);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    const deleteFileFromDB = id => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.delete(id);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    /* =========================================
+       UTILITÁRIOS
+    ========================================= */
+
+    const escapeHTML = value => {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        })[char]);
+    };
+
+    const formatBytes = bytes => {
+        if (!bytes) return '0 KB';
+
+        const units = ['Bytes', 'KB', 'MB', 'GB'];
+        const index = Math.floor(Math.log(bytes) / Math.log(1024));
+
+        return `${(bytes / Math.pow(1024, index)).toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
+    };
+
+    const formatDate = date => {
+        return new Date(date).toLocaleDateString('pt-BR');
+    };
+
+    const getProjects = () => {
+        try {
+            return JSON.parse(localStorage.getItem(PROJECT_KEY)) || [];
+        } catch {
+            return [];
         }
-      };
-
-      request.onsuccess = event => {
-        db = event.target.result;
-        resolve(db);
-      };
-
-      request.onerror = () => reject(request.error);
-    });
-  };
-
-  const getAllFilesFromDB = () => {
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(STORE_NAME, 'readonly');
-      const store = transaction.objectStore(STORE_NAME);
-      const request = store.getAll();
-
-      request.onsuccess = () => resolve(request.result || []);
-      request.onerror = () => reject(request.error);
-    });
-  };
-
-  const saveFileToDB = file => {
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(STORE_NAME, 'readwrite');
-      const store = transaction.objectStore(STORE_NAME);
-      const request = store.put(file);
-
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
-    });
-  };
-
-  const deleteFileFromDB = id => {
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(STORE_NAME, 'readwrite');
-      const store = transaction.objectStore(STORE_NAME);
-      const request = store.delete(id);
-
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
-    });
-  };
-
-  /* =========================================
-     UTILITÁRIOS
-  ========================================= */
-
-  const escapeHTML = value => {
-    return String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    })[char]);
-  };
-
-  const formatBytes = bytes => {
-    if (!bytes) return '0 KB';
-
-    const units = ['Bytes', 'KB', 'MB', 'GB'];
-    const index = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    return `${(bytes / Math.pow(1024, index)).toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
-  };
-
-  const formatDate = date => {
-    return new Date(date).toLocaleDateString('pt-BR');
-  };
-
-  const getProjects = () => {
-    try {
-      return JSON.parse(localStorage.getItem(PROJECT_KEY)) || [];
-    } catch {
-      return [];
-    }
-  };
-
-  const getProjectName = projectId => {
-    const project = getProjects().find(item =>
-      String(item.id) === String(projectId)
-    );
-
-    return project ? project.name : 'Sem projeto vinculado';
-  };
-
-  const getFileExtension = name => {
-    return String(name).split('.').pop().toLowerCase();
-  };
-
-  const getFileType = file => {
-    const extension = getFileExtension(file.name);
-
-    if (file.type?.startsWith('image/')) return 'image';
-    if (file.type === 'application/pdf' || extension === 'pdf') return 'pdf';
-
-    if ([
-      'doc', 'docx', 'txt', 'odt', 'rtf'
-    ].includes(extension)) return 'document';
-
-    if ([
-      'xls', 'xlsx', 'csv'
-    ].includes(extension)) return 'spreadsheet';
-
-    if ([
-      'ppt', 'pptx'
-    ].includes(extension)) return 'presentation';
-
-    if ([
-      'zip', 'rar', '7z'
-    ].includes(extension)) return 'archive';
-
-    return 'other';
-  };
-
-  const getFileIcon = file => {
-    const type = getFileType(file);
-
-    const icons = {
-      image: '🖼️',
-      pdf: '📕',
-      document: '📄',
-      spreadsheet: '📊',
-      presentation: '📽️',
-      archive: '🗜️',
-      other: '📁'
     };
 
-    return icons[type] || icons.other;
-  };
+    const getProjectName = projectId => {
+        const project = getProjects().find(item =>
+            String(item.id) === String(projectId)
+        );
 
-  const showFormMessage = (message, type = 'error') => {
-    if (!elements.formMessage) return;
-
-    elements.formMessage.textContent = message;
-    elements.formMessage.className = `files-form-message ${type}`;
-    elements.formMessage.hidden = false;
-  };
-
-  const clearFormMessage = () => {
-    if (!elements.formMessage) return;
-
-    elements.formMessage.textContent = '';
-    elements.formMessage.hidden = true;
-  };
-
-  /* =========================================
-     MODAIS
-  ========================================= */
-
-  const openModal = modal => {
-    if (!modal) return;
-
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-  };
-
-  const closeModal = modal => {
-    if (!modal) return;
-
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-  };
-
-  const openUploadModal = () => {
-    clearFormMessage();
-    openModal(elements.uploadModal);
-  };
-
-  const closeUploadModal = () => {
-    closeModal(elements.uploadModal);
-    elements.uploadForm?.reset();
-
-    selectedFile = null;
-
-    if (elements.selectedFile) {
-      elements.selectedFile.hidden = true;
-    }
-
-    if (elements.fileInput) {
-      elements.fileInput.value = '';
-    }
-
-    clearFormMessage();
-  };
-
-  /* =========================================
-     SELEÇÃO DE ARQUIVO
-  ========================================= */
-
-  const displaySelectedFile = file => {
-    selectedFile = file;
-
-    if (!file) {
-      if (elements.selectedFile) {
-        elements.selectedFile.hidden = true;
-      }
-      return;
-    }
-
-    if (elements.selectedFileName) {
-      elements.selectedFileName.textContent = file.name;
-    }
-
-    if (elements.selectedFileSize) {
-      elements.selectedFileSize.textContent = formatBytes(file.size);
-    }
-
-    if (elements.selectedFile) {
-      elements.selectedFile.hidden = false;
-    }
-
-    clearFormMessage();
-  };
-
-  const validateFile = file => {
-    if (!file) {
-      showFormMessage('Selecione um arquivo para continuar.');
-      return false;
-    }
-
-    if (file.size === 0) {
-      showFormMessage('Este arquivo está vazio e não pode ser enviado.');
-      return false;
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      showFormMessage('O arquivo ultrapassa o limite de 15 MB.');
-      return false;
-    }
-
-    return true;
-  };
-
-  elements.fileInput?.addEventListener('change', event => {
-    const file = event.target.files?.[0];
-
-    if (file && validateFile(file)) {
-      displaySelectedFile(file);
-    } else {
-      selectedFile = null;
-    }
-  });
-
-  $('removeSelectedFile')?.addEventListener('click', () => {
-    selectedFile = null;
-
-    if (elements.fileInput) {
-      elements.fileInput.value = '';
-    }
-
-    if (elements.selectedFile) {
-      elements.selectedFile.hidden = true;
-    }
-
-    clearFormMessage();
-  });
-
-  /* =========================================
-     UPLOAD E SALVAMENTO
-  ========================================= */
-
-  const uploadFile = async () => {
-    if (!validateFile(selectedFile)) return;
-
-    const projectId = elements.project?.value || '';
-    const category = elements.category?.value || 'outros';
-    const description = elements.description?.value.trim() || '';
-
-    const fileData = {
-      id: `file-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      name: selectedFile.name,
-      type: selectedFile.type || 'application/octet-stream',
-      size: selectedFile.size,
-      blob: selectedFile,
-      category,
-      projectId,
-      description,
-      createdAt: new Date().toISOString()
+        return project ? project.name : 'Sem projeto vinculado';
     };
 
-    try {
-      if (elements.saveButton) {
-        elements.saveButton.disabled = true;
-        elements.saveButton.textContent = 'Enviando...';
-      }
+    const getFileExtension = name => {
+        return String(name).split('.').pop().toLowerCase();
+    };
 
-      await saveFileToDB(fileData);
-      await refreshFiles();
+    const getFileType = file => {
+        const extension = getFileExtension(file.name);
 
-      closeUploadModal();
+        if (file.type?.startsWith('image/')) return 'image';
+        if (file.type === 'application/pdf' || extension === 'pdf') return 'pdf';
 
-    } catch (error) {
-      console.error('Erro ao salvar arquivo:', error);
-      showFormMessage('Não foi possível salvar o arquivo. Tente novamente.');
-    } finally {
-      if (elements.saveButton) {
-        elements.saveButton.disabled = false;
-        elements.saveButton.textContent = 'Salvar arquivo';
-      }
-    }
-  };
+        if ([
+            'doc', 'docx', 'txt', 'odt', 'rtf'
+        ].includes(extension)) return 'document';
 
-  elements.uploadForm?.addEventListener('submit', event => {
-    event.preventDefault();
-    uploadFile();
-  });
+        if ([
+            'xls', 'xlsx', 'csv'
+        ].includes(extension)) return 'spreadsheet';
 
-  /* =========================================
-     FILTROS E PROJETOS
-  ========================================= */
+        if ([
+            'ppt', 'pptx'
+        ].includes(extension)) return 'presentation';
 
-  const populateProjectFilters = () => {
-    const projects = getProjects();
+        if ([
+            'zip', 'rar', '7z'
+        ].includes(extension)) return 'archive';
 
-    const selects = [
-      elements.project,
-      elements.projectFilter
-    ];
+        return 'other';
+    };
 
-    selects.forEach(select => {
-      if (!select) return;
+    const getFileIcon = file => {
+        const type = getFileType(file);
 
-      const currentValue = select.value;
+        const icons = {
+            image: '🖼️',
+            pdf: '📕',
+            document: '📄',
+            spreadsheet: '📊',
+            presentation: '📽️',
+            archive: '🗜️',
+            other: '📁'
+        };
 
-      const firstOption = select.options[0];
-      select.innerHTML = '';
+        return icons[type] || icons.other;
+    };
 
-      if (firstOption) {
-        select.appendChild(firstOption);
-      }
+    const showFormMessage = (message, type = 'error') => {
+        if (!elements.formMessage) return;
 
-      projects.forEach(project => {
-        const option = document.createElement('option');
-        option.value = project.id;
-        option.textContent = project.name;
-        select.appendChild(option);
-      });
+        elements.formMessage.textContent = message;
+        elements.formMessage.className = `files-form-message ${type}`;
+        elements.formMessage.hidden = false;
+    };
 
-      if ([...select.options].some(option => option.value === currentValue)) {
-        select.value = currentValue;
-      }
+    const clearFormMessage = () => {
+        if (!elements.formMessage) return;
+
+        elements.formMessage.textContent = '';
+        elements.formMessage.hidden = true;
+    };
+
+    /* =========================================
+       MODAIS
+    ========================================= */
+
+    const openModal = modal => {
+        if (!modal) return;
+
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+    };
+
+    const closeModal = modal => {
+        if (!modal) return;
+
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+    };
+
+    const openUploadModal = () => {
+        clearFormMessage();
+        openModal(elements.uploadModal);
+    };
+
+    const closeUploadModal = () => {
+        closeModal(elements.uploadModal);
+        elements.uploadForm?.reset();
+
+        selectedFile = null;
+
+        if (elements.selectedFile) {
+            elements.selectedFile.hidden = true;
+        }
+
+        if (elements.fileInput) {
+            elements.fileInput.value = '';
+        }
+
+        clearFormMessage();
+    };
+
+    /* =========================================
+       SELEÇÃO DE ARQUIVO
+    ========================================= */
+
+    const displaySelectedFile = file => {
+        selectedFile = file;
+
+        if (!file) {
+            if (elements.selectedFile) {
+                elements.selectedFile.hidden = true;
+            }
+            return;
+        }
+
+        if (elements.selectedFileName) {
+            elements.selectedFileName.textContent = file.name;
+        }
+
+        if (elements.selectedFileSize) {
+            elements.selectedFileSize.textContent = formatBytes(file.size);
+        }
+
+        if (elements.selectedFile) {
+            elements.selectedFile.hidden = false;
+        }
+
+        clearFormMessage();
+    };
+
+    const validateFile = file => {
+        if (!file) {
+            showFormMessage('Selecione um arquivo para continuar.');
+            return false;
+        }
+
+        if (file.size === 0) {
+            showFormMessage('Este arquivo está vazio e não pode ser enviado.');
+            return false;
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+            showFormMessage('O arquivo ultrapassa o limite de 15 MB.');
+            return false;
+        }
+
+        return true;
+    };
+
+    elements.fileInput?.addEventListener('change', event => {
+        const file = event.target.files?.[0];
+
+        if (file && validateFile(file)) {
+            displaySelectedFile(file);
+        } else {
+            selectedFile = null;
+        }
     });
-  };
 
-  const getFilteredFiles = () => {
-    const search = elements.search?.value.trim().toLowerCase() || '';
-    const category = elements.categoryFilter?.value || '';
-    const project = elements.projectFilter?.value || '';
+    $('removeSelectedFile')?.addEventListener('click', () => {
+        selectedFile = null;
 
-    return files.filter(file => {
-      const projectName = getProjectName(file.projectId).toLowerCase();
+        if (elements.fileInput) {
+            elements.fileInput.value = '';
+        }
 
-      const matchesSearch =
-        file.name.toLowerCase().includes(search) ||
-        (file.description || '').toLowerCase().includes(search) ||
-        projectName.includes(search);
+        if (elements.selectedFile) {
+            elements.selectedFile.hidden = true;
+        }
 
-      const matchesCategory =
-        !category || file.category === category;
-
-      const matchesProject =
-        !project || String(file.projectId) === String(project);
-
-      return matchesSearch && matchesCategory && matchesProject;
+        clearFormMessage();
     });
-  };
 
-  /* =========================================
-     ESTATÍSTICAS
-  ========================================= */
+    /* =========================================
+       UPLOAD E SALVAMENTO
+    ========================================= */
 
-  const updateStats = () => {
-    const total = files.length;
+    const uploadFile = async () => {
+        if (!validateFile(selectedFile)) return;
 
-    const documents = files.filter(file =>
-      ['pdf', 'document', 'spreadsheet', 'presentation'].includes(getFileType(file))
-    ).length;
+        const projectId = elements.project?.value || '';
+        const category = elements.category?.value || 'outros';
+        const description = elements.description?.value.trim() || '';
 
-    const images = files.filter(file =>
-      getFileType(file) === 'image'
-    ).length;
+        const fileData = {
+            id: `file-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            name: selectedFile.name,
+            type: selectedFile.type || 'application/octet-stream',
+            size: selectedFile.size,
+            blob: selectedFile,
+            category,
+            projectId,
+            description,
+            createdAt: new Date().toISOString()
+        };
 
-    const totalSize = files.reduce((sum, file) => {
-      return sum + (Number(file.size) || 0);
-    }, 0);
+        try {
+            if (elements.saveButton) {
+                elements.saveButton.disabled = true;
+                elements.saveButton.textContent = 'Enviando...';
+            }
 
-    if (elements.totalFiles) {
-      elements.totalFiles.textContent = total;
-    }
+            await saveFileToDB(fileData);
+            await refreshFiles();
 
-    if (elements.documentFiles) {
-      elements.documentFiles.textContent = documents;
-    }
+            closeUploadModal();
 
-    if (elements.imageFiles) {
-      elements.imageFiles.textContent = images;
-    }
+        } catch (error) {
+            console.error('Erro ao salvar arquivo:', error);
+            showFormMessage('Não foi possível salvar o arquivo. Tente novamente.');
+        } finally {
+            if (elements.saveButton) {
+                elements.saveButton.disabled = false;
+                elements.saveButton.textContent = 'Salvar arquivo';
+            }
+        }
+    };
 
-    if (elements.storageUsed) {
-      elements.storageUsed.textContent = formatBytes(totalSize);
-    }
-  };
+    elements.uploadForm?.addEventListener('submit', event => {
+        event.preventDefault();
+        uploadFile();
+    });
 
-  /* =========================================
-     TABELA
-  ========================================= */
+    /* =========================================
+       FILTROS E PROJETOS
+    ========================================= */
 
-  const renderFiles = () => {
-    const filtered = getFilteredFiles();
+    const populateProjectFilters = () => {
+        const projects = getProjects();
 
-    updateStats();
+        const selects = [
+            elements.project,
+            elements.projectFilter
+        ];
 
-    if (elements.count) {
-      elements.count.textContent = files.length;
-    }
+        selects.forEach(select => {
+            if (!select) return;
 
-    if (elements.resultCount) {
-      elements.resultCount.textContent =
-        `${filtered.length} ${filtered.length === 1 ? 'arquivo encontrado' : 'arquivos encontrados'}`;
-    }
+            const currentValue = select.value;
 
-    if (elements.empty) {
-      elements.empty.hidden = filtered.length > 0;
-    }
+            const firstOption = select.options[0];
+            select.innerHTML = '';
 
-    const tableWrapper = document.querySelector('.files-table-wrapper');
+            if (firstOption) {
+                select.appendChild(firstOption);
+            }
 
-    if (tableWrapper) {
-      tableWrapper.hidden = filtered.length === 0;
-    }
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                select.appendChild(option);
+            });
 
-    if (!elements.table) return;
+            if ([...select.options].some(option => option.value === currentValue)) {
+                select.value = currentValue;
+            }
+        });
+    };
 
-    elements.table.innerHTML = filtered.map(file => {
-      const type = getFileType(file);
-      const projectName = getProjectName(file.projectId);
+    const getFilteredFiles = () => {
+        const search = elements.search?.value.trim().toLowerCase() || '';
+        const category = elements.categoryFilter?.value || '';
+        const project = elements.projectFilter?.value || '';
 
-      return `
+        return files.filter(file => {
+            const projectName = getProjectName(file.projectId).toLowerCase();
+
+            const matchesSearch =
+                file.name.toLowerCase().includes(search) ||
+                (file.description || '').toLowerCase().includes(search) ||
+                projectName.includes(search);
+
+            const matchesCategory =
+                !category || file.category === category;
+
+            const matchesProject =
+                !project || String(file.projectId) === String(project);
+
+            return matchesSearch && matchesCategory && matchesProject;
+        });
+    };
+
+    /* =========================================
+       ESTATÍSTICAS
+    ========================================= */
+
+    const updateStats = () => {
+        const total = files.length;
+
+        const documents = files.filter(file =>
+            ['pdf', 'document', 'spreadsheet', 'presentation'].includes(getFileType(file))
+        ).length;
+
+        const images = files.filter(file =>
+            getFileType(file) === 'image'
+        ).length;
+
+        const totalSize = files.reduce((sum, file) => {
+            return sum + (Number(file.size) || 0);
+        }, 0);
+
+        if (elements.totalFiles) {
+            elements.totalFiles.textContent = total;
+        }
+
+        if (elements.documentFiles) {
+            elements.documentFiles.textContent = documents;
+        }
+
+        if (elements.imageFiles) {
+            elements.imageFiles.textContent = images;
+        }
+
+        if (elements.storageUsed) {
+            elements.storageUsed.textContent = formatBytes(totalSize);
+        }
+    };
+
+    /* =========================================
+       TABELA
+    ========================================= */
+
+    const renderFiles = () => {
+        const filtered = getFilteredFiles();
+
+        updateStats();
+
+        if (elements.count) {
+            elements.count.textContent = files.length;
+        }
+
+        if (elements.resultCount) {
+            elements.resultCount.textContent =
+                `${filtered.length} ${filtered.length === 1 ? 'arquivo encontrado' : 'arquivos encontrados'}`;
+        }
+
+        if (elements.empty) {
+            elements.empty.hidden = filtered.length > 0;
+        }
+
+        const tableWrapper = document.querySelector('.files-table-wrapper');
+
+        if (tableWrapper) {
+            tableWrapper.hidden = filtered.length === 0;
+        }
+
+        if (!elements.table) return;
+
+        elements.table.innerHTML = filtered.map(file => {
+            const type = getFileType(file);
+            const projectName = getProjectName(file.projectId);
+
+            return `
                 <tr>
                     <td>
                         <div class="file-name-cell">
@@ -3256,336 +3416,336 @@ document.addEventListener("DOMContentLoaded", () => {
                     </td>
                 </tr>
             `;
-    }).join('');
-  };
+        }).join('');
+    };
 
-  const refreshFiles = async () => {
-    files = await getAllFilesFromDB();
+    const refreshFiles = async () => {
+        files = await getAllFilesFromDB();
 
-    files.sort((a, b) => {
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
+        files.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
 
-    renderFiles();
-  };
+        renderFiles();
+    };
 
-  /* =========================================
-     VISUALIZAÇÃO
-  ========================================= */
+    /* =========================================
+       VISUALIZAÇÃO
+    ========================================= */
 
-  const closePreview = () => {
-    closeModal(elements.previewModal);
+    const closePreview = () => {
+        closeModal(elements.previewModal);
 
-    if (previewURL) {
-      URL.revokeObjectURL(previewURL);
-      previewURL = null;
-    }
-
-    if (elements.previewContent) {
-      elements.previewContent.innerHTML = '';
-    }
-  };
-
-  const openPreview = file => {
-    if (!elements.previewModal || !elements.previewContent) return;
-
-    if (previewURL) {
-      URL.revokeObjectURL(previewURL);
-      previewURL = null;
-    }
-
-    elements.previewName.textContent = file.name;
-    elements.previewContent.innerHTML = '';
-
-    const type = getFileType(file);
-    previewURL = URL.createObjectURL(file.blob);
-
-    if (type === 'pdf') {
-      const iframe = document.createElement('iframe');
-      iframe.src = previewURL;
-      iframe.title = file.name;
-      iframe.className = 'file-preview-frame';
-
-      elements.previewContent.appendChild(iframe);
-
-    } else if (type === 'image') {
-      const image = document.createElement('img');
-      image.src = previewURL;
-      image.alt = file.name;
-      image.className = 'file-preview-image';
-
-      elements.previewContent.appendChild(image);
-
-    } else {
-      const message = document.createElement('div');
-      message.className = 'file-preview-unavailable';
-      message.textContent = 'A visualização não está disponível para este formato. Faça o download para abrir o arquivo.';
-
-      elements.previewContent.appendChild(message);
-    }
-
-    openModal(elements.previewModal);
-  };
-
-  /* =========================================
-     DOWNLOAD
-  ========================================= */
-
-  const downloadFile = file => {
-    const url = URL.createObjectURL(file.blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = file.name;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
-
-  /* =========================================
-     MODAL PERSONALIZADO DE EXCLUSÃO
-  ========================================= */
-
-  const openDeleteModal = file => {
-    filePendingDelete = file;
-
-    if (elements.deleteName) {
-      elements.deleteName.textContent = file.name;
-    }
-
-    if (elements.confirmDelete) {
-      elements.confirmDelete.disabled = false;
-      elements.confirmDelete.textContent = 'Excluir arquivo';
-    }
-
-    openModal(elements.deleteModal);
-  };
-
-  const closeDeleteModal = () => {
-    closeModal(elements.deleteModal);
-    filePendingDelete = null;
-
-    if (elements.confirmDelete) {
-      elements.confirmDelete.disabled = false;
-      elements.confirmDelete.textContent = 'Excluir arquivo';
-    }
-  };
-
-  elements.cancelDelete?.addEventListener('click', closeDeleteModal);
-
-  elements.deleteModal?.addEventListener('click', event => {
-    if (event.target === elements.deleteModal) {
-      closeDeleteModal();
-    }
-  });
-
-  elements.confirmDelete?.addEventListener('click', async () => {
-    if (!filePendingDelete) return;
-
-    const fileId = filePendingDelete.id;
-
-    elements.confirmDelete.disabled = true;
-    elements.confirmDelete.textContent = 'Excluindo...';
-
-    try {
-      await deleteFileFromDB(fileId);
-      await refreshFiles();
-
-      closeDeleteModal();
-
-    } catch (error) {
-      console.error('Erro ao excluir arquivo:', error);
-
-      elements.confirmDelete.disabled = false;
-      elements.confirmDelete.textContent = 'Tentar novamente';
-    }
-  });
-
-  /* =========================================
-     AÇÕES DA TABELA
-  ========================================= */
-
-  elements.table?.addEventListener('click', event => {
-    const button = event.target.closest('[data-file-action]');
-    if (!button) return;
-
-    const file = files.find(item =>
-      String(item.id) === String(button.dataset.fileId)
-    );
-
-    if (!file) return;
-
-    const action = button.dataset.fileAction;
-
-    if (action === 'preview') {
-      openPreview(file);
-    }
-
-    if (action === 'download') {
-      downloadFile(file);
-    }
-
-    if (action === 'delete') {
-      openDeleteModal(file);
-    }
-  });
-
-  /* =========================================
-     EVENTOS DOS FILTROS
-  ========================================= */
-
-  elements.search?.addEventListener('input', renderFiles);
-  elements.categoryFilter?.addEventListener('change', renderFiles);
-  elements.projectFilter?.addEventListener('change', renderFiles);
-
-  /* =========================================
-     BOTÕES DOS MODAIS
-  ========================================= */
-
-  $('openUploadModal')?.addEventListener('click', openUploadModal);
-  $('emptyUploadButton')?.addEventListener('click', openUploadModal);
-  $('closeFileModal')?.addEventListener('click', closeUploadModal);
-  $('cancelFileUpload')?.addEventListener('click', closeUploadModal);
-  $('closePreviewModal')?.addEventListener('click', closePreview);
-
-  elements.uploadModal?.addEventListener('click', event => {
-    if (event.target === elements.uploadModal) {
-      closeUploadModal();
-    }
-  });
-
-  elements.previewModal?.addEventListener('click', event => {
-    if (event.target === elements.previewModal) {
-      closePreview();
-    }
-  });
-
-  /* =========================================
-     ARRASTAR E SOLTAR ARQUIVOS
-  ========================================= */
-
-  if (elements.dropZone) {
-    ['dragenter', 'dragover'].forEach(eventName => {
-      elements.dropZone.addEventListener(eventName, event => {
-        event.preventDefault();
-        elements.dropZone.classList.add('drag-over');
-      });
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      elements.dropZone.addEventListener(eventName, event => {
-        event.preventDefault();
-        elements.dropZone.classList.remove('drag-over');
-      });
-    });
-
-    elements.dropZone.addEventListener('drop', event => {
-      const file = event.dataTransfer?.files?.[0];
-
-      if (!file) return;
-
-      if (validateFile(file)) {
-        displaySelectedFile(file);
-
-        if (elements.fileInput) {
-          const transfer = new DataTransfer();
-          transfer.items.add(file);
-          elements.fileInput.files = transfer.files;
+        if (previewURL) {
+            URL.revokeObjectURL(previewURL);
+            previewURL = null;
         }
-      }
+
+        if (elements.previewContent) {
+            elements.previewContent.innerHTML = '';
+        }
+    };
+
+    const openPreview = file => {
+        if (!elements.previewModal || !elements.previewContent) return;
+
+        if (previewURL) {
+            URL.revokeObjectURL(previewURL);
+            previewURL = null;
+        }
+
+        elements.previewName.textContent = file.name;
+        elements.previewContent.innerHTML = '';
+
+        const type = getFileType(file);
+        previewURL = URL.createObjectURL(file.blob);
+
+        if (type === 'pdf') {
+            const iframe = document.createElement('iframe');
+            iframe.src = previewURL;
+            iframe.title = file.name;
+            iframe.className = 'file-preview-frame';
+
+            elements.previewContent.appendChild(iframe);
+
+        } else if (type === 'image') {
+            const image = document.createElement('img');
+            image.src = previewURL;
+            image.alt = file.name;
+            image.className = 'file-preview-image';
+
+            elements.previewContent.appendChild(image);
+
+        } else {
+            const message = document.createElement('div');
+            message.className = 'file-preview-unavailable';
+            message.textContent = 'A visualização não está disponível para este formato. Faça o download para abrir o arquivo.';
+
+            elements.previewContent.appendChild(message);
+        }
+
+        openModal(elements.previewModal);
+    };
+
+    /* =========================================
+       DOWNLOAD
+    ========================================= */
+
+    const downloadFile = file => {
+        const url = URL.createObjectURL(file.blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = file.name;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+
+    /* =========================================
+       MODAL PERSONALIZADO DE EXCLUSÃO
+    ========================================= */
+
+    const openDeleteModal = file => {
+        filePendingDelete = file;
+
+        if (elements.deleteName) {
+            elements.deleteName.textContent = file.name;
+        }
+
+        if (elements.confirmDelete) {
+            elements.confirmDelete.disabled = false;
+            elements.confirmDelete.textContent = 'Excluir arquivo';
+        }
+
+        openModal(elements.deleteModal);
+    };
+
+    const closeDeleteModal = () => {
+        closeModal(elements.deleteModal);
+        filePendingDelete = null;
+
+        if (elements.confirmDelete) {
+            elements.confirmDelete.disabled = false;
+            elements.confirmDelete.textContent = 'Excluir arquivo';
+        }
+    };
+
+    elements.cancelDelete?.addEventListener('click', closeDeleteModal);
+
+    elements.deleteModal?.addEventListener('click', event => {
+        if (event.target === elements.deleteModal) {
+            closeDeleteModal();
+        }
     });
-  }
 
-  /* =========================================
-     MENU LATERAL E PERFIL
-  ========================================= */
+    elements.confirmDelete?.addEventListener('click', async () => {
+        if (!filePendingDelete) return;
 
-  elements.mobileMenuButton?.addEventListener('click', () => {
-    elements.sidebar?.classList.toggle('mobile-open');
-    elements.sidebarOverlay?.classList.toggle('active');
-  });
+        const fileId = filePendingDelete.id;
 
-  elements.sidebarOverlay?.addEventListener('click', () => {
-    elements.sidebar?.classList.remove('mobile-open');
-    elements.sidebarOverlay.classList.remove('active');
-  });
+        elements.confirmDelete.disabled = true;
+        elements.confirmDelete.textContent = 'Excluindo...';
 
-  elements.profileButton?.addEventListener('click', event => {
-    event.stopPropagation();
-    elements.profileMenu?.classList.toggle('open');
-  });
+        try {
+            await deleteFileFromDB(fileId);
+            await refreshFiles();
 
-  document.addEventListener('click', event => {
-    if (
-      elements.profileMenu &&
-      !elements.profileMenu.contains(event.target) &&
-      !elements.profileButton?.contains(event.target)
-    ) {
-      elements.profileMenu.classList.remove('open');
-    }
-  });
+            closeDeleteModal();
 
-  /* =========================================
-     DATA E ANO
-  ========================================= */
+        } catch (error) {
+            console.error('Erro ao excluir arquivo:', error);
 
-  if (elements.date) {
-    elements.date.textContent = new Date().toLocaleDateString('pt-BR', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
+            elements.confirmDelete.disabled = false;
+            elements.confirmDelete.textContent = 'Tentar novamente';
+        }
     });
-  }
 
-  const yearElement = document.querySelector('[data-task-year]');
+    /* =========================================
+       AÇÕES DA TABELA
+    ========================================= */
 
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-  }
+    elements.table?.addEventListener('click', event => {
+        const button = event.target.closest('[data-file-action]');
+        if (!button) return;
 
-  /* =========================================
-     ATUALIZAÇÃO DE PROJETOS
-  ========================================= */
+        const file = files.find(item =>
+            String(item.id) === String(button.dataset.fileId)
+        );
 
-  window.addEventListener('storage', event => {
-    if (event.key === PROJECT_KEY) {
-      populateProjectFilters();
-      renderFiles();
+        if (!file) return;
+
+        const action = button.dataset.fileAction;
+
+        if (action === 'preview') {
+            openPreview(file);
+        }
+
+        if (action === 'download') {
+            downloadFile(file);
+        }
+
+        if (action === 'delete') {
+            openDeleteModal(file);
+        }
+    });
+
+    /* =========================================
+       EVENTOS DOS FILTROS
+    ========================================= */
+
+    elements.search?.addEventListener('input', renderFiles);
+    elements.categoryFilter?.addEventListener('change', renderFiles);
+    elements.projectFilter?.addEventListener('change', renderFiles);
+
+    /* =========================================
+       BOTÕES DOS MODAIS
+    ========================================= */
+
+    $('openUploadModal')?.addEventListener('click', openUploadModal);
+    $('emptyUploadButton')?.addEventListener('click', openUploadModal);
+    $('closeFileModal')?.addEventListener('click', closeUploadModal);
+    $('cancelFileUpload')?.addEventListener('click', closeUploadModal);
+    $('closePreviewModal')?.addEventListener('click', closePreview);
+
+    elements.uploadModal?.addEventListener('click', event => {
+        if (event.target === elements.uploadModal) {
+            closeUploadModal();
+        }
+    });
+
+    elements.previewModal?.addEventListener('click', event => {
+        if (event.target === elements.previewModal) {
+            closePreview();
+        }
+    });
+
+    /* =========================================
+       ARRASTAR E SOLTAR ARQUIVOS
+    ========================================= */
+
+    if (elements.dropZone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            elements.dropZone.addEventListener(eventName, event => {
+                event.preventDefault();
+                elements.dropZone.classList.add('drag-over');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            elements.dropZone.addEventListener(eventName, event => {
+                event.preventDefault();
+                elements.dropZone.classList.remove('drag-over');
+            });
+        });
+
+        elements.dropZone.addEventListener('drop', event => {
+            const file = event.dataTransfer?.files?.[0];
+
+            if (!file) return;
+
+            if (validateFile(file)) {
+                displaySelectedFile(file);
+
+                if (elements.fileInput) {
+                    const transfer = new DataTransfer();
+                    transfer.items.add(file);
+                    elements.fileInput.files = transfer.files;
+                }
+            }
+        });
     }
-  });
 
-  /* =========================================
-     INICIALIZAÇÃO
-  ========================================= */
+    /* =========================================
+       MENU LATERAL E PERFIL
+    ========================================= */
 
-  const initializeFiles = async () => {
-    try {
-      await openDatabase();
-      populateProjectFilters();
-      await refreshFiles();
+    elements.mobileMenuButton?.addEventListener('click', () => {
+        elements.sidebar?.classList.toggle('mobile-open');
+        elements.sidebarOverlay?.classList.toggle('active');
+    });
 
-    } catch (error) {
-      console.error('Erro ao inicializar a central de arquivos:', error);
+    elements.sidebarOverlay?.addEventListener('click', () => {
+        elements.sidebar?.classList.remove('mobile-open');
+        elements.sidebarOverlay.classList.remove('active');
+    });
 
-      if (elements.empty) {
-        elements.empty.hidden = false;
-        elements.empty.textContent =
-          'Não foi possível carregar os arquivos neste navegador.';
-      }
+    elements.profileButton?.addEventListener('click', event => {
+        event.stopPropagation();
+        elements.profileMenu?.classList.toggle('open');
+    });
 
-      const tableWrapper = document.querySelector('.files-table-wrapper');
+    document.addEventListener('click', event => {
+        if (
+            elements.profileMenu &&
+            !elements.profileMenu.contains(event.target) &&
+            !elements.profileButton?.contains(event.target)
+        ) {
+            elements.profileMenu.classList.remove('open');
+        }
+    });
 
-      if (tableWrapper) {
-        tableWrapper.hidden = true;
-      }
+    /* =========================================
+       DATA E ANO
+    ========================================= */
+
+    if (elements.date) {
+        elements.date.textContent = new Date().toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
     }
-  };
 
-  initializeFiles();
+    const yearElement = document.querySelector('[data-task-year]');
+
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+
+    /* =========================================
+       ATUALIZAÇÃO DE PROJETOS
+    ========================================= */
+
+    window.addEventListener('storage', event => {
+        if (event.key === PROJECT_KEY) {
+            populateProjectFilters();
+            renderFiles();
+        }
+    });
+
+    /* =========================================
+       INICIALIZAÇÃO
+    ========================================= */
+
+    const initializeFiles = async () => {
+        try {
+            await openDatabase();
+            populateProjectFilters();
+            await refreshFiles();
+
+        } catch (error) {
+            console.error('Erro ao inicializar a central de arquivos:', error);
+
+            if (elements.empty) {
+                elements.empty.hidden = false;
+                elements.empty.textContent =
+                    'Não foi possível carregar os arquivos neste navegador.';
+            }
+
+            const tableWrapper = document.querySelector('.files-table-wrapper');
+
+            if (tableWrapper) {
+                tableWrapper.hidden = true;
+            }
+        }
+    };
+
+    initializeFiles();
 
 })();
 
@@ -3907,10 +4067,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (file.type.startsWith('image/')) {
                 elements.category.value = 'imagem';
             } else if (file.type.includes('spreadsheet') ||
-                       ['xls', 'xlsx', 'csv'].includes(getExtension(file.name))) {
+                ['xls', 'xlsx', 'csv'].includes(getExtension(file.name))) {
                 elements.category.value = 'planilha';
             } else if (file.type.includes('presentation') ||
-                       ['ppt', 'pptx'].includes(getExtension(file.name))) {
+                ['ppt', 'pptx'].includes(getExtension(file.name))) {
                 elements.category.value = 'apresentacao';
             } else {
                 elements.category.value = 'documento';
@@ -4129,7 +4289,7 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.previewContent.appendChild(image);
 
         } else if (file.type === 'application/pdf' ||
-                   getExtension(file.name) === 'pdf') {
+            getExtension(file.name) === 'pdf') {
             const iframe = document.createElement('iframe');
             iframe.src = previewUrl;
             iframe.title = `Visualização de ${file.name}`;
@@ -4394,6 +4554,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const getClients = () => {
         return readStorage(CLIENT_KEY);
     };
+    
 
     const getClient = (id) => {
         return getClients().find(client =>
@@ -4429,6 +4590,170 @@ document.addEventListener("DOMContentLoaded", () => {
         overdue: 'Atrasado'
     })[status] || 'Pendente';
 
+
+    // DOWNLOAD DA FATURA EM PDF
+    const downloadInvoicePDF = (invoice) => {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+            alert('Não foi possível carregar a ferramenta de PDF. Verifique sua conexão e tente novamente.');
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const clientName = getClientName(invoice);
+        const clientCompany = getClientCompany(invoice);
+        const status = getStatus(invoice);
+        const statusText = statusLabel(status);
+
+        // Cabeçalho
+        doc.setFillColor(16, 22, 36);
+        doc.rect(0, 0, 210, 42, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(22);
+        doc.text('ClientPortal', 18, 20);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text('DOCUMENTO FINANCEIRO', 18, 29);
+
+        doc.setFontSize(11);
+        doc.text(`Fatura: ${String(invoice.id)}`, 192, 20, {
+            align: 'right'
+        });
+
+        // Título
+        doc.setTextColor(30, 40, 58);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text('Fatura de cobranca', 18, 60);
+
+        // Dados do cliente
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, 68, 192, 68);
+
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('CLIENTE', 18, 80);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(30, 40, 58);
+        doc.text(doc.splitTextToSize(clientName, 170), 18, 88);
+
+        let currentY = 98;
+
+        if (clientCompany) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(100, 110, 125);
+            doc.text('Empresa', 18, currentY);
+
+            doc.setTextColor(30, 40, 58);
+            doc.text(doc.splitTextToSize(clientCompany, 170), 18, currentY + 7);
+
+            currentY += 19;
+        }
+
+        // Descrição
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, currentY, 192, currentY);
+
+        currentY += 12;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('DESCRICAO DO SERVICO', 18, currentY);
+
+        currentY += 8;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(30, 40, 58);
+
+        const descriptionLines = doc.splitTextToSize(
+            invoice.description || 'Sem descricao',
+            170
+        );
+
+        doc.text(descriptionLines, 18, currentY);
+
+        currentY += descriptionLines.length * 7 + 12;
+
+        // Valor
+        doc.setFillColor(242, 246, 253);
+        doc.roundedRect(18, currentY, 174, 27, 3, 3, 'F');
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(100, 110, 125);
+        doc.text('VALOR DA FATURA', 25, currentY + 10);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(17);
+        doc.setTextColor(45, 105, 220);
+        doc.text(formatCurrency(invoice.amount), 185, currentY + 18, {
+            align: 'right'
+        });
+
+        currentY += 43;
+
+        // Datas e status
+        const details = [
+            ['Data de emissao', formatDate(invoice.issueDate)],
+            ['Data de vencimento', formatDate(invoice.dueDate)],
+            ['Status', statusText]
+        ];
+
+        if (status === 'paid' && invoice.paymentDate) {
+            details.push([
+                'Data do pagamento',
+                formatDate(invoice.paymentDate)
+            ]);
+        }
+
+        doc.setFontSize(10);
+
+        details.forEach(([label, value]) => {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(100, 110, 125);
+            doc.text(label, 18, currentY);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 40, 58);
+            doc.text(String(value), 192, currentY, {
+                align: 'right'
+            });
+
+            currentY += 12;
+        });
+
+        // Rodapé
+        doc.setDrawColor(220, 225, 235);
+        doc.line(18, 270, 192, 270);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(130, 140, 155);
+        doc.text(
+            'Documento gerado pelo sistema ClientPortal.',
+            105,
+            279,
+            { align: 'center' }
+        );
+
+        const safeId = String(invoice.id).replace(/[^a-zA-Z0-9_-]/g, '');
+
+        doc.save(`fatura-${safeId || 'clientportal'}.pdf`);
+    };
+
+
+
+
+    
     // DADOS DEMONSTRATIVOS
     const createDemoInvoices = () => {
         const clients = getClients();
@@ -4468,6 +4793,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 status: 'pending'
             }
         ];
+
+        
+
+
+
+        
 
         return examples.map((example, index) => {
             const client = clients.find(item =>
@@ -4647,6 +4978,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                 aria-label="Editar fatura">✎</button>
 
                             <button type="button"
+                                class="finance-action-button download"
+                                data-action="download"
+                                data-id="${escapeHTML(invoice.id)}"
+                                title="Baixar fatura em PDF"
+                                aria-label="Baixar fatura em PDF">↓</button>
+
+                            <button type="button"
                                 class="finance-action-button delete"
                                 data-action="delete"
                                 data-id="${escapeHTML(invoice.id)}"
@@ -4810,6 +5148,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!invoice) return;
 
+        if (action === 'download') {
+            downloadInvoicePDF(invoice);
+            return;
+        }
+
         if (action === 'edit') {
             renderClientOptions();
 
@@ -4829,7 +5172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             invoiceModal.classList.add('active');
             invoiceModal.setAttribute('aria-hidden', 'false');
-        }
+                }
 
         if (action === 'delete') {
             const confirmed = confirm(

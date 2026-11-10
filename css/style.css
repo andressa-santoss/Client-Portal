@@ -6889,3 +6889,7 @@ body.app-page a {
         justify-content: center;
     }
 }
+.finance-action-button.download:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
