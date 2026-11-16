@@ -973,8 +973,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         emptyState.hidden = filtered.length > 0;
 
-        document.getElementById('projectsResultCount').textContent =
-            `${filtered.length} ${filtered.length === 1 ? 'projeto' : 'projetos'}`;
+        // document.getElementById('projectsResultCount').textContent =
+        //     `${filtered.length} ${filtered.length === 1 ? 'projeto' : 'projetos'}`;
+
+
+        function updateStatistics() {
+    const total = projects.length;
+
+    const active = projects.filter(p =>
+        ['Em andamento', 'Em revisão'].includes(getEffectiveStatus(p))
+    ).length;
+
+    const completed = projects.filter(p =>
+        p.status === 'Concluído'
+    ).length;
+
+    const delayed = projects.filter(p =>
+        getEffectiveStatus(p) === 'Atrasado'
+    ).length;
+
+    const elements = {
+        totalProjects: total,
+        activeProjects: active,
+        completedProjects: completed,
+        delayedProjects: delayed,
+        sidebarProjectCount: total
+    };
+
+    Object.entries(elements).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    });
+}
 
         updateStatistics();
     }
@@ -5262,5 +5295,496 @@ document.addEventListener("DOMContentLoaded", () => {
     // INICIALIZAÇÃO
     renderClientOptions();
     renderInvoices();
+
+})();
+
+
+/* =========================================
+   CLIENTPORTAL — MÓDULO DE RELATÓRIOS
+========================================= */
+
+(() => {
+    const page = document.querySelector('[data-page="relatorios"]');
+    if (!page) return;
+
+    const KEYS = {
+        projects: 'clientPortalProjects',
+        tasks: 'clientPortalTasks',
+        clients: 'clientPortalClients',
+        invoices: 'clientPortalInvoices'
+    };
+
+    const $ = id => document.getElementById(id);
+
+    const elements = {
+        start: $('reportStartDate'),
+        end: $('reportEndDate'),
+        apply: $('applyReportFilters'),
+        clear: $('clearReportFilters'),
+        message: $('reportFilterMessage'),
+        export: $('exportReports'),
+
+        projectsTotal: $('reportProjectsTotal'),
+        projectsDetail: $('reportProjectsDetail'),
+        tasksTotal: $('reportTasksTotal'),
+        tasksDetail: $('reportTasksDetail'),
+        clientsTotal: $('reportClientsTotal'),
+        clientsDetail: $('reportClientsDetail'),
+        revenueTotal: $('reportRevenueTotal'),
+        revenueDetail: $('reportRevenueDetail'),
+
+        projectChart: $('projectReportChart'),
+        projectEmpty: $('projectReportEmpty'),
+        taskChart: $('taskReportChart'),
+        taskEmpty: $('taskReportEmpty'),
+        clientChart: $('clientReportChart'),
+        clientEmpty: $('clientReportEmpty'),
+
+        invoiceTotal: $('reportInvoiceTotal'),
+        paidTotal: $('reportPaidTotal'),
+        pendingTotal: $('reportPendingTotal'),
+        overdueTotal: $('reportOverdueTotal'),
+
+        projectTable: $('reportProjectTable'),
+        projectTableEmpty: $('reportProjectTableEmpty'),
+        projectCount: $('reportProjectCount')
+    };
+
+    const readArray = key => {
+        try {
+            const value = JSON.parse(localStorage.getItem(key) || '[]');
+            return Array.isArray(value) ? value : [];
+        } catch (error) {
+            console.error(`Erro ao ler ${key}:`, error);
+            return [];
+        }
+    };
+
+    const escapeHTML = value =>
+        String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        })[char]);
+
+    const currency = value =>
+        Number(value || 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+    const today = () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const readData = () => ({
+        projects: readArray(KEYS.projects),
+        tasks: readArray(KEYS.tasks),
+        clients: readArray(KEYS.clients),
+        invoices: readArray(KEYS.invoices)
+    });
+
+    let data = readData();
+
+    let filtered = {
+        projects: [],
+        tasks: [],
+        clients: [],
+        invoices: []
+    };
+
+    const isInPeriod = date => {
+        // Registros antigos sem data de criação continuam visíveis.
+        if (!date) return true;
+
+        if (elements.start.value && date < elements.start.value) {
+            return false;
+        }
+
+        if (elements.end.value && date > elements.end.value) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const isProjectOverdue = project => {
+        return project.status !== 'Concluído' &&
+            Boolean(project.deadline) &&
+            project.deadline < today();
+    };
+
+    const getInvoiceStatus = invoice => {
+        if (invoice.status === 'paid') return 'paid';
+        if (invoice.dueDate && invoice.dueDate < today()) return 'overdue';
+        return 'pending';
+    };
+
+    const getTaskStatus = task => {
+        if (task.status === 'Concluída') return 'completed';
+
+        if (
+            task.deadline &&
+            task.deadline < today()
+        ) {
+            return 'overdue';
+        }
+
+        if (task.status === 'Em andamento') return 'progress';
+
+        return 'pending';
+    };
+
+    const getProjectStatus = project => {
+        if (isProjectOverdue(project)) return 'Atrasado';
+        return project.status || 'Sem status';
+    };
+
+    const renderBars = (container, empty, items) => {
+        const total = items.reduce((sum, item) => sum + item.value, 0);
+
+        if (!total) {
+            container.innerHTML = '';
+            empty.hidden = false;
+            return;
+        }
+
+        empty.hidden = true;
+
+        container.innerHTML = items.map(item => {
+            const percentage = (item.value / total) * 100;
+
+            return `
+                <div class="report-bar-item">
+                    <span class="report-bar-label">
+                        ${escapeHTML(item.label)}
+                    </span>
+
+                    <div class="report-bar-track">
+                        <div
+                            class="report-bar-fill ${item.color || ''}"
+                            style="width:${percentage}%"
+                        ></div>
+                    </div>
+
+                    <span class="report-bar-value">
+                        ${item.value}
+                    </span>
+                </div>
+            `;
+        }).join('');
+    };
+
+    const renderProjects = () => {
+        const projects = filtered.projects;
+
+        const completed = projects.filter(
+            project => project.status === 'Concluído'
+        ).length;
+
+        const inProgress = projects.filter(
+            project => project.status === 'Em andamento'
+        ).length;
+
+        const review = projects.filter(
+            project => project.status === 'Em revisão'
+        ).length;
+
+        const paused = projects.filter(
+            project => project.status === 'Pausado'
+        ).length;
+
+        const overdue = projects.filter(
+            isProjectOverdue
+        ).length;
+
+        elements.projectsTotal.textContent = projects.length;
+        elements.projectsDetail.textContent =
+            `${completed} concluídos`;
+
+        renderBars(elements.projectChart, elements.projectEmpty, [
+            { label: 'Concluídos', value: completed, color: 'green' },
+            { label: 'Em andamento', value: inProgress, color: '' },
+            { label: 'Em revisão', value: review, color: 'purple' },
+            { label: 'Pausados', value: paused, color: 'orange' },
+            { label: 'Atrasados', value: overdue, color: 'red' }
+        ]);
+
+        const sorted = [...projects].sort(
+            (a, b) => Number(b.progress || 0) - Number(a.progress || 0)
+        );
+
+        elements.projectCount.textContent =
+            `${projects.length} projeto(s)`;
+
+        elements.projectTable.innerHTML = sorted.map(project => {
+            const progress = Math.max(
+                0,
+                Math.min(100, Number(project.progress) || 0)
+            );
+
+            const status = getProjectStatus(project);
+
+            let statusClass = '';
+
+            if (status === 'Concluído') statusClass = 'complete';
+            if (status === 'Atrasado') statusClass = 'delayed';
+
+            return `
+                <tr>
+                    <td class="report-project-name">
+                        ${escapeHTML(project.name || 'Sem nome')}
+                    </td>
+                    <td>${escapeHTML(project.client || '—')}</td>
+                    <td>${escapeHTML(project.responsible || '—')}</td>
+                    <td>
+                        <div class="report-progress">
+                            <div class="report-progress-track">
+                                <div
+                                    class="report-progress-fill"
+                                    style="width:${progress}%"
+                                ></div>
+                            </div>
+                            <span>${progress}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="report-project-status ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        elements.projectTableEmpty.hidden = projects.length > 0;
+    };
+
+    const renderTasks = () => {
+        const tasks = filtered.tasks;
+
+        const completed = tasks.filter(
+            task => getTaskStatus(task) === 'completed'
+        ).length;
+
+        const progress = tasks.filter(
+            task => getTaskStatus(task) === 'progress'
+        ).length;
+
+        const pending = tasks.filter(
+            task => getTaskStatus(task) === 'pending'
+        ).length;
+
+        const overdue = tasks.filter(
+            task => getTaskStatus(task) === 'overdue'
+        ).length;
+
+        elements.tasksTotal.textContent = tasks.length;
+        elements.tasksDetail.textContent =
+            `${completed} concluídas`;
+
+        renderBars(elements.taskChart, elements.taskEmpty, [
+            { label: 'Concluídas', value: completed, color: 'green' },
+            { label: 'Em andamento', value: progress, color: '' },
+            { label: 'Pendentes', value: pending, color: 'orange' },
+            { label: 'Atrasadas', value: overdue, color: 'red' }
+        ]);
+    };
+
+    const renderClients = () => {
+        const clients = filtered.clients;
+
+        const active = clients.filter(
+            client => client.status === 'Ativo'
+        ).length;
+
+        const inactive = clients.length - active;
+
+        elements.clientsTotal.textContent = clients.length;
+        elements.clientsDetail.textContent = `${active} ativos`;
+
+        renderBars(elements.clientChart, elements.clientEmpty, [
+            { label: 'Ativos', value: active, color: 'green' },
+            { label: 'Inativos', value: inactive, color: 'orange' }
+        ]);
+    };
+
+    const renderFinance = () => {
+        const invoices = filtered.invoices;
+
+        const total = invoices.reduce(
+            (sum, invoice) => sum + Number(invoice.amount || 0),
+            0
+        );
+
+        const paid = invoices
+            .filter(invoice => getInvoiceStatus(invoice) === 'paid')
+            .reduce((sum, invoice) => sum + Number(invoice.amount || 0), 0);
+
+        const overdue = invoices
+            .filter(invoice => getInvoiceStatus(invoice) === 'overdue')
+            .reduce((sum, invoice) => sum + Number(invoice.amount || 0), 0);
+
+        const pending = invoices
+            .filter(invoice => getInvoiceStatus(invoice) === 'pending')
+            .reduce((sum, invoice) => sum + Number(invoice.amount || 0), 0);
+
+        elements.revenueTotal.textContent = currency(total);
+        elements.revenueDetail.textContent =
+            `${currency(paid)} recebidos`;
+
+        elements.invoiceTotal.textContent = currency(total);
+        elements.paidTotal.textContent = currency(paid);
+        elements.pendingTotal.textContent = currency(pending);
+        elements.overdueTotal.textContent = currency(overdue);
+    };
+
+    const applyFilters = () => {
+        if (
+            elements.start.value &&
+            elements.end.value &&
+            elements.start.value > elements.end.value
+        ) {
+            elements.message.textContent =
+                'A data inicial não pode ser posterior à data final.';
+            return;
+        }
+
+        filtered.projects = data.projects.filter(
+            project => isInPeriod(project.start)
+        );
+
+        filtered.tasks = data.tasks.filter(
+            task => isInPeriod(task.createdAt)
+        );
+
+        filtered.clients = data.clients.filter(
+            client => isInPeriod(client.createdAt)
+        );
+
+        filtered.invoices = data.invoices.filter(
+            invoice => isInPeriod(invoice.issueDate)
+        );
+
+        elements.message.textContent =
+            elements.start.value || elements.end.value
+                ? 'Exibindo registros conforme o período selecionado. Registros sem data de criação permanecem incluídos.'
+                : 'Exibindo todos os registros disponíveis.';
+
+        renderProjects();
+        renderTasks();
+        renderClients();
+        renderFinance();
+    };
+
+    const refresh = () => {
+        data = readData();
+        applyFilters();
+    };
+
+    const exportCSV = () => {
+        const rows = [
+            ['Relatório ClientPortal'],
+            ['Gerado em', new Date().toLocaleString('pt-BR')],
+            ['Data inicial', elements.start.value || 'Não definida'],
+            ['Data final', elements.end.value || 'Não definida'],
+            [],
+            ['INDICADORES'],
+            ['Categoria', 'Quantidade ou valor'],
+            ['Projetos', filtered.projects.length],
+            ['Tarefas', filtered.tasks.length],
+            ['Clientes', filtered.clients.length],
+            [
+                'Faturamento',
+                filtered.invoices.reduce(
+                    (sum, item) => sum + Number(item.amount || 0), 0
+                )
+            ],
+            [],
+            ['PROJETOS'],
+            ['Projeto', 'Cliente', 'Responsável', 'Progresso', 'Status'],
+            ...filtered.projects.map(project => [
+                project.name || '',
+                project.client || '',
+                project.responsible || '',
+                `${Number(project.progress) || 0}%`,
+                getProjectStatus(project)
+            ]),
+            [],
+            ['FINANCEIRO'],
+            ['Fatura', 'Descrição', 'Valor', 'Vencimento', 'Status'],
+            ...filtered.invoices.map(invoice => [
+                invoice.id || '',
+                invoice.description || '',
+                Number(invoice.amount || 0),
+                invoice.dueDate || '',
+                getInvoiceStatus(invoice)
+            ])
+        ];
+
+        const csv = '\uFEFF' + rows.map(row =>
+            row.map(value =>
+                `"${String(value ?? '').replace(/"/g, '""')}"`
+            ).join(';')
+        ).join('\r\n');
+
+        const blob = new Blob([csv], {
+            type: 'text/csv;charset=utf-8;'
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = `relatorio-clientportal-${today()}.csv`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+    };
+
+    elements.apply.addEventListener('click', applyFilters);
+
+    elements.clear.addEventListener('click', () => {
+        elements.start.value = '';
+        elements.end.value = '';
+        applyFilters();
+    });
+
+    elements.export.addEventListener('click', exportCSV);
+
+    // Atualiza quando outro módulo altera os dados em outra aba.
+    window.addEventListener('storage', event => {
+        if (Object.values(KEYS).includes(event.key)) {
+            refresh();
+        }
+    });
+
+    // Menu mobile
+    const sidebar = $('sidebar');
+    const overlay = $('sidebarOverlay');
+    const menuButton = $('mobileMenuButton');
+
+    const closeMenu = () => {
+        sidebar?.classList.remove('active');
+        overlay?.classList.remove('active');
+    };
+
+    menuButton?.addEventListener('click', () => {
+        sidebar?.classList.toggle('active');
+        overlay?.classList.toggle('active');
+    });
+
+    overlay?.addEventListener('click', closeMenu);
+
+    refresh();
 
 })();

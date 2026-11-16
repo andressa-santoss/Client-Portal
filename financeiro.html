@@ -17,57 +17,106 @@
     <div class="app-layout">
 
         <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
+      <aside class="sidebar" id="sidebar">
 
-            <div class="sidebar-brand">
-                <a href="dashboard.html" class="brand">
-                    <span class="brand-icon">C</span>
-                    <span>Client<span>Portal</span></span>
-                </a>
+    <!-- MARCA -->
+    <a href="dashboard.html" class="brand sidebar-brand">
+        <span class="brand-mark">
+            <span></span><span></span><span></span>
+        </span>
+        CLIENT<span>PORTAL</span>
+    </a>
+
+    <!-- MENU PRINCIPAL -->
+    <div class="sidebar-label">MENU PRINCIPAL</div>
+
+    <nav class="sidebar-nav">
+
+        <a href="dashboard.html" class="sidebar-link">
+            <span class="nav-icon">▦</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="projetos.html" class="sidebar-link">
+            <span class="nav-icon">▣</span>
+            <span>Projetos</span>
+        </a>
+
+        <a href="tarefas.html" class="sidebar-link">
+            <span class="nav-icon">☑</span>
+            <span>Tarefas</span>
+        </a>
+
+        <a href="clientes.html" class="sidebar-link">
+            <span class="nav-icon">♙</span>
+            <span>Clientes</span>
+        </a>
+
+        <a href="mensagens.html" class="sidebar-link">
+            <span class="nav-icon">▤</span>
+            <span>Mensagens</span>
+            <span class="nav-notification"></span>
+        </a>
+
+        <a href="arquivos.html" class="sidebar-link">
+            <span class="nav-icon">▧</span>
+            <span>Arquivos</span>
+        </a>
+
+    </nav>
+
+    <!-- GESTÃO -->
+    <div class="sidebar-label sidebar-label-spaced">GESTÃO</div>
+
+    <nav class="sidebar-nav">
+
+        <a href="financeiro.html" class="sidebar-link active">
+            <span class="nav-icon">＄</span>
+            <span>Financeiro</span>
+        </a>
+
+        <a href="relatorios.html" class="sidebar-link">
+            <span class="nav-icon">▥</span>
+            <span>Relatórios</span>
+        </a>
+
+        <a href="configuracoes.html" class="sidebar-link">
+            <span class="nav-icon">⚙</span>
+            <span>Configurações</span>
+        </a>
+
+    </nav>
+
+    <!-- RODAPÉ -->
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-help">
+            <div class="help-icon">?</div>
+            <div>
+                <strong>Precisa de ajuda?</strong>
+                <span>Acesse nosso suporte</span>
             </div>
+        </div>
 
-            <nav class="sidebar-nav">
-                <span class="sidebar-label">MENU PRINCIPAL</span>
+        <button type="button" class="sidebar-profile" id="profileButton">
+            <span class="profile-avatar">AD</span>
 
-                <a href="dashboard.html" class="sidebar-link">
-                    <span>▦</span> Dashboard
-                </a>
-                <a href="projetos.html" class="sidebar-link">
-                    <span>▣</span> Projetos
-                </a>
-                <a href="tarefas.html" class="sidebar-link">
-                    <span>☷</span> Tarefas
-                </a>
-                <a href="clientes.html" class="sidebar-link">
-                    <span>♙</span> Clientes
-                </a>
-                <a href="mensagens.html" class="sidebar-link">
-                    <span>✉</span> Mensagens
-                </a>
-                <a href="arquivos.html" class="sidebar-link">
-                    <span>▤</span> Arquivos
-                </a>
-                <a href="financeiro.html" class="sidebar-link active">
-                    <span>＄</span> Financeiro
-                </a>
+            <span class="profile-info">
+                <strong>Administrador</strong>
+                <small>Empresa</small>
+            </span>
 
-                <span class="sidebar-label">GESTÃO</span>
+            <span class="profile-more">···</span>
+        </button>
 
-                <a href="relatorios.html" class="sidebar-link">
-                    <span>▥</span> Relatórios
-                </a>
-                <a href="configuracoes.html" class="sidebar-link">
-                    <span>⚙</span> Configurações
-                </a>
-            </nav>
+        <div class="profile-menu" id="profileMenu">
+            <a href="configuracoes.html">Minha conta</a>
+            <a href="login.html">Sair da conta</a>
+        </div>
 
-            <div class="sidebar-footer">
-                <span>ClientPortal</span>
-                <small>Gestão inteligente de clientes</small>
-            </div>
+    </div>
 
-        </aside>
-
+</aside>
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- CONTEÚDO -->
