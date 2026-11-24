@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações | ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="script/script.js" defer></script>
+</head>
+
+<body class="app-page" data-page="configuracoes">
+
+    <div class="app-layout">
+
+
+        <aside class="sidebar" id="sidebar">
+
+            <!-- MARCA -->
+            <a href="dashboard.html" class="brand sidebar-brand">
+                <span class="brand-mark">
+                    <span></span><span></span><span></span>
+                </span>
+                CLIENT<span>PORTAL</span>
+            </a>
+
+            <!-- MENU PRINCIPAL -->
+            <div class="sidebar-label">MENU PRINCIPAL</div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html" class="sidebar-link">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="projetos.html" class="sidebar-link">
+                    <span class="nav-icon">▣</span>
+                    <span>Projetos</span>
+                </a>
+
+                <a href="tarefas.html" class="sidebar-link">
+                    <span class="nav-icon">☑</span>
+                    <span>Tarefas</span>
+                </a>
+
+                <a href="clientes.html" class="sidebar-link">
+                    <span class="nav-icon">♙</span>
+                    <span>Clientes</span>
+                </a>
+
+                <a href="mensagens.html" class="sidebar-link">
+                    <span class="nav-icon">▤</span>
+                    <span>Mensagens</span>
+                    <span class="nav-notification"></span>
+                </a>
+
+                <a href="arquivos.html" class="sidebar-link">
+                    <span class="nav-icon">▧</span>
+                    <span>Arquivos</span>
+                </a>
+
+            </nav>
+
+            <!-- GESTÃO -->
+            <div class="sidebar-label sidebar-label-spaced">
+                GESTÃO
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="financeiro.html" class="sidebar-link">
+                    <span class="nav-icon">＄</span>
+                    <span>Financeiro</span>
+                </a>
+
+                <a href="relatorios.html" class="sidebar-link">
+                    <span class="nav-icon">▥</span>
+                    <span>Relatórios</span>
+                </a>
+
+                <a href="configuracoes.html" class="sidebar-link active">
+                    <span class="nav-icon">⚙</span>
+                    <span>Configurações</span>
+                </a>
+
+            </nav>
+
+            <!-- RODAPÉ DA SIDEBAR -->
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-help">
+                    <div class="help-icon">?</div>
+                    <div>
+                        <strong>Precisa de ajuda?</strong>
+                        <span>Acesse nosso suporte</span>
+                    </div>
+                </div>
+
+                <button type="button" class="sidebar-profile" id="profileButton">
+
+                    <span class="profile-avatar">AD</span>
+
+                    <span class="profile-info">
+                        <strong>Administrador</strong>
+                        <small>Empresa</small>
+                    </span>
+
+                    <span class="profile-more">···</span>
+
+                </button>
+
+                <div class="profile-menu" id="profileMenu">
+                    <a href="configuracoes.html">Minha conta</a>
+                    <a href="login.html">Sair da conta</a>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="dashboard-main">
+
+            <!-- CABEÇALHO -->
+            <header class="dashboard-topbar">
+
+                <div class="topbar-left">
+                    <button class="mobile-menu-button" id="mobileMenuButton"
+                            type="button" aria-label="Abrir menu">
+                        ☰
+                    </button>
+
+                    <div class="breadcrumb">
+                        <span>Gestão</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <strong>Configurações</strong>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <div class="topbar-user">
+                        <span class="profile-avatar" data-user-initials>AD</span>
+                        <div>
+                            <strong data-user-name>Administrador</strong>
+                            <small data-user-role>Gestor da empresa</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTEÚDO -->
+            <div class="dashboard-content settings-content">
+
+                <!-- APRESENTAÇÃO -->
+                <section class="dashboard-welcome settings-welcome">
+                    <div>
+                        <div class="welcome-eyebrow">
+                            <span class="welcome-pulse"></span>
+                            CONTA E PREFERÊNCIAS
+                        </div>
+
+                        <h1>Suas <em>configurações.</em></h1>
+
+                        <p>
+                            Gerencie seu perfil, os dados da empresa, preferências
+                            do sistema e notificações.
+                        </p>
+                    </div>
+
+                    <span class="settings-saved-at" id="settingsSavedAt">
+                        Nenhuma alteração salva ainda
+                    </span>
+                </section>
+
+                <div class="settings-layout">
+
+                    <!-- NAVEGAÇÃO DAS ABAS -->
+                    <nav class="settings-tabs" role="tablist" aria-label="Seções das configurações">
+                        <button class="settings-tab active" type="button" role="tab"
+                                data-settings-tab="perfil" aria-selected="true">
+                            <span class="settings-tab-icon">♙</span>
+                            <span>
+                                <strong>Perfil</strong>
+                                <small>Seus dados pessoais</small>
+                            </span>
+                        </button>
+
+                        <button class="settings-tab" type="button" role="tab"
+                                data-settings-tab="empresa" aria-selected="false">
+                            <span class="settings-tab-icon">▣</span>
+                            <span>
+                                <strong>Empresa</strong>
+                                <small>Informações do negócio</small>
+                            </span>
+                        </button>
+
+                        <button class="settings-tab" type="button" role="tab"
+                                data-settings-tab="preferencias" aria-selected="false">
+                            <span class="settings-tab-icon">⚙</span>
+                            <span>
+                                <strong>Preferências</strong>
+                                <small>Comportamento do sistema</small>
+                            </span>
+                        </button>
+
+                        <button class="settings-tab" type="button" role="tab"
+                                data-settings-tab="notificacoes" aria-selected="false">
+                            <span class="settings-tab-icon">♧</span>
+                            <span>
+                                <strong>Notificações</strong>
+                                <small>Alertas e avisos</small>
+                            </span>
+                        </button>
+
+                        <button class="settings-tab" type="button" role="tab"
+                                data-settings-tab="dados" aria-selected="false">
+                            <span class="settings-tab-icon">▧</span>
+                            <span>
+                                <strong>Dados</strong>
+                                <small>Backup e restauração</small>
+                            </span>
+                        </button>
+                    </nav>
+
+                    <div class="settings-panels">
+
+                        <!-- PERFIL -->
+                        <section class="dashboard-panel settings-panel active" data-settings-panel="perfil">
+                            <div class="panel-header">
+                                <div>
+                                    <h2>Perfil</h2>
+                                    <p>Essas informações aparecem no menu lateral e no topo das páginas.</p>
+                                </div>
+                            </div>
+
+                            <div class="settings-avatar-row">
+                                <span class="settings-avatar" id="settingsAvatarPreview">AD</span>
+                                <div>
+                                    <strong id="settingsNamePreview">Administrador</strong>
+                                    <small>As iniciais são geradas a partir do seu nome.</small>
+                                </div>
+                            </div>
+
+                            <form class="settings-form" id="profileForm" data-settings-form="profile" novalidate>
+                                <div class="settings-grid">
+                                    <div class="settings-field">
+                                        <label for="profileName">Nome completo *</label>
+                                        <input id="profileName" name="name" type="text"
+                                               placeholder="Ex.: Andressa Santos" required>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="profileRole">Cargo</label>
+                                        <input id="profileRole" name="role" type="text"
+                                               placeholder="Ex.: Gestora de projetos">
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="profileEmail">E-mail *</label>
+                                        <input id="profileEmail" name="email" type="email"
+                                               placeholder="voce@empresa.com" required>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="profilePhone">Telefone</label>
+                                        <input id="profilePhone" name="phone" type="tel"
+                                               placeholder="(11) 99999-9999" data-mask="phone">
+                                        <small class="settings-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="settings-actions">
+                                    <button class="settings-secondary-button" type="button" data-settings-reset>
+                                        Desfazer alterações
+                                    </button>
+                                    <button class="dashboard-primary-button" type="submit">
+                                        Salvar perfil
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- EMPRESA -->
+                        <section class="dashboard-panel settings-panel" data-settings-panel="empresa" hidden>
+                            <div class="panel-header">
+                                <div>
+                                    <h2>Empresa</h2>
+                                    <p>Dados usados em faturas, relatórios e no portal do cliente.</p>
+                                </div>
+                            </div>
+
+                            <form class="settings-form" id="companyForm" data-settings-form="company" novalidate>
+                                <div class="settings-grid">
+                                    <div class="settings-field">
+                                        <label for="companyName">Nome da empresa *</label>
+                                        <input id="companyName" name="name" type="text"
+                                               placeholder="Ex.: Studio Criativo" required>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="companyDocument">CNPJ</label>
+                                        <input id="companyDocument" name="document" type="text"
+                                               placeholder="00.000.000/0000-00" data-mask="cnpj">
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="companyEmail">E-mail comercial</label>
+                                        <input id="companyEmail" name="email" type="email"
+                                               placeholder="contato@empresa.com">
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="companySite">Site</label>
+                                        <input id="companySite" name="site" type="url"
+                                               placeholder="https://www.empresa.com">
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="companySegment">Segmento</label>
+                                        <select id="companySegment" name="segment">
+                                            <option value="">Selecione</option>
+                                            <option>Agência digital</option>
+                                            <option>Desenvolvimento de software</option>
+                                            <option>Design e branding</option>
+                                            <option>Consultoria</option>
+                                            <option>Marketing</option>
+                                            <option>Outro</option>
+                                        </select>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="companyCity">Cidade / UF</label>
+                                        <input id="companyCity" name="city" type="text"
+                                               placeholder="Ex.: São Paulo / SP">
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field settings-field-full">
+                                        <label for="companyAddress">Endereço</label>
+                                        <input id="companyAddress" name="address" type="text"
+                                               placeholder="Rua, número, bairro">
+                                        <small class="settings-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="settings-actions">
+                                    <button class="settings-secondary-button" type="button" data-settings-reset>
+                                        Desfazer alterações
+                                    </button>
+                                    <button class="dashboard-primary-button" type="submit">
+                                        Salvar empresa
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- PREFERÊNCIAS -->
+                        <section class="dashboard-panel settings-panel" data-settings-panel="preferencias" hidden>
+                            <div class="panel-header">
+                                <div>
+                                    <h2>Preferências</h2>
+                                    <p>Ajuste como o ClientPortal funciona para você.</p>
+                                </div>
+                            </div>
+
+                            <form class="settings-form" id="preferencesForm" data-settings-form="preferences" novalidate>
+                                <div class="settings-grid">
+                                    <div class="settings-field">
+                                        <label for="prefHome">Página inicial após o login</label>
+                                        <select id="prefHome" name="homePage">
+                                            <option value="dashboard.html">Dashboard</option>
+                                            <option value="projetos.html">Projetos</option>
+                                            <option value="tarefas.html">Tarefas</option>
+                                            <option value="mensagens.html">Mensagens</option>
+                                        </select>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="prefCurrency">Moeda</label>
+                                        <select id="prefCurrency" name="currency">
+                                            <option value="BRL">Real (R$)</option>
+                                            <option value="USD">Dólar (US$)</option>
+                                            <option value="EUR">Euro (€)</option>
+                                        </select>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="prefDateFormat">Formato de data</label>
+                                        <select id="prefDateFormat" name="dateFormat">
+                                            <option value="dd/mm/aaaa">dd/mm/aaaa</option>
+                                            <option value="aaaa-mm-dd">aaaa-mm-dd</option>
+                                        </select>
+                                        <small class="settings-error"></small>
+                                    </div>
+
+                                    <div class="settings-field">
+                                        <label for="prefTimezone">Fuso horário</label>
+                                        <select id="prefTimezone" name="timezone">
+                                            <option value="America/Sao_Paulo">Brasília (GMT-3)</option>
+                                            <option value="America/Manaus">Manaus (GMT-4)</option>
+                                            <option value="America/Rio_Branco">Rio Branco (GMT-5)</option>
+                                            <option value="America/Noronha">Fernando de Noronha (GMT-2)</option>
+                                        </select>
+                                        <small class="settings-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="settings-switch-list">
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Reduzir animações</strong>
+                                            <small>Desativa transições e efeitos de movimento.</small>
+                                        </span>
+                                        <input type="checkbox" name="reduceMotion">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Modo compacto</strong>
+                                            <small>Diminui espaçamentos para mostrar mais informação.</small>
+                                        </span>
+                                        <input type="checkbox" name="compact">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                </div>
+
+                                <div class="settings-actions">
+                                    <button class="settings-secondary-button" type="button" data-settings-reset>
+                                        Desfazer alterações
+                                    </button>
+                                    <button class="dashboard-primary-button" type="submit">
+                                        Salvar preferências
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- NOTIFICAÇÕES -->
+                        <section class="dashboard-panel settings-panel" data-settings-panel="notificacoes" hidden>
+                            <div class="panel-header">
+                                <div>
+                                    <h2>Notificações</h2>
+                                    <p>Escolha sobre o que você quer ser avisado.</p>
+                                </div>
+                            </div>
+
+                            <form class="settings-form" id="notificationsForm" data-settings-form="notifications" novalidate>
+                                <div class="settings-switch-list">
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Novas mensagens</strong>
+                                            <small>Quando um cliente enviar uma mensagem.</small>
+                                        </span>
+                                        <input type="checkbox" name="messages">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Prazos de tarefas</strong>
+                                            <small>Tarefas que vencem nos próximos 3 dias.</small>
+                                        </span>
+                                        <input type="checkbox" name="deadlines">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Faturas em atraso</strong>
+                                            <small>Quando uma fatura passar do vencimento.</small>
+                                        </span>
+                                        <input type="checkbox" name="invoices">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Aprovações pendentes</strong>
+                                            <small>Entregas aguardando retorno do cliente.</small>
+                                        </span>
+                                        <input type="checkbox" name="approvals">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+
+                                    <label class="settings-switch">
+                                        <span>
+                                            <strong>Resumo semanal por e-mail</strong>
+                                            <small>Será enviado quando o e-mail estiver integrado ao Firebase.</small>
+                                        </span>
+                                        <input type="checkbox" name="weeklyEmail">
+                                        <i aria-hidden="true"></i>
+                                    </label>
+                                </div>
+
+                                <div class="settings-actions">
+                                    <button class="settings-secondary-button" type="button" data-settings-reset>
+                                        Desfazer alterações
+                                    </button>
+                                    <button class="dashboard-primary-button" type="submit">
+                                        Salvar notificações
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- DADOS -->
+                        <section class="dashboard-panel settings-panel" data-settings-panel="dados" hidden>
+                            <div class="panel-header">
+                                <div>
+                                    <h2>Dados e backup</h2>
+                                    <p>Enquanto o Firebase não está integrado, os dados ficam salvos neste navegador.</p>
+                                </div>
+                            </div>
+
+                            <div class="settings-data-summary" id="settingsDataSummary"></div>
+
+                            <div class="settings-data-actions">
+                                <div class="settings-data-card">
+                                    <div>
+                                        <strong>Exportar backup</strong>
+                                        <small>Baixa um arquivo .json com projetos, clientes, tarefas, mensagens, faturas e configurações.</small>
+                                    </div>
+                                    <button class="settings-secondary-button" type="button" id="exportDataButton">
+                                        Exportar
+                                    </button>
+                                </div>
+
+                                <div class="settings-data-card">
+                                    <div>
+                                        <strong>Importar backup</strong>
+                                        <small>Restaura um arquivo exportado anteriormente. Os dados atuais serão substituídos.</small>
+                                    </div>
+                                    <label class="settings-secondary-button" for="importDataInput">
+                                        Importar
+                                    </label>
+                                    <input type="file" id="importDataInput" accept="application/json,.json" hidden>
+                                </div>
+
+                                <div class="settings-data-card settings-danger">
+                                    <div>
+                                        <strong>Apagar dados locais</strong>
+                                        <small>Remove todos os dados do ClientPortal deste navegador. Os arquivos enviados também serão apagados.</small>
+                                    </div>
+                                    <button class="settings-danger-button" type="button" id="clearDataButton">
+                                        Apagar dados
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="settings-confirm" id="clearDataConfirm" hidden>
+                                <p>
+                                    Essa ação não pode ser desfeita. Digite <b>APAGAR</b> para confirmar.
+                                </p>
+                                <div class="settings-confirm-row">
+                                    <input type="text" id="clearDataInput" autocomplete="off" placeholder="APAGAR">
+                                    <button class="settings-secondary-button" type="button" id="clearDataCancel">
+                                        Cancelar
+                                    </button>
+                                    <button class="settings-danger-button" type="button" id="clearDataConfirmButton" disabled>
+                                        Confirmar
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- AVISO DE FEEDBACK -->
+            <div class="settings-toast" id="settingsToast" role="status" aria-live="polite">
+                <span class="settings-toast-icon">✓</span>
+                <div>
+                    <strong id="settingsToastTitle">Alterações salvas</strong>
+                    <small id="settingsToastText">Suas configurações foram atualizadas.</small>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

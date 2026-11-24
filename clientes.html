@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerenciamento de clientes do ClientPortal.">
+    <title>Clientes | ClientPortal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="app-page" data-page="clientes">
+
+<div class="app-layout">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar" id="sidebar">
+
+        <a href="dashboard.html" class="brand sidebar-brand">
+            <span class="brand-mark">
+                <span></span><span></span><span></span>
+            </span>
+            CLIENT<span>PORTAL</span>
+        </a>
+
+        <div class="sidebar-label">MENU PRINCIPAL</div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="projetos.html" class="sidebar-link">
+                <span class="nav-icon">▣</span>
+                <span>Projetos</span>
+                <span class="nav-count" id="sidebarProjectCount">04</span>
+            </a>
+
+            <a href="tarefas.html" class="sidebar-link">
+                <span class="nav-icon">☑</span>
+                <span>Tarefas</span>
+            </a>
+
+            <a href="clientes.html" class="sidebar-link active">
+                <span class="nav-icon">♙</span>
+                <span>Clientes</span>
+            </a>
+
+            <a href="mensagens.html" class="sidebar-link">
+                <span class="nav-icon">▤</span>
+                <span>Mensagens</span>
+                <span class="nav-notification"></span>
+            </a>
+
+            <a href="arquivos.html" class="sidebar-link">
+                <span class="nav-icon">▧</span>
+                <span>Arquivos</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-label sidebar-label-spaced">GESTÃO</div>
+
+        <nav class="sidebar-nav">
+            <a href="financeiro.html" class="sidebar-link">
+                <span class="nav-icon">＄</span>
+                <span>Financeiro</span>
+            </a>
+
+            <a href="relatorios.html" class="sidebar-link">
+                <span class="nav-icon">▥</span>
+                <span>Relatórios</span>
+            </a>
+
+            <a href="configuracoes.html" class="sidebar-link">
+                <span class="nav-icon">⚙</span>
+                <span>Configurações</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-help">
+                <div class="help-icon">?</div>
+                <div>
+                    <strong>Precisa de ajuda?</strong>
+                    <span>Acesse nosso suporte</span>
+                </div>
+            </div>
+
+            <button type="button" class="sidebar-profile" id="profileButton">
+                <span class="profile-avatar">AD</span>
+                <span class="profile-info">
+                    <strong>Administrador</strong>
+                    <small>Empresa</small>
+                </span>
+                <span class="profile-more">···</span>
+            </button>
+
+            <div class="profile-menu" id="profileMenu">
+                <a href="configuracoes.html">Minha conta</a>
+                <a href="login.html">Sair da conta</a>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+
+            <div class="topbar-left">
+                <button class="mobile-menu-button" id="mobileMenuButton"
+                        type="button" aria-label="Abrir menu">
+                    ☰
+                </button>
+
+                <div class="breadcrumb">
+                    <span>Workspace</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <strong>Clientes</strong>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="topbar-date" id="clientsDate"></div>
+
+                <button class="icon-button notification-button"
+                        type="button" aria-label="Notificações">
+                    ♧
+                    <span></span>
+                </button>
+
+                <div class="topbar-divider"></div>
+
+                <div class="topbar-user">
+                    <span class="profile-avatar">AD</span>
+                    <div>
+                        <strong>Administrador</strong>
+                        <small>Gestor da empresa</small>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <div class="dashboard-content clients-page">
+
+            <!-- TÍTULO -->
+            <section class="clients-welcome">
+                <div>
+                    <div class="welcome-eyebrow">
+                        <span class="welcome-pulse"></span>
+                        RELACIONAMENTO
+                    </div>
+
+                    <h1>Seus <em>clientes.</em></h1>
+
+                    <p>
+                        Gerencie seus contatos, acompanhe relacionamentos
+                        e mantenha as informações organizadas.
+                    </p>
+                </div>
+
+                <button class="dashboard-primary-button"
+                        type="button" id="newClientButton">
+                    <span>＋</span> Novo cliente
+                </button>
+            </section>
+
+            <!-- INDICADORES -->
+            <section class="clients-stats">
+
+                <article class="client-stat-card">
+                    <div class="client-stat-heading">
+                        <span>Total de clientes</span>
+                        <span class="client-stat-icon blue">♙</span>
+                    </div>
+                    <strong id="totalClients">04</strong>
+                    <small>Clientes cadastrados</small>
+                </article>
+
+                <article class="client-stat-card">
+                    <div class="client-stat-heading">
+                        <span>Clientes ativos</span>
+                        <span class="client-stat-icon green">✓</span>
+                    </div>
+                    <strong id="activeClients">03</strong>
+                    <small>Relacionamentos ativos</small>
+                </article>
+
+                <article class="client-stat-card">
+                    <div class="client-stat-heading">
+                        <span>Clientes inativos</span>
+                        <span class="client-stat-icon orange">◷</span>
+                    </div>
+                    <strong id="inactiveClients">01</strong>
+                    <small>Relacionamentos pausados</small>
+                </article>
+
+                <article class="client-stat-card">
+                    <div class="client-stat-heading">
+                        <span>Projetos vinculados</span>
+                        <span class="client-stat-icon purple">▣</span>
+                    </div>
+                    <strong id="linkedProjects">04</strong>
+                    <small>Projetos associados</small>
+                </article>
+
+            </section>
+
+            <!-- LISTAGEM -->
+            <section class="dashboard-panel clients-management">
+
+                <div class="clients-list-header">
+                    <div>
+                        <h2>Todos os clientes</h2>
+                        <p>Consulte e gerencie os clientes da sua empresa.</p>
+                    </div>
+
+                    <span class="clients-total-label" id="clientsResultCount">
+                        04 clientes
+                    </span>
+                </div>
+
+                <!-- BUSCA E FILTROS -->
+                <div class="clients-toolbar">
+
+                    <div class="clients-search">
+                        <span>⌕</span>
+                        <input type="search" id="clientSearch"
+                               placeholder="Buscar por nome, empresa ou e-mail...">
+                    </div>
+
+                    <select id="clientStatusFilter" aria-label="Filtrar por status">
+                        <option value="">Todos os status</option>
+                        <option value="Ativo">Ativos</option>
+                        <option value="Inativo">Inativos</option>
+                    </select>
+
+                </div>
+
+                <!-- TABELA -->
+                <div class="projects-table-wrapper">
+                    <table class="projects-table clients-table">
+
+                        <thead>
+                            <tr>
+                                <th>CLIENTE</th>
+                                <th>CONTATO</th>
+                                <th>TELEFONE</th>
+                                <th>PROJETOS</th>
+                                <th>STATUS</th>
+                                <th>AÇÕES</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="clientsTableBody"></tbody>
+
+                    </table>
+                </div>
+
+                <div class="clients-empty" id="clientsEmpty" hidden>
+                    <span>♙</span>
+                    <h3>Nenhum cliente encontrado</h3>
+                    <p>Altere os filtros ou cadastre um novo cliente.</p>
+                </div>
+
+            </section>
+
+            <footer class="dashboard-footer">
+                <span>© <span data-ano>2026</span> ClientPortal</span>
+                <span>Gestão de projetos e relacionamento com clientes.</span>
+            </footer>
+
+        </div>
+
+    </main>
+
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MODAL DE CADASTRO / EDIÇÃO -->
+<div class="client-modal-overlay" id="clientModal" aria-hidden="true">
+
+    <section class="client-modal" role="dialog"
+             aria-modal="true" aria-labelledby="clientModalTitle">
+
+        <div class="client-modal-header">
+            <div>
+                <span class="modal-eyebrow">RELACIONAMENTO</span>
+                <h2 id="clientModalTitle">Novo cliente</h2>
+                <p>Preencha os dados para cadastrar um cliente.</p>
+            </div>
+
+            <button type="button" class="modal-close"
+                    id="closeClientModal" aria-label="Fechar">
+                ×
+            </button>
+        </div>
+
+        <form id="clientForm">
+
+            <input type="hidden" id="clientId">
+
+            <div class="client-form-grid">
+
+                <div class="client-form-group">
+                    <label for="clientName">Nome do contato *</label>
+                    <input type="text" id="clientName"
+                           placeholder="Nome completo" required maxlength="100">
+                </div>
+
+                <div class="client-form-group">
+                    <label for="clientCompany">Empresa *</label>
+                    <input type="text" id="clientCompany"
+                           placeholder="Nome da empresa" required maxlength="100">
+                </div>
+
+                <div class="client-form-group">
+                    <label for="clientEmail">E-mail *</label>
+                    <input type="email" id="clientEmail"
+                           placeholder="contato@empresa.com" required>
+                </div>
+
+                <div class="client-form-group">
+                    <label for="clientPhone">Telefone *</label>
+                    <input type="tel" id="clientPhone"
+                           placeholder="(11) 99999-9999" required>
+                </div>
+
+                <div class="client-form-group">
+                    <label for="clientStatus">Status</label>
+                    <select id="clientStatus">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+
+                <div class="client-form-group">
+                    <label for="clientDocument">Documento (opcional)</label>
+                    <input type="text" id="clientDocument"
+                           placeholder="CNPJ ou CPF">
+                </div>
+
+                <div class="client-form-group full">
+                    <label for="clientNotes">Observações</label>
+                    <textarea id="clientNotes" rows="3"
+                              placeholder="Informações adicionais sobre o cliente..."></textarea>
+                </div>
+
+            </div>
+
+            <div class="client-modal-actions">
+                <button type="button" class="client-cancel-button"
+                        id="cancelClientButton">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="dashboard-primary-button">
+                    Salvar cliente
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+<!-- MODAL DE DETALHES -->
+<div class="client-modal-overlay" id="clientDetailsModal" aria-hidden="true">
+
+    <section class="client-modal client-details-modal" role="dialog"
+             aria-modal="true" aria-labelledby="clientDetailsTitle">
+
+        <div class="client-modal-header">
+            <div>
+                <span class="modal-eyebrow">CADASTRO DO CLIENTE</span>
+                <h2 id="clientDetailsTitle">Detalhes do cliente</h2>
+                <p>Informações de contato e projetos relacionados.</p>
+            </div>
+
+            <button type="button" class="modal-close"
+                    id="closeClientDetails" aria-label="Fechar">
+                ×
+            </button>
+        </div>
+
+        <div id="clientDetailsContent"></div>
+
+    </section>
+
+</div>
+
+<script src="script/script.js" defer></script>
+</body>
+</html>
